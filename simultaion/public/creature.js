@@ -7,7 +7,7 @@ export default class Creature{
             x, z
         }
         this.scene = scene
-        this.food = 0
+        this.food = 1
         this.id = id
         this.radius = 0.3
         this.object = this.draw()

@@ -13,7 +13,7 @@ export default class World{
         this.turn = 1
         this.cid = 1
         this.food_num = 10
-        this.energy = 100
+        this.energy = 200
         this.steps = 100
         this.mapInitializer()
         this.scene = scene
@@ -72,10 +72,6 @@ export default class World{
                 var position = creature.position
                 // babyCreature.push(new Creature(this.cid, position.x, position.z))
                 babyCreature.push(new Creature(this.cid, Math.floor(Math.random() * this.size.width), Math.floor(Math.random() * this.size.height), this.scene))
-
-
-
-                
                 this.cid+=1
                 creature.food = 0
             }
