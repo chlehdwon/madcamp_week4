@@ -17,7 +17,12 @@ export default class Creature{
         this.id = id                // creation id of creature
         this.radius = 3             // radius of 3D-sphere
         this.object = null
+        
+        this.clock = new THREE.Clock()
+        this.animateMixer = null
+
         this.init(cowURL)
+
         this.worldSize = worldSize // information of world
     } 
     async init(url){
@@ -26,6 +31,12 @@ export default class Creature{
 
         gltfData.scene.position.set(this.position.x-this.worldSize/2, this.radius, this.position.z-this.worldSize/2)
         gltfData.scene.scale.set(3,3,3)
+
+        this.animateMixer = new THREE.AnimationMixer(gltfData.scene)
+        const clips = gltfData.animations
+        const clip = THREE.AnimationClip.findByName(clips, "ArmatureAction")
+        const action = this.animateMixer.clipAction(clip);
+        action.play()
         
         this.object = gltfData.scene
         this.scene.add(this.object)
@@ -55,6 +66,8 @@ export default class Creature{
         if(this.object){
             this.position.x = next_x
             this.position.z = next_z
+    
+            this.animateMixer.update(this.clock.getDelta())
             // this.object.position.set(next_x-15,0.3, next_z-15)
             this.object.position.x = next_x - this.worldSize/2
             this.object.position.z= next_z - this.worldSize/2
