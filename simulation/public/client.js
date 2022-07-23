@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
+import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 import World from './world.js' 
 import Creature from './creature.js' 
 
@@ -31,6 +32,22 @@ const plane = new THREE.Mesh(planeGeometry, planeMaterial)
 scene.add(plane)
 plane.rotation.x = -0.5*Math.PI
 
+const loader = new GLTFLoader();
+const iceURL = new URL('./assets/iceground.glb', import.meta.url)
+let backgorund
+loader.load(iceURL.href, function(gltf){
+    backgorund = gltf.scene
+    backgorund.rotation
+    backgorund.scale.set(50, 10, 50)
+    backgorund.position.y = 1
+    scene.add(backgorund)
+})
+
+const light = new THREE.PointLight(0xffffff, 2, 1500)
+light.position.set(0, 300, 250)
+scene.add(light)
+
+
 // const gridHelper = new THREE.GridHelper(500) //size of grid, division of grid
 // scene.add(gridHelper)
 
@@ -57,14 +74,13 @@ myWorld.foodInit()
 
 console.log("=====food creation done=====")
 
-async function animate() {
-    await requestAnimationFrame(animate)
+function animate() {
+    requestAnimationFrame(animate)
     // console.log(camera.position)
     // creatures move
     if(myWorld.energy>0){
         myWorld.energy-=1
-        if(myWorld.stepping==true)
-            myWorld.step()
+        myWorld.step()
     }
     else{
         myWorld.turnOver()

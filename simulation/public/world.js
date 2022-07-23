@@ -50,11 +50,11 @@ export default class World{
             if(next_z < 0)
                 next_z = 0
             
-            // creature.update(next_x,next_z)
-            creature.position.x = next_x
-            creature.position.z = next_z
-            creature.object.position.x = next_x - creature.worldSize/2
-            creature.object.position.z= next_z - creature.worldSize/2
+            creature.update(next_x,next_z)
+            // creature.position.x = next_x
+            // creature.position.z = next_z
+            // creature.object.position.x = next_x - creature.worldSize/2
+            // creature.object.position.z= next_z - creature.worldSize/2
             // console.log(`${next_x} ${next_z}`)
             if(this.foodMap[next_z][next_x] > 0){
                 // console.log(`creature ${creature.id} get food at ${next_x}, ${next_z}`)
