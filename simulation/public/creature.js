@@ -27,12 +27,12 @@ export default class Creature{
 
         return sphere
     }
-    update(next_x, next_z) {
-        this.position.x = next_x
-        this.position.z = next_z
-        this.object.position.x = next_x - this.worldSize/2
-        this.object.position.z= next_z - this.worldSize/2
-    }
+    // update(next_x, next_z) {
+    //     this.position.x = next_x
+    //     this.position.z = next_z
+    //     this.object.position.x = next_x - this.worldSize/2
+    //     this.object.position.z= next_z - this.worldSize/2
+    // }
     destroy(){
         
         this.scene.remove(this.object)

@@ -18,6 +18,7 @@ export default class World{
         this.mapInitializer()   //
         this.scene = scene
         this.foodRadius = 1
+        this.stepping = true
     }
 
     mapInitializer(){
@@ -31,22 +32,29 @@ export default class World{
     }
     
     step(){
+        this.stepping = false
         const xMoves = [1, -1, 0, 0, 1, -1, 1, -1]
         const zMoves = [0, 0, 1, -1, 1, -1, -1, 1]
         this.creatures.forEach((creature) => {
             const idx = Math.floor(Math.random() * xMoves.length);
+            if(idx!==0 && !idx) console.log("?????")
             var next_x = creature.position.x + xMoves[idx]
             var next_z = creature.position.z + zMoves[idx]
 
-            if(next_x >= this.size.width){
+            if(next_x >= this.size.width)
                 next_x = this.size.width-1
-            } else if(next_x <0){
+            if(next_x <0)
                 next_x = 0
-            } else if(next_z >= this.size.height){
+            if(next_z >= this.size.height)
                 next_z = this.size.height-1
-            } else if(next_z <0){
+            if(next_z < 0)
                 next_z = 0
-            }
+            
+            // creature.update(next_x,next_z)
+            creature.position.x = next_x
+            creature.position.z = next_z
+            creature.object.position.x = next_x - creature.worldSize/2
+            creature.object.position.z= next_z - creature.worldSize/2
             // console.log(`${next_x} ${next_z}`)
             if(this.foodMap[next_z][next_x] > 0){
                 // console.log(`creature ${creature.id} get food at ${next_x}, ${next_z}`)
@@ -56,8 +64,8 @@ export default class World{
                 this.scene.remove(this.foodDict[[next_x, next_z]])
             }
 
-            creature.update(next_x,next_z)
         })
+        this.stepping = true
     }
 
     turnOver(){

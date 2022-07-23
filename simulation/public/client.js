@@ -57,13 +57,14 @@ myWorld.foodInit()
 
 console.log("=====food creation done=====")
 
-function animate() {
-    requestAnimationFrame(animate)
+async function animate() {
+    await requestAnimationFrame(animate)
     // console.log(camera.position)
     // creatures move
     if(myWorld.energy>0){
         myWorld.energy-=1
-        myWorld.step()
+        if(myWorld.stepping==true)
+            myWorld.step()
     }
     else{
         myWorld.turnOver()
