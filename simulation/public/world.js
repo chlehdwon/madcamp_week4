@@ -5,18 +5,19 @@ export default class World{
     constructor(scene){
         this.creatures = []
         this.size ={
-            width:30,
-            height:30
+            width:250,
+            height:250
         }
-        this.foodMap = []
+        this.foodMap = []       // number of food
         this.foodDict = {}
         this.turn = 1
         this.cid = 1
-        this.food_num = 10
-        this.energy = 200
-        this.steps = 100
-        this.mapInitializer()
+        this.food_num = 10      //
+        this.energy = 300       // number of initial energy
+        this.steps = 100        //
+        this.mapInitializer()   //
         this.scene = scene
+        this.foodRadius = 1
     }
 
     mapInitializer(){
@@ -70,14 +71,14 @@ export default class World{
             else if(creature.food>=2){
                 console.log(`creature ${creature.id} duplicated!`)
                 var position = creature.position
-                // babyCreature.push(new Creature(this.cid, position.x, position.z))
-                babyCreature.push(new Creature(this.cid, Math.floor(Math.random() * this.size.width), Math.floor(Math.random() * this.size.height), this.scene))
+                babyCreature.push(new Creature(this.cid, position.x, position.z, this.scene, this.size.width))
+                // babyCreature.push(new Creature(this.cid, Math.floor(Math.random() * this.size.width), Math.floor(Math.random() * this.size.height), this.scene, this.size.width))
                 this.cid+=1
-                creature.food = 0
+                creature.food -= 2
             }
             else{
                 console.log(`creature ${creature.id} lived!`)
-                creature.food = 0
+                creature.food -= 1
             }            
         })
         this.creatures.push(...babyCreature)
@@ -90,9 +91,11 @@ export default class World{
         while(i<this.food_num){
             let x = Math.floor(Math.random() * this.size.width)
             let z = Math.floor(Math.random() * this.size.height)
+            let width = this.size.width
+            let height = this.size.height
             if(this.foodMap[z][x]>0) continue;
-            const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5), new THREE.MeshBasicMaterial({color: 0xFF0000}))
-            food_sphere.position.set(x-15, -0.5, z-15)
+            const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0xFF0000}))
+            food_sphere.position.set(x-width/2, -this.foodRadius, z-height/2)
             this.foodDict[[x,z]]=food_sphere
             console.log(`create food at ${x} ${z}`)
             this.foodMap[z][x] += 1  // save food's position to my world!

@@ -9,24 +9,20 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 
-
 const scene = new THREE.Scene()
  
 const camera = new THREE.PerspectiveCamera(
   -45,
   window.innerWidth / window.innerHeight,
   0.1,
-  100)
-camera.position.set(-10, -30, 30)
+  1500)
+camera.position.set(0, -300, 250)
+camera.lookAt(0,0,0)
  
 const controls = new OrbitControls(camera, renderer.domElement)
  
-const boxGeometry = new THREE.BoxGeometry()
-const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true,})
-const box = new THREE.Mesh(boxGeometry, boxMaterial)
-scene.add(box)
 
-const planeGeometry = new THREE.PlaneGeometry(30,30)
+const planeGeometry = new THREE.PlaneGeometry(300,300)
 const planeMaterial = new THREE.MeshBasicMaterial({
     color:0xFFFFFF,
     side: THREE.DoubleSide
@@ -35,8 +31,8 @@ const plane = new THREE.Mesh(planeGeometry, planeMaterial)
 scene.add(plane)
 plane.rotation.x = -0.5*Math.PI
 
-const gridHelper = new THREE.GridHelper(30) //size of grid, division of grid
-scene.add(gridHelper)
+// const gridHelper = new THREE.GridHelper(500) //size of grid, division of grid
+// scene.add(gridHelper)
 
 // Here main satarts!!
 // Only one turn.....
@@ -46,8 +42,8 @@ console.log("=====world creation done=====")
 
 //create adam and eve
 let creatures = []
-myWorld.creatures.push(new Creature(1, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene))
-myWorld.creatures.push(new Creature(2, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene))
+myWorld.creatures.push(new Creature(1, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene, myWorld.size.width))
+myWorld.creatures.push(new Creature(2, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene, myWorld.size.width))
 myWorld.cid=3    // 생성된 크리쳐 개수
 
 console.log("=====creature creation done=====")
@@ -63,6 +59,7 @@ console.log("=====food creation done=====")
 
 function animate() {
     requestAnimationFrame(animate)
+    // console.log(camera.position)
     // creatures move
     if(myWorld.energy>0){
         myWorld.energy-=1
