@@ -12,11 +12,11 @@ document.body.appendChild(renderer.domElement)
 const scene = new THREE.Scene()
  
 const camera = new THREE.PerspectiveCamera(
-  -45,
+  45,
   window.innerWidth / window.innerHeight,
   0.1,
   1500)
-camera.position.set(0, -300, 250)
+camera.position.set(0, 300, 250)
 camera.lookAt(0,0,0)
  
 const controls = new OrbitControls(camera, renderer.domElement)
@@ -39,7 +39,7 @@ plane.rotation.x = -0.5*Math.PI
 const myWorld = new World(scene)
 
 console.log("=====world creation done=====")
-
+console.log(`${myWorld.foodMap[0][0]}`)
 //create adam and eve
 let creatures = []
 myWorld.creatures.push(new Creature(1, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene, myWorld.size.width))

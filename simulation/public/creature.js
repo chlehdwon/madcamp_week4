@@ -20,7 +20,7 @@ export default class Creature{
             wireframe: false
         })
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
-        sphere.position.set(this.position.x-this.worldSize/2, -this.radius, this.position.z-this.worldSize/2)
+        sphere.position.set(this.position.x-this.worldSize/2, this.radius, this.position.z-this.worldSize/2)
         // console.log(`create sphere at ${this.position.x-15} ${this.position.z-15}`)
         
         this.scene.add(sphere)

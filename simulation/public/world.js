@@ -12,9 +12,9 @@ export default class World{
         this.foodDict = {}
         this.turn = 1
         this.cid = 1
-        this.food_num = 10      //
-        this.energy = 300       // number of initial energy
-        this.steps = 100        //
+        this.food_num = 300      //
+        this.energy = 200       // number of initial energy
+        this.steps = 200        //
         this.mapInitializer()   //
         this.scene = scene
         this.foodRadius = 1
@@ -31,8 +31,8 @@ export default class World{
     }
     
     step(){
-        const xMoves = [1, -1, 0, 0]
-        const zMoves = [0, 0, 1, -1]
+        const xMoves = [1, -1, 0, 0, 1, -1, 1, -1]
+        const zMoves = [0, 0, 1, -1, 1, -1, -1, 1]
         this.creatures.forEach((creature) => {
             const idx = Math.floor(Math.random() * xMoves.length);
             var next_x = creature.position.x + xMoves[idx]
@@ -47,16 +47,16 @@ export default class World{
             } else if(next_z <0){
                 next_z = 0
             }
-
-            creature.update(next_x,next_z)
-
+            // console.log(`${next_x} ${next_z}`)
             if(this.foodMap[next_z][next_x] > 0){
-                console.log(`creature ${creature.id} get food at ${next_x}, ${next_z}`)
+                // console.log(`creature ${creature.id} get food at ${next_x}, ${next_z}`)
                 this.foodMap[next_z][next_x]-=1
                 creature.food++
                 // console.log(this.foodDict[[next_x, next_z]])
                 this.scene.remove(this.foodDict[[next_x, next_z]])
             }
+
+            creature.update(next_x,next_z)
         })
     }
 
@@ -64,12 +64,12 @@ export default class World{
         var babyCreature = []
         this.creatures.forEach((creature) => {
             if(creature.food==0){
-                console.log(`creature ${creature.id} died!`)
+                // console.log(`creature ${creature.id} died!`)
                 this.creatures = this.creatures.filter((element)=>element.object!==creature.object);
                 this.scene.remove(creature.object)
             }
             else if(creature.food>=2){
-                console.log(`creature ${creature.id} duplicated!`)
+                // console.log(`creature ${creature.id} duplicated!`)
                 var position = creature.position
                 babyCreature.push(new Creature(this.cid, position.x, position.z, this.scene, this.size.width))
                 // babyCreature.push(new Creature(this.cid, Math.floor(Math.random() * this.size.width), Math.floor(Math.random() * this.size.height), this.scene, this.size.width))
@@ -77,11 +77,14 @@ export default class World{
                 creature.food -= 2
             }
             else{
-                console.log(`creature ${creature.id} lived!`)
+                // console.log(`creature ${creature.id} lived!`)
                 creature.food -= 1
             }            
         })
         this.creatures.push(...babyCreature)
+        console.log(`=====Turn ${this.turn} end=====`)
+        console.log(`${this.creatures.length} creatures lived!`)
+        this.turn+=1
         if(this.creatures.length>0)
             this.foodInit()
     }
@@ -95,9 +98,9 @@ export default class World{
             let height = this.size.height
             if(this.foodMap[z][x]>0) continue;
             const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0xFF0000}))
-            food_sphere.position.set(x-width/2, -this.foodRadius, z-height/2)
+            food_sphere.position.set(x-width/2, this.foodRadius, z-height/2)
             this.foodDict[[x,z]]=food_sphere
-            console.log(`create food at ${x} ${z}`)
+            // console.log(`create food at ${x} ${z}`)
             this.foodMap[z][x] += 1  // save food's position to my world!
             this.scene.add(food_sphere)
             i++;
