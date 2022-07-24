@@ -13,9 +13,36 @@
         }
       }
     </script>
+    <script type="module" src="client.js" defer></script>
+    <link rel="stylesheet" href="style.css">
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
-    <script type="module" src="client.js"></script>
+    <title id="title">My World Simulation</title>
+    <div class="canvas">
+      <canvas id="c"></canvas>
+    </div>
+    
+    <div class="controlbar">
+      <button class="button" id="cSpeciesBtn">creature</button>
+      <button class="button">env</button>
+      <button class="button">disasters</button>
+      <button class="button">뭐쓰지</button>
+      <button class="button">뭐쓸까</button>
+    </div>
+
+    <div class="statisticBox">
+      <!-- 여기에 확률 그래프들 얹기 -->
+      <ul>
+        <li><a href="default.asp">Home</a></li>
+        <li><a href="news.asp">News</a></li>
+        <li><a href="contact.asp">Contact</a></li>
+        <li><a href="about.asp">About</a></li>
+      </ul>
+      <div class="chartContainer">
+        statistics here
+      </dif>
+
+    </div>
   </body>
 </html> 

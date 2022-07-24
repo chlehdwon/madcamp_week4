@@ -1,0 +1,83 @@
+#title{
+    width:100%;
+    height:5vh;
+    color:white;
+    background-color:lightblue;
+    display: block;
+    text-align:center;
+    font-size:2.5vh;
+    padding:1vh;
+    font-weight: bold;
+    text-shadow: 5px 5px #558ABB;
+}
+body{
+    background-image: url('assets/background2.jpg')
+}
+.canvas{
+    position:relative;
+}
+.controlbar{
+    position:absolute;
+    width: 5vw;
+    display:inline;
+    text-align:center;
+    padding-top: 2vh;
+    padding-left:2vw;
+}
+.button {
+    background-color: #04AA6D;
+    border-color: white;
+    color: white;
+    padding-top: 5vh;
+    text-align:center;
+    vertical-align:bottom;
+    text-decoration: none;
+    font-size: 1.3vh;
+    margin-bottom: 3vh;
+    border-radius: 12px;
+    width:7vh;
+    height:7vh;
+}
+.button:hover{
+    opacity: 0.5;
+    color:black;
+}
+
+#cSpeciesBtn{
+    background-image: url('assets/createbtn.jpg');
+    background-size:cover;
+    background-position: center;
+}
+.statisticBox{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+    width:25vw;
+}
+ul {
+    display:flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+  }
+  li{float:left;}
+  li a{
+    display: flex;
+    background-color:darkcyan;
+    color:#ffffff;
+    padding:1vh;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+  }
+  li a:hover{
+    background-color: #558ABB;
+    color:black;
+  }
+  .chartContainer{
+    color:black;
+    background-color:beige;
+    display:block;
+  }
