@@ -14,7 +14,7 @@ export default class Creature{
         this.id = id   
         this.scene = scene   
         this.food = 1                // creation id of creature
-        this.radius = 2          // radius of 3D-sphere
+        this.radius = 1          // radius of 3D-sphere
         this.type = type
         this.worldSize = worldSize // information of world
         
@@ -98,7 +98,8 @@ export default class Creature{
             // this.animateMixer.update(this.clock.getDelta())
             let x = next_x - this.worldSize/2
             let z = next_z - this.worldSize/2
-            this.object.rotation.y = Math.atan((x - this.object.position.x)/(z - this.object.position.z)) + Math.PI
+            this.object.rotation.y = Math.atan((x - this.object.position.x)/(z - this.object.position.z)) + ((z - this.object.position.z)>=0 ? Math.PI : 0)
+
             this.object.position.x = x
             this.object.position.z= z
         }
