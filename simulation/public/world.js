@@ -31,8 +31,8 @@ export default class World{
                 type: 1,
                 speed: 1, 
                 sight: 10,
-                coldresist: 1,
-                hotresist:1,
+                coldresist: 2,
+                hotresist:2,
                 efficiency: 1,
                 isfarsighted: true
             }))
@@ -46,10 +46,10 @@ export default class World{
                 worldSize: this.size,
                 type: 2,
                 speed: 3,
-                sight: 5, 
-                coldresist: 1,
-                hotresist: 1,
-                efficiency: 1,
+                sight: 4, 
+                coldresist: 2,
+                hotresist: 2,
+                efficiency: 2,
                 isfarsighted: true
             }))
         }
@@ -179,6 +179,7 @@ export default class World{
             else if(creature.food>=2){
 
                 var position = creature.position
+                var newCreatureInfo = this.mutationAlgo(creature)
                 var newCreature =new Creature({
                     id:this.cid++, 
                     x: position.x, 
@@ -186,11 +187,11 @@ export default class World{
                     scene: this.scene, 
                     worldSize: this.size,
                     type: 1,
-                    speed: 1, 
-                    sight: 10,
-                    coldresist: 1,
-                    hotresist:1,
-                    efficiency: 1,
+                    speed: newCreatureInfo.speed, 
+                    sight: newCreatureInfo.sight,
+                    coldresist: newCreatureInfo.coldresist,
+                    hotresist:  newCreatureInfo.hotresist,
+                    efficiency: newCreatureInfo.efficiency,
                     isfarsighted: isfarsighted
                 })
                 babyCreature.push(newCreature)
@@ -214,6 +215,8 @@ export default class World{
             }
             else if(creature.food>=2){
                 var position = creature.position
+                var newCreatureInfo = this.mutationAlgo(creature)
+
                 var newCreature =new Creature({
                     id:this.cid++, 
                     x: position.x, 
@@ -221,11 +224,11 @@ export default class World{
                     scene: this.scene, 
                     worldSize: this.size,
                     type: 2,
-                    speed: 3, 
-                    sight: 10,
-                    coldresist: 1,
-                    hotresist:1,
-                    efficiency: 1,
+                    speed: newCreatureInfo.speed, 
+                    sight: newCreatureInfo.sight,
+                    coldresist: newCreatureInfo.coldresist,
+                    hotresist:  newCreatureInfo.hotresist,
+                    efficiency: newCreatureInfo.efficiency,
                     isfarsighted: isfarsighted
                 })
                 babyCreature.push(newCreature)
@@ -248,7 +251,39 @@ export default class World{
         
         this.turn += 1
     }
+    
+    mutationAlgo(each_creature){
+        let newCreatureInfo = each_creature
+        let mutationPercent = 5
+        let attributeArray = [each_creature.speed, each_creature.sight/2 - 2 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
+        
+        // 변이가 일어난다면 한 특정은 
+        if(Math.floor(Math.random() * 100) < mutationPercent){
+            let upperAttribute = Math.floor(Math.random() * 5)
+            let downAttribute  = Math.floor(Math.random() * 5)
 
+            // 각 index의 값들이 범위를 벗어나면 다시 찾음
+            while(attributeArray[upperAttribute]>=4){
+                upperAttribute = Math.floor(Math.random() * 5)
+            }
+            while(attributeArray[downAttribute]<=0){
+                downAttribute = Math.floor(Math.random() * 5)
+            }
+            
+            // 각 index의 값들을 한 개는 올리고 한개는 올림
+            attributeArray[upperAttribute] += 1
+            attributeArray[downAttribute]  -= 1
+        }
+        attributeArray[1] = attributeArray[1]*2 + 2 
+
+        newCreatureInfo.speed      = attributeArray[0]
+        newCreatureInfo.sight      = attributeArray[1]
+        newCreatureInfo.coldresist = attributeArray[2]
+        newCreatureInfo.hotresist  = attributeArray[3]
+        newCreatureInfo.efficiency = attributeArray[4]
+
+        return newCreatureInfo
+    }
 
     // opposite_type은 반대 type 
     searchAlgo(each_creature,xpos,zpos,scope,opposite_type){
