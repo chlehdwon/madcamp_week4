@@ -1,9 +1,12 @@
 import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
+// import {Chart} from 'chart.js/auto'
 import { Loader } from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
+// import {makeChart,updateChart} from './chart.js'
+
 
 // =============== RENDERER ===================
 const canvas = document.querySelector('#c')
@@ -66,7 +69,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 50, 10)
+const myWorld = new World(scene, 100, 10)
 console.log("=====world creation done=====")
 
 //create adam and eve
@@ -79,14 +82,13 @@ myWorld.foodInit()
 console.log("=====food creation done=====")
 console.log(myWorld.prey[0])
 var basic_frame = 60
-var target_frame = 15
+var target_frame = 5
 var frame = 0
 let animateId
 
 function animate() {
     animateId= requestAnimationFrame(animate)
     light.position.copy( camera.position );
-
     if(frame > basic_frame){
         frame -= basic_frame
         // set farsighted & closesighted
@@ -97,16 +99,15 @@ function animate() {
             isfarsighted = false
     
         // creatures move
-        if(myWorld.energy>0){
-            myWorld.energy-=1
-            myWorld.step(isfarsighted)
+        
+        myWorld.day(isfarsighted)
+        if(myWorld.turn%30==0){
+            myWorld.yearOver(isfarsighted)
+            updateChart()
         }
-        else{
-            myWorld.turnOver(isfarsighted)
-            myWorld.energy=myWorld.steps
-        }
-        render() 
     }
+    
+    render() 
     frame += target_frame
     
 }
@@ -114,7 +115,6 @@ function animate() {
 function render() {
     renderer.render(scene, camera)
 }
-
 animate()
 
 
@@ -197,3 +197,26 @@ function getOffset(el){
         bottom: rect.bottom + window.scrollY
     }
 }
+
+function updateChart(){
+
+
+    new Chart(document.getElementById("line-chart").getContext("2d"), {
+        type: 'pie',
+        data: {
+          labels: ["predator", "prey"],
+          datasets: [{
+            label: "Population (millions)",
+            backgroundColor: ["#3e95cd", "#8e5ea2",],
+            data: [myWorld.predator.length,myWorld.prey.length]
+          }]
+        },
+        options: {
+          title: {
+            display: false,
+            text: 'Predicted world population (millions) in 2050'
+          }
+        }
+    });
+}
+

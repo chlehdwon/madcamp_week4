@@ -1,22 +1,35 @@
 import * as THREE from 'three'
 import Creature from './creature.js' 
+import {Jungle, Desert, Glacier, Grass} from './env.js'
 
 export default class World{
     constructor(scene, preyNum,predatorNum){
+        // basic information
+        this.size = 200
+        this.turn = 1
+        this.cid = 1    
+        this.scene = scene
+
+        // creature information
         this.prey = []
         this.predator = []
-        this.size = 250
         this.creatures = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // creature map
+
+        // food information
         this.foodMap = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // food map
         this.foodDict = {}
-        this.turn = 1
-        this.cid = 1
-        this.food_num = 100      //
-        this.energy = 300       // number of initial energy
-        this.steps = 300        // number of energy amount
-        this.scene = scene
+        this.food_num = 100  
         this.foodRadius = 1
-        this.stepping = true
+
+        // env information
+        this.envs = [new Glacier(), new Desert(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass()]
+        
+
+        // turn information
+        this.energy = 300       // number of initial energy
+        // this.turn = 300        // number of energy amount
+
+        // start initialization
         this.creatureInit(preyNum,predatorNum)
     }
 
@@ -50,6 +63,7 @@ export default class World{
                 coldresist: 2,
                 hotresist: 2,
                 efficiency: 2,
+
                 isfarsighted: true
             }))
         }
@@ -63,23 +77,41 @@ export default class World{
         
     }
 
+    getCurrentEnv(xpos, zpos){
+        let x_idx = parseInt(xpos/(size/4)) 
+        let z_idx = parseInt(zpos/(size/4)) 
+
+        return this.env[z_idx*4 + x_idx]
+    }
+
 
     foodInit(){
-        let i=0
-        while(i<this.food_num){
-            let x = Math.floor(Math.random() * this.size)
-            let z = Math.floor(Math.random() * this.size)
-            if(this.foodMap[z][x]>0) continue;
-            const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
-            food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
-            this.foodDict[[x,z]]=food_sphere
-            this.foodMap[z][x] += 1  // save food's position to my world!
-            this.scene.add(food_sphere)
-            i++;
+        for(let i=0; i<4; i++){
+            for(let j=0; j<4; j++){
+                // Get environment
+                let env = this.envs[i*4 + j]
+                let start_z = this.size/4*i
+                let start_x = this.size/4*j
+                let k=0
+
+                // Food initialization
+                while(k<env.foodSpawn){
+                    let x = Math.floor(Math.random() * this.size/4) + start_x
+                    let z = Math.floor(Math.random() * this.size/4) + start_z
+                    if(this.foodMap[z][x]>0) continue;
+                    const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
+                    food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
+                    this.foodDict[[x,z]]=food_sphere
+                    this.foodMap[z][x] += 1  // save food's position to my world!
+                    this.scene.add(food_sphere)
+                    k++;
+                }
+            }
         }
     }
 
-    step(isfarsighted){
+    day(isfarsighted){
+
         this.prey.forEach((creature) => {
             var direction = this.searchFood(creature)
             if(creature.changeDirect==0 || creature.isChasing){
@@ -89,8 +121,6 @@ export default class World{
 
             direction = creature.direction
             creature.changeDirect--;
-
-
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
 
@@ -99,11 +129,14 @@ export default class World{
 
                 if(next_x >= this.size){
                     next_x = this.size-1
-                }if(next_x <0){
+                }
+                if(next_x <0){
                     next_x = 0
-                }if(next_z >= this.size){
+                }
+                if(next_z >= this.size){
                     next_z = this.size-1
-                }if(next_z <0){
+                }
+                if(next_z <0){
                     next_z = 0
                 }
                 
@@ -112,11 +145,19 @@ export default class World{
                 // 이동한 후 생명체의 위치 저장
                 this.creatures[creature.position.z][creature.position.x].push(creature)
 
+
                 if(this.foodMap[next_z][next_x] > 0){
                     this.foodMap[next_z][next_x]-=1
-                    creature.food+=1
                     this.scene.remove(this.foodDict[[next_x, next_z]])
+                    creature.hp += creature.efficiency * creature.hpScale
                 }
+            }
+            creature.hp -= creature.speed
+
+            if(creature.hp<=0){
+                this.prey = this.prey.filter((element)=>element.object!==creature.object);
+                this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
+                this.scene.remove(creature.object)
             }
         })
         this.predator.forEach((creature) => {
@@ -135,44 +176,53 @@ export default class World{
 
                 if(next_x >= this.size){
                     next_x = this.size-1
-                }if(next_x <0){
+                }
+                if(next_x <0){
                     next_x = 0
-                }if(next_z >= this.size){
+                }
+                if(next_z >= this.size){
                     next_z = this.size-1
-                }if(next_z <0){
+                }
+                if(next_z <0){
                     next_z = 0
                 }
                 creature.update(next_x,next_z, isfarsighted)
-
                 // 이동한 후 생명체의 위치 저장
                 this.creatures[creature.position.z][creature.position.x].push(creature)
+
                 
                 // 이동한 곳에 prey가 있고 포식자의 food가 2보다 작으면 prey 먹음
                 for (var p of this.creatures[creature.position.z][creature.position.x]){
-                    //console.log(p)
-                    //console.log(p.type)
                     if(p.type==1){
                         this.scene.remove(p.object)
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
                         this.prey= this.prey.filter((element)=>element.object!==p.object);
-                        creature.food+=1
+                        // creature.food+=1
+                        creature.hp += creature.efficiency * creature.hpScale
                     }
                 }
             }
-        })
-    }
+            creature.hp -= creature.speed
 
-    turnOver(isfarsighted){
-        var babyCreature = []
-        this.prey.forEach((creature) => {
-            if(creature.food<=0){
-
-                this.prey = this.prey.filter((element)=>element.object!==creature.object);
+            if(creature.hp<=0){
+                this.predator = this.predator.filter((element)=>element.object!==creature.object);
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
                 this.scene.remove(creature.object)
             }
-            else if(creature.food>=2){
+        })
+        // console.log(this.turn)
+        this.turn += 1
+    }
 
+    yearOver(isfarsighted){
+        var babyCreature = []
+        this.prey.forEach((creature) => {
+            // if(creature.hp<=0){
+            //     this.prey = this.prey.filter((element)=>element.object!==creature.object);
+            //     this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
+            //     this.scene.remove(creature.object)
+            // }
+            if(creature.hp>=creature.hpScale*2){
                 var position = creature.position
                 var newCreatureInfo = this.mutationAlgo(creature)
                 var newCreature =new Creature({
@@ -192,23 +242,24 @@ export default class World{
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
-                this.cid+=1
-                creature.food -= 2
+                // this.cid+=1
+                // creature.food -= 2
+                creature.hp -= creature.hpScale
             }
-            else{
-                creature.food -= 1
-            }            
+            // else{
+            //     creature.food -= 1
+            // }            
         })
         this.prey.push(...babyCreature)
 
         babyCreature = []
         this.predator.forEach((creature) => {
-            if(creature.food<=0){
-                this.predator = this.predator.filter((element)=>element.object!==creature.object);
-                this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
-                this.scene.remove(creature.object)
-            }
-            else if(creature.food>=2){
+            // if(creature.food<=0){
+            //     this.predator = this.predator.filter((element)=>element.object!==creature.object);
+            //     this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
+            //     this.scene.remove(creature.object)
+            // }
+            if(creature.hp>=creature.hpScale*2){
                 var position = creature.position
                 console.log("duplicate")
                 var newCreatureInfo = this.mutationAlgo(creature)
@@ -230,22 +281,20 @@ export default class World{
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
-                this.cid+=1
-                creature.food -=2
+                creature.hp -= creature.hpScale
             }
-            else{
-                creature.food -= 1
-            }            
+            // else{
+            //     creature.food -= 1
+            // }            
         })
         this.predator.push(...babyCreature)
 
-        console.log(`=====turn ${this.turn} end=====`)
+        console.log(`=====month ${this.turn/30} end=====`)
         console.log(`${this.predator.length} predator left`)
         console.log(`${this.prey.length} pery left`)
         if(this.prey.length>0)
             this.foodInit()
         
-        this.turn += 1
     }
     
     mutationAlgo(each_creature){
@@ -335,7 +384,7 @@ export default class World{
     }
 
     searchFood(each_creature){
-        var scope = 10
+        var scope = each_creature.sight
         var direction = [0,0] //z,x
 
         var xpos = each_creature.position.x
@@ -397,13 +446,14 @@ export default class World{
     }
     
     searchPrey(each_creature){
-        var scope = 3
+        var scope = each_creature.sight
         var direction = [0,0] //z,x
         var xpos = each_creature.position.x
         var zpos = each_creature.position.z
 
         // 현재 위치에 먹이가 있다면 안 움직임
-        if(this.food >2){
+        // if(this.food >2){
+        if(this.hp > this.hpScale * 2){
             return this.makeRandomDirec()
         }else if(this.creatures[zpos][xpos].type==1){
             console.log("predactor no move")
