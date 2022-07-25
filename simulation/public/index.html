@@ -28,7 +28,7 @@
       <div class="controlbar">
         <button class="button" id="creatureBtn">creature</button>
         <button class="button">env</button>
-        <button class="button">disasters</button>
+        <button class="button" id="disasterBtn">disasters</button>
         <button class="button">뭐쓰지</button>
         <button class="button">뭐쓸까</button>
       </div>
@@ -44,43 +44,43 @@
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Property</label>
-                <label><input type="radio" id="prey" name="property" value="prey">Prey</label>
-                <label><input type="radio" id="predetor"name="property" value="predetor">Predetor</label>
+                <label><input class="creatureInput" type="radio" id="prey" name="property" value="prey">Prey</label>
+                <label><input  class="creatureInput" type="radio" id="predetor"name="property" value="predetor">Predetor</label>
               </form>
             </div>
 
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Speed</label>
-                <input type="range" id="speed" min="1" max="5">
+                <input  class="creatureInput" type="range" id="speed" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Visible Range</label>
-                <input type="range" id="sight" min="1" max="5">
+                <input  class="creatureInput" type="range" id="sight" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Cold Resistance</label>
-                <input type="range" id="cold" min="1" max="5">
+                <input  class="creatureInput" type="range" id="cold" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Hot Resistance</label>
-                <input type="range" id="hot" min="1" max="5">
+                <input  class="creatureInput" type="range" id="hot" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Energy Efficiency</label>
-                <input type="range" id="eff" min="1" max="5">
+                <input  class="creatureInput" type="range" id="eff" min="1" max="5">
               </form>
             </div>
             <menu>

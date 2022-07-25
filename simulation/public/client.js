@@ -273,7 +273,7 @@ function getOffset(el){
 function initCreatureD(){
     newPredetorList = []
     newPreyList = []
-    let input = document.getElementsByTagName('input')
+    let input = document.getElementsByClassName('creatureInput')
     let inputList = Array.prototype.slice.call(input)
     inputList.forEach(elem => {
         elem.checked = false
@@ -293,6 +293,7 @@ pauseBtn.addEventListener('click', function(){
     cancelAnimationFrame(animateId)
 })
 playBtn.addEventListener('click', function(){
+    cancelAnimationFrame(animateId)
     animate()
 })
 framecount.addEventListener('input', function(){
@@ -301,3 +302,8 @@ framecount.addEventListener('input', function(){
     target_frame = parseInt(framecount.value)
     animate()
 }, false)
+
+let disasterBtn = document.getElementById("disasterBtn")
+disasterBtn.addEventListener("click", function(){
+
+})
