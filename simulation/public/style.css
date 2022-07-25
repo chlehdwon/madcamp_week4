@@ -134,3 +134,25 @@ ul {
     background-color:beige;
     display:block;
   }
+
+#speedControlBar{
+    display: flex;
+}
+#frameNum{
+    color:white;
+}
+#frameTag{
+    color: white;
+}
+/* #speedControlBar{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+} */
+.rightsidedBox{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+}

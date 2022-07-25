@@ -67,7 +67,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 10, 1)
+const myWorld = new World(scene, 100, 10)
 console.log("=====world creation done=====")
 
 //create adam and eve
@@ -80,7 +80,7 @@ myWorld.foodInit()
 console.log("=====food creation done=====")
 console.log(myWorld.prey[0])
 var basic_frame = 60
-var target_frame = 10
+var target_frame = 15
 var frame = 0
 let animateId
 
@@ -98,16 +98,13 @@ function animate() {
             isfarsighted = false
     
         // creatures move
-        if(myWorld.energy>0){
-            myWorld.energy-=1
-            myWorld.step(isfarsighted)
+        
+        myWorld.day(isfarsighted)
+        if(myWorld.turn%30==0){
+            myWorld.monthOver(isfarsighted)
         }
-        else{
-            myWorld.turnOver(isfarsighted)
-            myWorld.energy=myWorld.steps
-        }
-        render() 
     }
+    render() 
     frame += target_frame
     
 }
@@ -287,3 +284,20 @@ function initCreatureD(){
     })
 }
 
+let framecount = document.getElementById("framecount")
+let pauseBtn = document.getElementById("pause")
+let playBtn = document.getElementById("aniplay")
+let frameNum = document.getElementById('frameNum')
+
+pauseBtn.addEventListener('click', function(){
+    cancelAnimationFrame(animateId)
+})
+playBtn.addEventListener('click', function(){
+    animate()
+})
+framecount.addEventListener('input', function(){
+    cancelAnimationFrame(animateId)
+    frameNum.innerHTML = framecount.value
+    target_frame = parseInt(framecount.value)
+    animate()
+}, false)
