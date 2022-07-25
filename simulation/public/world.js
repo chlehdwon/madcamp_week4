@@ -22,15 +22,34 @@ export default class World{
 
     creatureInit(preyNum,predatorNum){
         for (var i =0;i<preyNum;i++){    // 1차 소비자
-            this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100,100, this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100,100+ 2*i, this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100,100- 2*i, this.scene, this.size,1,1, true))
+            this.prey.push(new Creature({
+                id:this.cid++, 
+                x: Math.floor(Math.random() * this.size), 
+                z: Math.floor(Math.random() * this.size), 
+                scene: this.scene, 
+                worldSize: this.size,
+                type: 1,
+                speed: 1, 
+                sight: 10,
+                coldresist: 1,
+                hotresist:1,
+                isfarsighted: true
+            }))
         }
         for (var j =0;j<predatorNum;j++){    // 2차 소비자
-            this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,2, true))
-            //this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,0,2, true))
+            this.predator.push(new Creature({
+                id: this.cid++, 
+                x: Math.floor(Math.random() * this.size), 
+                z: Math.floor(Math.random() * this.size), 
+                scene: this.scene, 
+                worldSize: this.size,
+                type: 2,
+                speed: 3,
+                sight: 5, 
+                coldresist: 1,
+                hotresist: 1,
+                isfarsighted: true
+            }))
         }
 
         this.prey.forEach((creatures)=>{
@@ -135,7 +154,7 @@ export default class World{
                 for (var p of this.creatures[creature.position.z][creature.position.x]){
                     //console.log(p)
                     //console.log(p.type)
-                    if(p.type==1 ){
+                    if(p.type==1){
                         this.scene.remove(p.object)
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
                         this.prey= this.prey.filter((element)=>element.object!==p.object);
@@ -158,7 +177,19 @@ export default class World{
             else if(creature.food>=2){
 
                 var position = creature.position
-                var newCreature =new Creature(this.cid, position.x, position.z, this.scene, this.size,1,1,isfarsighted)
+                var newCreature =new Creature({
+                    id:this.cid++, 
+                    x: position.x, 
+                    z: position.z, 
+                    scene: this.scene, 
+                    worldSize: this.size,
+                    type: 1,
+                    speed: 1, 
+                    sight: 10,
+                    coldresist: 1,
+                    hotresist:1,
+                    isfarsighted: isfarsighted
+                })
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
@@ -180,7 +211,19 @@ export default class World{
             }
             else if(creature.food>=2){
                 var position = creature.position
-                var newCreature =new Creature(this.cid, position.x, position.z, this.scene, this.size,3,2, isfarsighted)
+                var newCreature =new Creature({
+                    id:this.cid++, 
+                    x: position.x, 
+                    z: position.z, 
+                    scene: this.scene, 
+                    worldSize: this.size,
+                    type: 2,
+                    speed: 3, 
+                    sight: 10,
+                    coldresist: 1,
+                    hotresist:1,
+                    isfarsighted: isfarsighted
+                })
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
@@ -278,7 +321,7 @@ export default class World{
             return direction
         }
 
-
+        direction = [0,0]
         // 현재 위치에 먹이가 있다면 안 움직임
         if(this.foodMap[zpos][xpos]>0){
             console.log("prey no move")
@@ -325,7 +368,9 @@ export default class World{
         var zpos = each_creature.position.z
 
         // 현재 위치에 먹이가 있다면 안 움직임
-        if(this.creatures[zpos][xpos].type==1){
+        if(this.food >2){
+            return this.makeRandomDirec()
+        }else if(this.creatures[zpos][xpos].type==1){
             console.log("predactor no move")
             return direction
         }

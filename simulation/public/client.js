@@ -81,9 +81,11 @@ console.log(myWorld.prey[0])
 var basic_frame = 60
 var target_frame = 15
 var frame = 0
+let animateId
 
 function animate() {
-    requestAnimationFrame(animate)
+    animateId= requestAnimationFrame(animate)
+    light.position.copy( camera.position );
 
     if(frame > basic_frame){
         frame -= basic_frame
@@ -151,11 +153,6 @@ let gridmapList = Array.prototype.slice.call(gridmaps)
 
 creatureBtn.addEventListener('click', function onOpen(){
     cancelAnimationFrame(animateId)
-    if (typeof creatureDialog.showModal === 'function') {
-        creatureDialog.showModal()
-    }else {
-        alert("the dialog api is not supported by this browser")
-    }
 })
 cancelBtn.addEventListener('click', function(){
     animate()
@@ -195,6 +192,8 @@ function getOffset(el){
     const rect = el.getBoundingClientRect();
     return {
         left: rect.left + window.scrollX,
-        top: rect.top + window.scrollY
+        top: rect.top + window.scrollY,
+        right: rect.right + window.scrollX,
+        bottom: rect.bottom + window.scrollY
     }
 }
