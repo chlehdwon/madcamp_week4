@@ -22,7 +22,7 @@
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
-    <title id="title">My World Simulation</title>
+    <title id="title">리얼 야생 버라이어티</title>
     <div class="canvas">
       <canvas id="c"></canvas>
     </div>
@@ -47,44 +47,44 @@
           <div id="featureList">
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
-                <label for="vol" class="featureTag">속성</label>
-                <label><input type="radio" name="property" value="prey"> 1차소비자</label>
-                <label><input type="radio" name="property" value="predetor"> 2차소비자</label>
+                <label for="vol" class="featureTag">Property</label>
+                <label><input type="radio" id="prey" name="property" value="prey">Prey</label>
+                <label><input type="radio" id="predetor"name="property" value="predetor">Predetor</label>
               </form>
             </div>
 
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
-                <label for="vol" class="featureTag">속도</label>
-                <input type="range" id="speedStat" min="0" max="4">
+                <label for="vol" class="featureTag">Speed</label>
+                <input type="range" id="speed" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
-                <label for="vol" class="featureTag">지능</label>
-                <input type="range" id="speedStat" min="0" max="4">
+                <label for="vol" class="featureTag">Visible Range</label>
+                <input type="range" id="sight" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
-                <label for="vol" class="featureTag">저온저항성</label>
-                <input type="range" id="speedStat" min="0" max="4">
+                <label for="vol" class="featureTag">Cold Resistance</label>
+                <input type="range" id="cold" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
-                <label for="vol" class="featureTag">고온저항성</label>
-                <input type="range" id="speedStat" min="0" max="4">
+                <label for="vol" class="featureTag">Hot Resistance</label>
+                <input type="range" id="hot" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
-                <label for="vol" class="featureTag">연비</label>
-                <input type="range" id="speedStat" min="0" max="4">
+                <label for="vol" class="featureTag">Energy Efficiency</label>
+                <input type="range" id="eff" min="1" max="5">
               </form>
             </div>
             <menu>
@@ -96,15 +96,39 @@
         <!-- </form> -->
         <div id="gridmapContainer">
           <div class="grid-container">
-            <div class="grid-item" id="grid1">1</div>
-            <div class="grid-item" id="grid2">2</div>
-            <div class="grid-item" id="grid3">3</div>
-            <div class="grid-item" id="grid4">4</div>
+            <canvas class="grid-item" id="00">1</canvas>
+            <canvas class="grid-item" id="10">2</canvas>
+            <canvas class="grid-item" id="20">3</canvas>
+            <canvas class="grid-item" id="30">4</canvas>
+            
+            <canvas class="grid-item" id="01">5</canvas>
+            <canvas class="grid-item" id="11">6</canvas>
+            <canvas class="grid-item" id="21">7</canvas>
+            <canvas class="grid-item" id="31">8</canvas>
+            
+            <canvas class="grid-item" id="02">9</canvas>
+            <canvas class="grid-item" id="12">10</canvas>
+            <canvas class="grid-item" id="22">11</canvas>
+            <canvas class="grid-item" id="31">12</canvas>
+            
+            <canvas class="grid-item" id="03">13</canvas>
+            <canvas class="grid-item" id="13">14</canvas>
+            <canvas class="grid-item" id="23">15</canvas>
+            <canvas class="grid-item" id="33">16</canvas>
           </div>
+          <button id="gridConfirmBtn">GO!!</button>
         </div>
       </dialog>
 
     </div>
+    <div class="rightsidedBox">
+      <div id="speedControlBar">
+        <label for="vol" id="frameTag">change speed</label>
+        <button id="aniplay">play</button>
+        <button id="pause">pause</button>
+        <input type="range" id="framecount" min="1" max="30">
+        <output id="frameNum">15</output>
+      </div>
 
     <div class="statisticBox">
       <!-- 여기에 확률 그래프들 얹기 -->
@@ -121,7 +145,6 @@
 
         
       </dif> 
-
     </div>
   </body>
 </html> 

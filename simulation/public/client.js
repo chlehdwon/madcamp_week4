@@ -42,7 +42,8 @@ scene.add(light)
 scene.add(light.target)
 
 // =================== PLANE =========================
-const planeGeometry = new THREE.PlaneGeometry(300,300)
+const PLANESIZE = 300
+const planeGeometry = new THREE.PlaneGeometry(PLANESIZE,PLANESIZE)
 const planeMaterial = new THREE.MeshBasicMaterial({
     color: 0xE4AE5B,
     side: THREE.DoubleSide
@@ -69,7 +70,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 100, 10)
+const myWorld = new World(scene, 0, 0)
 console.log("=====world creation done=====")
 
 //create adam and eve
@@ -82,7 +83,7 @@ myWorld.foodInit()
 console.log("=====food creation done=====")
 console.log(myWorld.prey[0])
 var basic_frame = 60
-var target_frame = 5
+var target_frame = 15
 var frame = 0
 let animateId
 
@@ -101,8 +102,8 @@ function animate() {
         // creatures move
         
         myWorld.day(isfarsighted)
-        if(myWorld.turn%30==0){
-            myWorld.yearOver(isfarsighted)
+        if(myWorld.turn%365==0){
+            myWorld.monthOver(isfarsighted)
             updateChart()
         }
     }
@@ -149,31 +150,59 @@ var cancelBtn = document.getElementById('cancelBtn')
 var gridmapC = document.getElementById('gridmapContainer')
 let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
+let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
 
 creatureBtn.addEventListener('click', function onOpen(){
     cancelAnimationFrame(animateId)
 })
+
+
+let newCreatureP
+let newPreyList
+let newPredetorList
+let newCid
+let typeColor = [0x000000, 0x0000FF,0xFF0000] // for visualizing click
+
 cancelBtn.addEventListener('click', function(){
+    newPredetorList.forEach((elem)=>{
+        scene.remove(elem.object)
+    })
+    newPreyList.forEach((elem) => {
+        scene.remove(elem.object)
+    })
+    initCreatureD() // 이거 꼭 위에코드 다음에 실행되어야 함!!!
     animate()
-    let input = document.getElementsByTagName('input')
-    let inputList = Array.prototype.slice.call(input)
-    inputList.forEach(elem => {
-        elem.checked = false
-        elem.value = null
-    }) //.value = null
-    
     gridmapC.style.display = "none"
     creatureDialog.close('creatureNotChosen')
 })
 
 confirmBtn.addEventListener('click', function(){
-    // gridmap 보여주고 클릭 받기 !!!!
-    // 1. 지정된 인풋 파라미터에 불러오기
-    // 1-1. 모두 다 null이 아님을 확인하기.
-    // 2. 파라미터 전역적으로 지정해서 다른 클릭에서 사용할 수 있도록 하기
-    // 3. gridmap 켜기(맵의 크기는 일정.거기서 상대적으로 위치를 얻어야 함.
-    // 4. 각 꼭짓점의
+    newPreyList = []
+    newPredetorList = []
+    newCid = myWorld.cid
+
+    let ctype
+    if(document.getElementById('prey').checked){
+        ctype = 1;
+    } else if(document.getElementById('predetor').checked){
+        ctype = 2;
+    } else{
+        alert("타입을 선택해 주세요.")
+        return
+    }
+    newCreatureP = {
+        scene: scene,
+        type : ctype,
+        worldSize : PLANESIZE,
+        speed : parseInt(document.getElementById('speed').value),
+        sight : parseInt(document.getElementById('sight').value),
+        coldresist : parseInt(document.getElementById('cold').value),
+        hotresist : parseInt(document.getElementById('hot').value),
+        efficiency : parseInt(document.getElementById('eff').value),
+        isfarsighted : isfarsighted
+    }
+    console.log(newCreatureP)
     gridmapC.style.display = "block"
 })
 
@@ -182,10 +211,56 @@ previewBtn.addEventListener('click', function(){
 })
 
 gridmapList.forEach(grid => {
-    grid.addEventListener('click', function(){
+    grid.addEventListener('click', function(event){
         let gridpos = getOffset(grid)
-        console.log(gridpos)
+        const absoluteX = gridpos.right - gridpos.left
+        const absoluteY = gridpos.bottom - gridpos.top
+        const singleGridCount = PLANESIZE/4  // gridcount X gridcount 
+        const scaleX = singleGridCount/absoluteX
+        const scaleY = singleGridCount/absoluteY
+        const xi = parseInt(event.target.id[0])
+        const yi = parseInt(event.target.id[1])
+
+        // worldsize == planesize라 가정.
+        const inputX = event.clientX - gridpos.left
+        const inputY = event.clientY - gridpos.top
+
+        // draw preview dot
+        let cwidth = event.target.width
+        let cheight = event.target.height
+        let scaleX_c = cwidth/absoluteX
+        let scaleY_c = cheight/absoluteY
+        let ctx = event.target.getContext('2d')
+        ctx.beginPath()
+        ctx.arc(parseInt(inputX*scaleX_c), parseInt(inputY*scaleY_c), 2, 0, 2*Math.PI)
+        ctx.stroke()
+        ctx.fillStyle = typeColor[newCreatureP.type]
+        ctx.fill()
+
+        newCreatureP.x = parseInt(xi*singleGridCount + inputX*scaleX)
+        newCreatureP.z = parseInt(yi*singleGridCount + inputY*scaleY)
+        newCreatureP.id = newCid
+        if (newCreatureP.type == 1){    // prey
+            newPreyList.push(new Creature(newCreatureP))
+        } else if (newCreatureP.type == 2){     // predetor
+            newPredetorList.push(new Creature(newCreatureP))
+        } else{
+            console.log("wrong type input!!!")
+        }
+        newCid++
     })
+})
+
+gridConfirmBtn.addEventListener('click', function(){
+    myWorld.prey = myWorld.prey.concat(newPreyList)
+    myWorld.predator = myWorld.predator.concat(newPredetorList)
+    
+    initCreatureD()
+    animate()
+    render()
+    
+    gridmapC.style.display = "none"
+    creatureDialog.close('creaturesConfirmed')
 })
 
 function getOffset(el){
@@ -197,6 +272,7 @@ function getOffset(el){
         bottom: rect.bottom + window.scrollY
     }
 }
+
 
 function updateChart(){
 
@@ -220,3 +296,34 @@ function updateChart(){
     });
 }
 
+function initCreatureD(){
+    newPredetorList = []
+    newPreyList = []
+    let input = document.getElementsByTagName('input')
+    let inputList = Array.prototype.slice.call(input)
+    inputList.forEach(elem => {
+        elem.checked = false
+        elem.value = null
+    }) 
+    gridmapList.forEach(grid => {
+        grid.width = grid.width // canvas 초기화
+    })
+}
+
+let framecount = document.getElementById("framecount")
+let pauseBtn = document.getElementById("pause")
+let playBtn = document.getElementById("aniplay")
+let frameNum = document.getElementById('frameNum')
+
+pauseBtn.addEventListener('click', function(){
+    cancelAnimationFrame(animateId)
+})
+playBtn.addEventListener('click', function(){
+    animate()
+})
+framecount.addEventListener('input', function(){
+    cancelAnimationFrame(animateId)
+    frameNum.innerHTML = framecount.value
+    target_frame = parseInt(framecount.value)
+    animate()
+}, false)

@@ -5,7 +5,7 @@ import {Jungle, Desert, Glacier, Grass} from './env.js'
 export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
-        this.size = 200
+        this.size = 300
         this.turn = 1
         this.cid = 1    
         this.scene = scene
@@ -22,7 +22,12 @@ export default class World{
         this.foodRadius = 1
 
         // env information
-        this.envs = [new Glacier(), new Desert(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass()]
+
+        // Jungle, Desert, Glacier, Grass
+        this.envs = [new Glacier(), new Glacier(), new Glacier(), new Glacier(),
+                new Glacier(), new Glacier(), new Glacier(), new Glacier(),
+                new Desert(), new Desert(), new Desert(), new Desert(),
+                new Desert(), new Desert(), new Desert(), new Desert()]
         
 
         // turn information
@@ -63,7 +68,6 @@ export default class World{
                 coldresist: 2,
                 hotresist: 2,
                 efficiency: 2,
-
                 isfarsighted: true
             }))
         }
@@ -78,10 +82,10 @@ export default class World{
     }
 
     getCurrentEnv(xpos, zpos){
-        let x_idx = parseInt(xpos/(size/4)) 
-        let z_idx = parseInt(zpos/(size/4)) 
+        let x_idx = parseInt(xpos/(this.size/4)) 
+        let z_idx = parseInt(zpos/(this.size/4)) 
 
-        return this.env[z_idx*4 + x_idx]
+        return this.envs[z_idx*4 + x_idx]
     }
 
 
@@ -114,6 +118,8 @@ export default class World{
 
         this.prey.forEach((creature) => {
             var direction = this.searchFood(creature)
+            let coldDamage = 0
+            let hotDamage = 0
             if(creature.changeDirect==0 || creature.isChasing){
                 creature.direction = direction
                 creature.changeDirect = creature.isChasing ? 1 : Math.floor(Math.random() * 5) + 10;
@@ -124,20 +130,28 @@ export default class World{
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
 
+                let env = this.getCurrentEnv(creature.position.x, creature.position.z)
+                coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
+                hotDamage += env.hot-creature.hotresist > 0 ? env.hot-creature.hotresist : 0
+
                 var next_x = creature.position.x + direction[1]
                 var next_z = creature.position.z + direction[0]
 
                 if(next_x >= this.size){
                     next_x = this.size-1
+                    creature.changeDirect = 0
                 }
                 if(next_x <0){
                     next_x = 0
+                    creature.changeDirect = 0
                 }
                 if(next_z >= this.size){
                     next_z = this.size-1
+                    creature.changeDirect = 0
                 }
                 if(next_z <0){
                     next_z = 0
+                    creature.changeDirect = 0
                 }
                 
                 creature.update(next_x, next_z, isfarsighted)
@@ -152,7 +166,9 @@ export default class World{
                     creature.hp += creature.efficiency * creature.hpScale
                 }
             }
-            creature.hp -= creature.speed
+            creature.hp -= (creature.speed + hotDamage + coldDamage)
+            if(hotDamage>0) console.log("so hot")
+            if(coldDamage>0) console.log("so cold")
 
             if(creature.hp<=0){
                 this.prey = this.prey.filter((element)=>element.object!==creature.object);
@@ -162,6 +178,8 @@ export default class World{
         })
         this.predator.forEach((creature) => {
             var direction = this.searchPrey(creature)
+            let coldDamage = 0
+            let hotDamage = 0
             if(creature.changeDirect==0 || creature.isChasing){
                 creature.direction = direction
                 creature.changeDirect = creature.isChasing ? 1 : Math.floor(Math.random() * 5) + 10;;
@@ -171,20 +189,29 @@ export default class World{
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
                 
+                let env = this.getCurrentEnv(creature.position.x, creature.position.z)
+                
+                coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
+                hotDamage += env.hot-creature.hotresist > 0 ? env.hot-creature.hotresist : 0
+
                 var next_x = creature.position.x + direction[1]
                 var next_z = creature.position.z + direction[0]
 
                 if(next_x >= this.size){
                     next_x = this.size-1
+                    creature.changeDirect = 0
                 }
                 if(next_x <0){
                     next_x = 0
+                    creature.changeDirect = 0
                 }
                 if(next_z >= this.size){
                     next_z = this.size-1
+                    creature.changeDirect = 0
                 }
                 if(next_z <0){
                     next_z = 0
+                    creature.changeDirect = 0
                 }
                 creature.update(next_x,next_z, isfarsighted)
                 // 이동한 후 생명체의 위치 저장
@@ -202,7 +229,7 @@ export default class World{
                     }
                 }
             }
-            creature.hp -= creature.speed
+            creature.hp -= (creature.speed + hotDamage + coldDamage)
 
             if(creature.hp<=0){
                 this.predator = this.predator.filter((element)=>element.object!==creature.object);
@@ -214,7 +241,7 @@ export default class World{
         this.turn += 1
     }
 
-    yearOver(isfarsighted){
+    monthOver(isfarsighted){
         var babyCreature = []
         this.prey.forEach((creature) => {
             // if(creature.hp<=0){
@@ -261,7 +288,6 @@ export default class World{
             // }
             if(creature.hp>=creature.hpScale*2){
                 var position = creature.position
-                console.log("duplicate")
                 var newCreatureInfo = this.mutationAlgo(creature)
 
                 var newCreature =new Creature({
@@ -289,9 +315,6 @@ export default class World{
         })
         this.predator.push(...babyCreature)
 
-        console.log(`=====month ${this.turn/30} end=====`)
-        console.log(`${this.predator.length} predator left`)
-        console.log(`${this.prey.length} pery left`)
         if(this.prey.length>0)
             this.foodInit()
         
@@ -303,6 +326,7 @@ export default class World{
         let attributeArray = [each_creature.speed, each_creature.sight/2 - 1 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
 
         // 변이가 일어난다면 한 특정한 속성 하나는 올리고 한개는 내림
+
         if(Math.floor(Math.random() * 100) < mutationPercent){
             console.log("돌연변이 발생")
             let upperAttribute = Math.floor(Math.random() * 5)
@@ -320,6 +344,7 @@ export default class World{
             attributeArray[upperAttribute] += 1
             attributeArray[downAttribute]  -= 1
         }
+        console.log(attributeArray)
         attributeArray[1] = attributeArray[1]*2 + 2 
 
         newCreatureInfo.speed      = attributeArray[0]
@@ -393,7 +418,7 @@ export default class World{
         // 현재 위치에 포식자가 있는데 아직 내가 안죽었다면 임의의 방향으로 도망침
         for (var c of this.creatures[zpos][xpos]){
             if(c.type == 2){
-                console.log("in rand")
+                // console.log("in rand")
                 return this.makeRandomDirec()
             }
                 
@@ -408,7 +433,7 @@ export default class World{
         direction = [0,0]
         // 현재 위치에 먹이가 있다면 안 움직임
         if(this.foodMap[zpos][xpos]>0){
-            console.log("prey no move")
+            // console.log("prey no move")
             return direction
         }
         
@@ -456,7 +481,7 @@ export default class World{
         if(this.hp > this.hpScale * 2){
             return this.makeRandomDirec()
         }else if(this.creatures[zpos][xpos].type==1){
-            console.log("predactor no move")
+            // console.log("predactor no move")
             return direction
         }
         return this.searchAlgo(each_creature,xpos,zpos,scope,1)

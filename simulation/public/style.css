@@ -90,13 +90,14 @@ body{
     display: grid;
     column-gap:10px;
     row-gap:10px;
-    grid-template-columns: 20vh 20vh;
-    grid-template-rows: 20vh 20vh;;
+    grid-template-columns: 10vh 10vh 10vh 10vh;
+    grid-template-rows: 10vh 10vh 10vh 10vh;
 }
 .grid-item{
     display: inline-grid;
     background-color: aquamarine;
-
+    width: 10vh;
+    height:10vh;
 }
 
 /* statisticBOX */
@@ -133,3 +134,25 @@ ul {
     background-color:beige;
     display:block;
   }
+
+#speedControlBar{
+    display: flex;
+}
+#frameNum{
+    color:white;
+}
+#frameTag{
+    color: white;
+}
+/* #speedControlBar{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+} */
+.rightsidedBox{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+}
