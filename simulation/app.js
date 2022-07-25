@@ -11,6 +11,8 @@ app.use(
     'node_modules/three/build'
   ))
 )
+
+
 app.use(
   '/jsm/',
   express.static(path.join(
