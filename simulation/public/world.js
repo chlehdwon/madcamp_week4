@@ -29,7 +29,7 @@ export default class World{
             // this.prey.push(new Creature(this.cid++, 100,100- 2*i, this.scene, this.size,1,1, true))
         }
         for (var j =0;j<predatorNum;j++){    // 2차 소비자
-            this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,2, true))
+            this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,2,2, true))
             //this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,0,2, true))
         }
 
@@ -278,7 +278,7 @@ export default class World{
             return direction
         }
 
-
+        direction = [0,0]
         // 현재 위치에 먹이가 있다면 안 움직임
         if(this.foodMap[zpos][xpos]>0){
             console.log("prey no move")
