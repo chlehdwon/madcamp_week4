@@ -14,9 +14,11 @@ export default class Creature{
         this.id = id   
         this.food = 1                // creation id of creature
         this.worldSize = worldSize // information of world
-        this.hpScale = 30*speed      // food per efficiency (1 eat => 30*speed*efficiency energy)
+        this.hpScale = 365*speed      // food per efficiency (1 eat => 30*speed*efficiency energy)
         this.hp = efficiency * this.hpScale
         
+
+
         // creature parameter
         this.type = type
         this.speed = speed
