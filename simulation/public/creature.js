@@ -98,8 +98,8 @@ export default class Creature{
             // this.animateMixer.update(this.clock.getDelta())
             let x = next_x - this.worldSize/2
             let z = next_z - this.worldSize/2
-            this.object.rotation.y = Math.atan((x - this.object.position.x)/(z - this.object.position.z)) + ((z - this.object.position.z)>=0 ? Math.PI : 0)
-
+            var atan = Math.atan((x - this.object.position.x)/(z - this.object.position.z))
+            this.object.rotation.y = isNaN(atan) ? 0 : atan + ((z - this.object.position.z)>=0 ? Math.PI : 0)
             this.object.position.x = x
             this.object.position.z= z
         }

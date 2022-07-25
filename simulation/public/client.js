@@ -5,7 +5,6 @@ import { Loader } from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
 
-
 // =============== RENDERER ===================
 const canvas = document.querySelector('#c')
 const renderer = new THREE.WebGLRenderer({
@@ -27,7 +26,7 @@ const camera = new THREE.PerspectiveCamera(
   1500)
 camera.position.set(0, 370, 340)
 camera.lookAt(0,0,0)
- 
+
 // ==================== ORBITCONTROL =========================
 const controls = new OrbitControls(camera, renderer.domElement)
 
@@ -67,7 +66,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 50, 1)
+const myWorld = new World(scene, 50, 10)
 console.log("=====world creation done=====")
 
 //create adam and eve
@@ -78,7 +77,7 @@ console.log("=====creature creation done=====")
 // create food
 myWorld.foodInit()
 console.log("=====food creation done=====")
-
+console.log(myWorld.prey[0])
 var basic_frame = 60
 var target_frame = 15
 var frame = 0

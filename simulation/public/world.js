@@ -22,12 +22,12 @@ export default class World{
 
     creatureInit(preyNum,predatorNum){
         for (var i =1;i<preyNum;i++){    // 1차 소비자
-            //this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
-            this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
+            this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
+            //this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
         }
         for (var j =0;j<predatorNum;j++){    // 2차 소비자
-            //this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,3,2, true))
-            this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,3,2, true))
+            this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,3,2, true))
+            //this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,3,2, true))
         }
 
         this.prey.forEach((creatures)=>{
@@ -67,6 +67,12 @@ export default class World{
             direction = creature.direction
             creature.changeDirect--;
 
+
+            // console.log("dirrection",direction)
+            // console.log("speed",creature.speed)
+
+
+
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
                 //console.log(this.creatures[creature.position.z][creature.position.x])
@@ -83,7 +89,7 @@ export default class World{
                 }if(next_z <0){
                     next_z = 0
                 }
-
+                
                 creature.update(next_x, next_z, isfarsighted)
 
                 // 이동한 후 생명체의 위치 저장
@@ -211,28 +217,27 @@ export default class World{
         for(var i=this.minScope(xpos,scope);i<this.maxScope(xpos,scope);i++){
             for(var j=this.minScope(zpos,scope);j<this.maxScope(zpos,scope);j++){
                 for(var c of this.creatures[j][i]){
-                    if(c.type ==1){
+                    if(c.type ==opposite_type){
                         var d = this.distance([zpos,xpos],[j,i])
 
                         // 기존과 같은 거리의 prey가 있다면 returnlist에 push
                         if(d==minDistance){
-                            returnlist.push([zpos-j,xpos-i])
+                            returnlist.push([j - zpos,i- xpos])
                         }
                         // 만약 거리가 작은게 있다면 returnlist 초기화 하고 push
                         else if(d < minDistance){
                             minDistance=d
                             returnlist=[]
-                            returnlist.push([zpos-j,xpos-i])
+                            returnlist.push([j- zpos,i- xpos])
                         }
                     }
                 }
             }
         }
-
+        
         // 만약 scope안에 prey가 없다면 랜덤으로 움직임
         if(minDistance==100){
             each_creature.isChasing = false;
-            
             // prey가 찾는거면 빈칸 return
             if(opposite_type == 2){return([])}
 
@@ -254,7 +259,6 @@ export default class World{
                 direction[1]*=-1
             }
         }
-
         return direction
     }
 
@@ -262,19 +266,22 @@ export default class World{
         var scope = 5
         var direction = [0,0] //z,x
 
-        //return direction
         var xpos = each_creature.position.x
         var zpos = each_creature.position.z
 
         // 현재 위치에 포식자가 있는데 아직 내가 안죽었다면 임의의 방향으로 도망침
         for (var c of this.creatures[zpos][xpos]){
-            if(c.type == 2)
+            if(c.type == 2){
+                console.log("in rand")
                 return this.makeRandomDirec()
+            }
+                
         }
         
         // 포식자를 주위에서 찾았다면 반대 방향으로 도망침
         direction = this.searchAlgo(each_creature,xpos,zpos,scope,2)
         if(direction.length !=0){
+            console.log("search enemy" ,direction)
             return direction
         }
 
