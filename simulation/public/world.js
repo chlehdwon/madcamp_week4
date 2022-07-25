@@ -22,15 +22,15 @@ export default class World{
 
     creatureInit(preyNum,predatorNum){
         for (var i =0;i<preyNum;i++){    // 1차 소비자
-            //this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
-            this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
-            this.prey.push(new Creature(this.cid++, 100,100, this.scene, this.size,1,1, true))
-            this.prey.push(new Creature(this.cid++, 100,100+ 2*i, this.scene, this.size,1,1, true))
-            this.prey.push(new Creature(this.cid++, 100,100- 2*i, this.scene, this.size,1,1, true))
+            this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
+            // this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
+            // this.prey.push(new Creature(this.cid++, 100,100, this.scene, this.size,1,1, true))
+            // this.prey.push(new Creature(this.cid++, 100,100+ 2*i, this.scene, this.size,1,1, true))
+            // this.prey.push(new Creature(this.cid++, 100,100- 2*i, this.scene, this.size,1,1, true))
         }
         for (var j =0;j<predatorNum;j++){    // 2차 소비자
-            //this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,2, true))
-            this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,0,2, true))
+            this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,2, true))
+            //this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,0,2, true))
         }
 
         this.prey.forEach((creatures)=>{
@@ -139,7 +139,7 @@ export default class World{
                 for (var p of this.creatures[creature.position.z][creature.position.x]){
                     //console.log(p)
                     //console.log(p.type)
-                    if(p.type==1 && p.food<2){
+                    if(p.type==1 ){
                         this.scene.remove(p.object)
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
                         this.prey= this.prey.filter((element)=>element.object!==p.object);
