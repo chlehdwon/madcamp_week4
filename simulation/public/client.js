@@ -1,9 +1,12 @@
 import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
+// import {Chart} from 'chart.js/auto'
 import { Loader } from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
+// import {makeChart,updateChart} from './chart.js'
+
 
 // =============== RENDERER ===================
 const canvas = document.querySelector('#c')
@@ -87,7 +90,6 @@ let animateId
 function animate() {
     animateId= requestAnimationFrame(animate)
     light.position.copy( camera.position );
-
     if(frame > basic_frame){
         frame -= basic_frame
         // set farsighted & closesighted
@@ -102,8 +104,10 @@ function animate() {
         myWorld.day(isfarsighted)
         if(myWorld.turn%365==0){
             myWorld.monthOver(isfarsighted)
+            updateChart()
         }
     }
+    
     render() 
     frame += target_frame
     
@@ -112,7 +116,6 @@ function animate() {
 function render() {
     renderer.render(scene, camera)
 }
-
 animate()
 
 
@@ -307,3 +310,25 @@ let disasterBtn = document.getElementById("disasterBtn")
 disasterBtn.addEventListener("click", function(){
 
 })
+function updateChart(){
+
+
+    new Chart(document.getElementById("line-chart").getContext("2d"), {
+        type: 'pie',
+        data: {
+          labels: ["predator", "prey"],
+          datasets: [{
+            label: "Population (millions)",
+            backgroundColor: ["#3e95cd", "#8e5ea2",],
+            data: [myWorld.predator.length,myWorld.prey.length]
+          }]
+        },
+        options: {
+          title: {
+            display: false,
+            text: 'Predicted world population (millions) in 2050'
+          }
+        }
+    });
+}
+

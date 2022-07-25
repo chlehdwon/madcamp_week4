@@ -47,7 +47,7 @@ export default class World{
                 scene: this.scene, 
                 worldSize: this.size,
                 type: 1,
-                speed: 1, 
+                speed: 2, 
                 sight: 8,
                 coldresist: 2,
                 hotresist:2,

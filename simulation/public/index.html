@@ -13,8 +13,12 @@
         }
       }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
     <script type="module" src="client.js" defer></script>
+    <script type="module" src="chart.js" defer></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="statstyle.css">
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
@@ -126,18 +130,22 @@
         <output id="frameNum">15</output>
       </div>
 
-      <div class="statisticBox">
-        <!-- 여기에 확률 그래프들 얹기 -->
-        <ul>
-          <li><a href="default.asp">Home</a></li>
-          <li><a href="news.asp">News</a></li>
-          <li><a href="contact.asp">Contact</a></li>
-          <li><a href="about.asp">About</a></li>
-        </ul>
-        <div class="chartContainer">
-          statistics here
-        </div> 
-      </div>
+    <div class="statisticBox">
+      <!-- 여기에 확률 그래프들 얹기 -->
+      <ul>
+        <li><a href="default.asp">Home</a></li>
+        <li><a href="news.asp">News</a></li>
+        <li><a href="contact.asp">Contact</a></li>
+        <li><a href="about.asp">About</a></li>
+
+      </ul>
+      <div class="chartContainer">
+        
+        <canvas id="line-chart"></canvas>
+
+        
+      </dif> 
+
     </div>
   </body>
 </html> 
