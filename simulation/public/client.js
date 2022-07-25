@@ -286,3 +286,4 @@ function initCreatureD(){
         grid.width = grid.width // canvas 초기화
     })
 }
+
