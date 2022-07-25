@@ -21,13 +21,16 @@ export default class World{
     }
 
     creatureInit(preyNum,predatorNum){
-        for (var i =1;i<preyNum;i++){    // 1차 소비자
-            this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
-            //this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
+        for (var i =0;i<preyNum;i++){    // 1차 소비자
+            //this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
+            this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
+            this.prey.push(new Creature(this.cid++, 100,100, this.scene, this.size,1,1, true))
+            this.prey.push(new Creature(this.cid++, 100,100+ 2*i, this.scene, this.size,1,1, true))
+            this.prey.push(new Creature(this.cid++, 100,100- 2*i, this.scene, this.size,1,1, true))
         }
         for (var j =0;j<predatorNum;j++){    // 2차 소비자
-            this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,3,2, true))
-            //this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,3,2, true))
+            //this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,2, true))
+            this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,0,2, true))
         }
 
         this.prey.forEach((creatures)=>{
@@ -300,12 +303,12 @@ export default class World{
                 if(this.foodMap[j][i]>0){
                     var d = this.distance([zpos,xpos],[j,i])
                     if(d == minDistance){
-                        nearlist.push([zpos-j,xpos-i])
+                        nearlist.push([j- zpos,i-xpos])
                     }
                     else if(d < minDistance){
                         minDistance = d
                         nearlist=[]
-                        nearlist.push([zpos-j,xpos-i])
+                        nearlist.push([j- zpos,i-xpos])
                     }
                 }
             }
