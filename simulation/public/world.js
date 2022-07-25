@@ -266,7 +266,7 @@ export default class World{
     }
 
     searchFood(each_creature){
-        var scope = 5
+        var scope = 10
         var direction = [0,0] //z,x
 
         var xpos = each_creature.position.x
