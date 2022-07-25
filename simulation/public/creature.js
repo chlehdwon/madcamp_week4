@@ -17,6 +17,8 @@ export default class Creature{
         this.hpScale = 30*speed      // food per efficiency (1 eat => 30*speed*efficiency energy)
         this.hp = efficiency * this.hpScale
         
+
+        
         // creature parameter
         this.type = type
         this.speed = speed
