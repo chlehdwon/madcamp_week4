@@ -67,7 +67,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 50, 1)
+const myWorld = new World(scene, 1, 1)
 console.log("=====world creation done=====")
 
 //create adam and eve
