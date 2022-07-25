@@ -9,7 +9,7 @@ const colorList = [0x000000,0x0000FF, 0xFF0000]
 
 // Animation object (= Creatures)
 export default class Creature{
-    constructor({id, x, z, scene, worldSize, type, speed, sight, coldresist, hotresist, isfarsighted}){
+    constructor({id, x, z, scene, worldSize, type, speed, sight, coldresist, hotresist, efficiency, isfarsighted}){
         this.position = {x, z}            
         this.id = id   
         this.scene = scene   
@@ -23,7 +23,8 @@ export default class Creature{
         this.sight = sight
         this.coldresist = coldresist
         this.hotresist = hotresist
-        
+        this.efficiency = efficiency
+
         this.changeDirect = 0      // change direction when this value is 0
         this.direction = [0,0]     // store creature's direction
         this.isChasing = false

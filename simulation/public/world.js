@@ -33,6 +33,7 @@ export default class World{
                 sight: 10,
                 coldresist: 1,
                 hotresist:1,
+                efficiency: 1,
                 isfarsighted: true
             }))
         }
@@ -48,6 +49,7 @@ export default class World{
                 sight: 5, 
                 coldresist: 1,
                 hotresist: 1,
+                efficiency: 1,
                 isfarsighted: true
             }))
         }
@@ -188,6 +190,7 @@ export default class World{
                     sight: 10,
                     coldresist: 1,
                     hotresist:1,
+                    efficiency: 1,
                     isfarsighted: isfarsighted
                 })
                 babyCreature.push(newCreature)
@@ -222,6 +225,7 @@ export default class World{
                     sight: 10,
                     coldresist: 1,
                     hotresist:1,
+                    efficiency: 1,
                     isfarsighted: isfarsighted
                 })
                 babyCreature.push(newCreature)
