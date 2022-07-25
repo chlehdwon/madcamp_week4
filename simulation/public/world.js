@@ -30,7 +30,7 @@ export default class World{
                 worldSize: this.size,
                 type: 1,
                 speed: 1, 
-                sight: 10,
+                sight: 8,
                 coldresist: 2,
                 hotresist:2,
                 efficiency: 1,
@@ -89,11 +89,6 @@ export default class World{
 
             direction = creature.direction
             creature.changeDirect--;
-
-
-            // console.log("dirrection",direction)
-            // console.log("speed",creature.speed)
-
 
 
             for(var i = 0;i<creature.speed;i++){
@@ -215,6 +210,7 @@ export default class World{
             }
             else if(creature.food>=2){
                 var position = creature.position
+                console.log("duplicate")
                 var newCreatureInfo = this.mutationAlgo(creature)
 
                 var newCreature =new Creature({
@@ -253,12 +249,13 @@ export default class World{
     }
     
     mutationAlgo(each_creature){
-        let newCreatureInfo = each_creature
+        let newCreatureInfo = Object.assign({},each_creature)
         let mutationPercent = 5
-        let attributeArray = [each_creature.speed, each_creature.sight/2 - 2 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
-        
-        // 변이가 일어난다면 한 특정은 
+        let attributeArray = [each_creature.speed, each_creature.sight/2 - 1 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
+
+        // 변이가 일어난다면 한 특정한 속성 하나는 올리고 한개는 내림
         if(Math.floor(Math.random() * 100) < mutationPercent){
+            console.log("돌연변이 발생")
             let upperAttribute = Math.floor(Math.random() * 5)
             let downAttribute  = Math.floor(Math.random() * 5)
 
@@ -281,7 +278,7 @@ export default class World{
         newCreatureInfo.coldresist = attributeArray[2]
         newCreatureInfo.hotresist  = attributeArray[3]
         newCreatureInfo.efficiency = attributeArray[4]
-
+        
         return newCreatureInfo
     }
 
@@ -356,7 +353,6 @@ export default class World{
         // 포식자를 주위에서 찾았다면 반대 방향으로 도망침
         direction = this.searchAlgo(each_creature,xpos,zpos,scope,2)
         if(direction.length !=0){
-            console.log("search enemy" ,direction)
             return direction
         }
 
