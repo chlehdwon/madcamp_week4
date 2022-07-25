@@ -67,7 +67,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 100, 10)
+const myWorld = new World(scene, 0, 0)
 console.log("=====world creation done=====")
 
 //create adam and eve
@@ -100,7 +100,7 @@ function animate() {
         // creatures move
         
         myWorld.day(isfarsighted)
-        if(myWorld.turn%30==0){
+        if(myWorld.turn%365==0){
             myWorld.monthOver(isfarsighted)
         }
     }

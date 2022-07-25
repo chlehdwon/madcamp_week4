@@ -22,7 +22,12 @@ export default class World{
         this.foodRadius = 1
 
         // env information
-        this.envs = [new Glacier(), new Desert(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass()]
+
+        // Jungle, Desert, Glacier, Grass
+        this.envs = [new Glacier(), new Glacier(), new Glacier(), new Glacier(),
+                new Glacier(), new Glacier(), new Glacier(), new Glacier(),
+                new Desert(), new Desert(), new Desert(), new Desert(),
+                new Desert(), new Desert(), new Desert(), new Desert()]
         
 
         // turn information
@@ -62,7 +67,7 @@ export default class World{
                 sight: 4, 
                 coldresist: 2,
                 hotresist: 2,
-                efficiency: 2,
+                efficiency: 1,
                 isfarsighted: true
             }))
         }
@@ -77,10 +82,10 @@ export default class World{
     }
 
     getCurrentEnv(xpos, zpos){
-        let x_idx = parseInt(xpos/(size/4)) 
-        let z_idx = parseInt(zpos/(size/4)) 
+        let x_idx = parseInt(xpos/(this.size/4)) 
+        let z_idx = parseInt(zpos/(this.size/4)) 
 
-        return this.env[z_idx*4 + x_idx]
+        return this.envs[z_idx*4 + x_idx]
     }
 
 
@@ -113,6 +118,8 @@ export default class World{
 
         this.prey.forEach((creature) => {
             var direction = this.searchFood(creature)
+            let coldDamage = 0
+            let hotDamage = 0
             if(creature.changeDirect==0 || creature.isChasing){
                 creature.direction = direction
                 creature.changeDirect = creature.isChasing ? 1 : Math.floor(Math.random() * 5) + 10;
@@ -122,6 +129,10 @@ export default class World{
             creature.changeDirect--;
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
+
+                let env = this.getCurrentEnv(creature.position.x, creature.position.z)
+                coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
+                hotDamage += env.hot-creature.hotresist > 0 ? env.hot-creature.hotresist : 0
 
                 var next_x = creature.position.x + direction[1]
                 var next_z = creature.position.z + direction[0]
@@ -155,7 +166,9 @@ export default class World{
                     creature.hp += creature.efficiency * creature.hpScale
                 }
             }
-            creature.hp -= creature.speed
+            creature.hp -= (creature.speed + hotDamage + coldDamage)
+            if(hotDamage>0) console.log("so hot")
+            if(coldDamage>0) console.log("so cold")
 
             if(creature.hp<=0){
                 this.prey = this.prey.filter((element)=>element.object!==creature.object);
@@ -165,6 +178,8 @@ export default class World{
         })
         this.predator.forEach((creature) => {
             var direction = this.searchPrey(creature)
+            let coldDamage = 0
+            let hotDamage = 0
             if(creature.changeDirect==0 || creature.isChasing){
                 creature.direction = direction
                 creature.changeDirect = creature.isChasing ? 1 : Math.floor(Math.random() * 5) + 10;;
@@ -174,6 +189,11 @@ export default class World{
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
                 
+                let env = this.getCurrentEnv(creature.position.x, creature.position.z)
+                
+                coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
+                hotDamage += env.hot-creature.hotresist > 0 ? env.hot-creature.hotresist : 0
+
                 var next_x = creature.position.x + direction[1]
                 var next_z = creature.position.z + direction[0]
 
@@ -209,7 +229,7 @@ export default class World{
                     }
                 }
             }
-            creature.hp -= creature.speed
+            creature.hp -= (creature.speed + hotDamage + coldDamage)
 
             if(creature.hp<=0){
                 this.predator = this.predator.filter((element)=>element.object!==creature.object);
