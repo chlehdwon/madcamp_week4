@@ -39,7 +39,8 @@ scene.add(light)
 scene.add(light.target)
 
 // =================== PLANE =========================
-const planeGeometry = new THREE.PlaneGeometry(300,300)
+const PLANESIZE = 300
+const planeGeometry = new THREE.PlaneGeometry(PLANESIZE,PLANESIZE)
 const planeMaterial = new THREE.MeshBasicMaterial({
     color: 0xE4AE5B,
     side: THREE.DoubleSide
@@ -66,7 +67,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 50, 10)
+const myWorld = new World(scene, 50, 0)
 console.log("=====world creation done=====")
 
 //create adam and eve
@@ -149,11 +150,13 @@ var cancelBtn = document.getElementById('cancelBtn')
 var gridmapC = document.getElementById('gridmapContainer')
 let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
+let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
 
 creatureBtn.addEventListener('click', function onOpen(){
     cancelAnimationFrame(animateId)
 })
+
 cancelBtn.addEventListener('click', function(){
     animate()
     let input = document.getElementsByTagName('input')
@@ -167,13 +170,34 @@ cancelBtn.addEventListener('click', function(){
     creatureDialog.close('creatureNotChosen')
 })
 
+let newCreatureP
+let newPreyList
+let newPredetorList
+let newCid
 confirmBtn.addEventListener('click', function(){
-    // gridmap 보여주고 클릭 받기 !!!!
-    // 1. 지정된 인풋 파라미터에 불러오기
-    // 1-1. 모두 다 null이 아님을 확인하기.
-    // 2. 파라미터 전역적으로 지정해서 다른 클릭에서 사용할 수 있도록 하기
-    // 3. gridmap 켜기(맵의 크기는 일정.거기서 상대적으로 위치를 얻어야 함.
-    // 4. 각 꼭짓점의
+    newPreyList = []
+    newPredetorList = []
+    newCid = myWorld.cid
+
+    let ctype
+    if(document.getElementById('prey').checked){
+        ctype = 1;
+    } else if(document.getElementById('predetor').checked){
+        ctype = 2;
+    } else{
+        alert("타입을 선택해 주세요.")
+        return
+    }
+    newCreatureP = {
+        scene: scene,
+        type : ctype,
+        speed : parseInt(document.getElementById('speed').value),
+        sight : parseInt(document.getElementById('sight').value),
+        coldresist : parseInt(document.getElementById('cold').value),
+        hotresist : parseInt(document.getElementById('hot').value),
+        efficiency : parseInt(document.getElementById('eff').value),
+    }
+    console.log(newCreatureP)
     gridmapC.style.display = "block"
 })
 
@@ -182,10 +206,54 @@ previewBtn.addEventListener('click', function(){
 })
 
 gridmapList.forEach(grid => {
-    grid.addEventListener('click', function(){
+    grid.addEventListener('click', function(event){
         let gridpos = getOffset(grid)
+        const absoluteX = gridpos.right - gridpos.left
+        const absoluteY = gridpos.bottom - gridpos.top
+        const singleGridCount = PLANESIZE/4  // gridcount X gridcount 
+        const scaleX = singleGridCount/absoluteX
+        const scaleY = singleGridCount/absoluteY
+        const xi = parseInt(event.target.id[0])
+        const yi = parseInt(event.target.id[1])
+
         console.log(gridpos)
+        // worldsize == planesize라 가정.
+        console.log(event.clientX)
+        console.log(event.clientY)
+        const inputX = event.clientX - gridpos.left
+        const inputY = event.clientY - gridpos.top
+
+        newCreatureP.x = parseInt(xi*singleGridCount + inputX*scaleX)
+        newCreatureP.z = parseInt(yi*singleGridCount + inputY*scaleY)
+        newCreatureP.id = newCid
+        if (newCreatureP.type == 1){    // prey
+            newPreyList.push(new Creature(newCreatureP))
+        } else if (newCreatureP.type == 2){     // predetor
+            newPredetorList.push(new Creature(newCreatureP))
+        } else{
+            console.log("wrong type input!!!")
+        }
+        newCid++
+        console.log(newPredetorList)
     })
+})
+
+gridConfirmBtn.addEventListener('click', function(){
+    myWorld.prey = myWorld.prey.concat(newPreyList)
+    myWorld.predator = myWorld.predator.concat(newPredetorList)
+    console.log(myWorld.prey)
+    console.log(myWorld.predetor)
+
+    animate()
+    let input = document.getElementsByTagName('input')
+    let inputList = Array.prototype.slice.call(input)
+    inputList.forEach(elem => {
+        elem.checked = false
+        elem.value = null
+    }) //.value = null
+    
+    gridmapC.style.display = "none"
+    creatureDialog.close('creaturesConfirmed')
 })
 
 function getOffset(el){

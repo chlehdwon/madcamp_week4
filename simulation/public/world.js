@@ -2,10 +2,10 @@ import * as THREE from 'three'
 import Creature from './creature.js' 
 
 export default class World{
-    constructor(scene, preyNum,predatorNum){
+    constructor(scene, preyNum, predatorNum){
         this.prey = []
         this.predator = []
-        this.size = 250
+        this.size = 300
         this.creatures = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // creature map
         this.foodMap = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // food map
         this.foodDict = {}
@@ -312,7 +312,7 @@ export default class World{
         // 현재 위치에 포식자가 있는데 아직 내가 안죽었다면 임의의 방향으로 도망침
         for (var c of this.creatures[zpos][xpos]){
             if(c.type == 2){
-                console.log("in rand")
+                // console.log("in rand")
                 return this.makeRandomDirec()
             }
                 
@@ -321,14 +321,14 @@ export default class World{
         // 포식자를 주위에서 찾았다면 반대 방향으로 도망침
         direction = this.searchAlgo(each_creature,xpos,zpos,scope,2)
         if(direction.length !=0){
-            console.log("search enemy" ,direction)
+            // console.log("search enemy" ,direction)
             return direction
         }
 
         direction = [0,0]
         // 현재 위치에 먹이가 있다면 안 움직임
         if(this.foodMap[zpos][xpos]>0){
-            console.log("prey no move")
+            // console.log("prey no move")
             return direction
         }
         
@@ -375,7 +375,7 @@ export default class World{
         if(this.food >2){
             return this.makeRandomDirec()
         }else if(this.creatures[zpos][xpos].type==1){
-            console.log("predactor no move")
+            // console.log("predactor no move")
             return direction
         }
         return this.searchAlgo(each_creature,xpos,zpos,scope,1)
