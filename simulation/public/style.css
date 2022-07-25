@@ -56,9 +56,50 @@ body{
 #creatureDialog{
     position: absolute;
     margin-top: 9vh;
-    margin-left: 7vw;
+    margin-left: 8vw;
+}
+#preview{
+    width: 20vh;
+    height:22vh;
+    background-image: url('assets/createbtn.jpg');
+    background-size:cover;
+    background-position: center;
+}
+#dialogContainer{
+    display: flex;
+}
+#featureList{
+    padding-left:2vh;
+}
+#featureBar{
+    padding-bottom: 0.5vh;
+    padding-top:0.5vh;
+}
+.featureTag{
+    width: 100px;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    display:inline-block;
+}
+#gridmapContainer{
+    display:none;
+    padding-left: 2vh;
+}
+.grid-container{
+    display: grid;
+    column-gap:10px;
+    row-gap:10px;
+    grid-template-columns: 20vh 20vh;
+    grid-template-rows: 20vh 20vh;;
+}
+.grid-item{
+    display: inline-grid;
+    background-color: aquamarine;
 
 }
+
+/* statisticBOX */
 .statisticBox{
     position:absolute;
     padding-top:2vh;

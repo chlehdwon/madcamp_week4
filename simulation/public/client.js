@@ -138,3 +138,63 @@ creatureBtn.addEventListener('click', function onOpen(){
     }
 })
 
+
+var creatureBtn = document.getElementById('creatureBtn')
+var creatureDialog = document.getElementById('creatureDialog')
+var previewBtn = document.getElementById('previewBtn')
+var confirmBtn = document.getElementById('confirmBtn')
+var cancelBtn = document.getElementById('cancelBtn')
+var gridmapC = document.getElementById('gridmapContainer')
+let gridmaps = document.getElementsByClassName('grid-item')
+let gridmapList = Array.prototype.slice.call(gridmaps)
+
+
+creatureBtn.addEventListener('click', function onOpen(){
+    cancelAnimationFrame(animateId)
+    if (typeof creatureDialog.showModal === 'function') {
+        creatureDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
+})
+cancelBtn.addEventListener('click', function(){
+    animate()
+    let input = document.getElementsByTagName('input')
+    let inputList = Array.prototype.slice.call(input)
+    inputList.forEach(elem => {
+        elem.checked = false
+        elem.value = null
+    }) //.value = null
+    
+    gridmapC.style.display = "none"
+    creatureDialog.close('creatureNotChosen')
+})
+
+confirmBtn.addEventListener('click', function(){
+    // gridmap 보여주고 클릭 받기 !!!!
+    // 1. 지정된 인풋 파라미터에 불러오기
+    // 1-1. 모두 다 null이 아님을 확인하기.
+    // 2. 파라미터 전역적으로 지정해서 다른 클릭에서 사용할 수 있도록 하기
+    // 3. gridmap 켜기(맵의 크기는 일정.거기서 상대적으로 위치를 얻어야 함.
+    // 4. 각 꼭짓점의
+    gridmapC.style.display = "block"
+})
+
+previewBtn.addEventListener('click', function(){
+    // TODO: input 스탯 받아서 적절한 애로 보여주기
+})
+
+gridmapList.forEach(grid => {
+    grid.addEventListener('click', function(){
+        let gridpos = getOffset(grid)
+        console.log(gridpos)
+    })
+})
+
+function getOffset(el){
+    const rect = el.getBoundingClientRect();
+    return {
+        left: rect.left + window.scrollX,
+        top: rect.top + window.scrollY
+    }
+}

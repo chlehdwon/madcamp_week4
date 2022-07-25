@@ -34,20 +34,70 @@
       </div>
 
       <dialog id="creatureDialog">
-        <form method="dialog">
-          <p><label>좋아하는 동물:
-            <select>
-              <option></option>
-              <option>아르테미아</option>
-              <option>레서판다</option>
-              <option>거미원숭이</option>
-            </select>
-          </label></p>
-          <menu>
-            <button value="cancel">취소</button>
-            <button id="confirmBtn" value="default">확인</button>
-          </menu>
-        </form>
+        <!-- <form method="dialog"> -->
+        <div id="dialogContainer">
+          <div id="preview">
+            <button id="previewBtn">preview</button>
+          </div>
+  
+          <div id="featureList">
+            <div id="featureBar">
+              <form action="'/action_page.php" method="get">
+                <label for="vol" class="featureTag">속성</label>
+                <label><input type="radio" name="property" value="prey"> 1차소비자</label>
+                <label><input type="radio" name="property" value="predetor"> 2차소비자</label>
+              </form>
+            </div>
+
+            <div id="featureBar">
+              <form action="'/action_page.php" method="get">
+                <label for="vol" class="featureTag">속도</label>
+                <input type="range" id="speedStat" min="0" max="5">
+              </form>
+            </div>
+            
+            <div id="featureBar">
+              <form action="'/action_page.php" method="get">
+                <label for="vol" class="featureTag">지능</label>
+                <input type="range" id="speedStat" min="0" max="5">
+              </form>
+            </div>
+            
+            <div id="featureBar">
+              <form action="'/action_page.php" method="get">
+                <label for="vol" class="featureTag">저온저항성</label>
+                <input type="range" id="speedStat" min="0" max="5">
+              </form>
+            </div>
+            
+            <div id="featureBar">
+              <form action="'/action_page.php" method="get">
+                <label for="vol" class="featureTag">고온저항성</label>
+                <input type="range" id="speedStat" min="0" max="5">
+              </form>
+            </div>
+            
+            <div id="featureBar">
+              <form action="'/action_page.php" method="get">
+                <label for="vol" class="featureTag">연비</label>
+                <input type="range" id="speedStat" min="0" max="5">
+              </form>
+            </div>
+            <menu>
+              <button id="cancelBtn" type="reset">cancle</button>
+              <button id="confirmBtn">confirm</button>
+            </menu>
+          </div>
+        </div>
+        <!-- </form> -->
+        <div id="gridmapContainer">
+          <div class="grid-container">
+            <div class="grid-item" id="grid1">1</div>
+            <div class="grid-item" id="grid2">2</div>
+            <div class="grid-item" id="grid3">3</div>
+            <div class="grid-item" id="grid4">4</div>
+          </div>
+        </div>
       </dialog>
 
     </div>
