@@ -67,55 +67,47 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene)
+const myWorld = new World(scene, 30, 15)
 console.log("=====world creation done=====")
 
 //create adam and eve
 let isfarsighted = true
-for (var i =0;i<30;i++){    // 1차 소비자
-    myWorld.prey.push(new Creature(myWorld.cid++, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene, myWorld.size.width,1,1, isfarsighted))
-}
-for (var j =0;j<10;j++){    // 2차 소비자
-    myWorld.predator.push(new Creature(myWorld.cid++, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene, myWorld.size.width,3,2, isfarsighted))
-}
 
-// myWorld.creatures.push(new Creature(1, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene, myWorld.size.width, true))
-// myWorld.creatures.push(new Creature(2, Math.floor(Math.random() * myWorld.size.width), Math.floor(Math.random() * myWorld.size.height), scene, myWorld.size.width, true))
-// myWorld.cid=3    // 생성된 크리쳐 개수
-
-myWorld.prey.forEach((creatures)=>{
-    myWorld.creatures[creatures.position.z][creatures.position.x].push(creatures)
-})
-myWorld.predator.forEach((creatures)=>{
-    myWorld.creatures[creatures.position.z][creatures.position.x].push(creatures)
-})
 console.log("=====creature creation done=====")
 
 // create food
 myWorld.foodInit()
 console.log("=====food creation done=====")
 
+var basic_frame = 60
+var target_frame = 15
+var frame = 0
 
 function animate() {
     requestAnimationFrame(animate)
 
-    // set farsighted & closesighted
-    const dist = Math.sqrt((camera.position.x*camera.position.x) + (camera.position.y*camera.position.y) + (camera.position.z*camera.position.z))
-    if(dist > 400)
-        isfarsighted = true
-    else
-        isfarsighted = false
-
-    // creatures move
-    if(myWorld.energy>0){
-        myWorld.energy-=1
-        myWorld.step(isfarsighted)
+    if(frame > basic_frame){
+        frame -= basic_frame
+        // set farsighted & closesighted
+        const dist = Math.sqrt((camera.position.x*camera.position.x) + (camera.position.y*camera.position.y) + (camera.position.z*camera.position.z))
+        if(dist > 400)
+            isfarsighted = true
+        else
+            isfarsighted = false
+    
+        // creatures move
+        if(myWorld.energy>0){
+            myWorld.energy-=1
+            myWorld.step(isfarsighted)
+        }
+        else{
+            myWorld.turnOver(isfarsighted)
+            myWorld.energy=myWorld.steps
+        }
+        render() 
     }
-    else{
-        myWorld.turnOver(isfarsighted)
-        myWorld.energy=myWorld.steps
-    }
-    render() 
+    frame += target_frame
+    
 }
  
 function render() {
