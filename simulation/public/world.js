@@ -1,36 +1,70 @@
 import * as THREE from 'three'
 import Creature from './creature.js' 
+import {Jungle, Desert, Glacier, Grass} from './env.js'
 
 export default class World{
     constructor(scene, preyNum,predatorNum){
+        // basic information
+        this.size = 100
+        this.turn = 1
+        this.cid = 1    
+        this.scene = scene
+
+        // creature information
         this.prey = []
         this.predator = []
-        this.size = 250
         this.creatures = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // creature map
+
+        // food information
         this.foodMap = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // food map
         this.foodDict = {}
-        this.turn = 1
-        this.cid = 1
-        this.food_num = 100      //
+        this.food_num = 100  
+        this.foodRadius = 1
+
+        // env information
+        this.envs = [new Glacier(), new Desert(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass()]
+        
+
+        // turn information
         this.energy = 300       // number of initial energy
         this.steps = 300        // number of energy amount
-        this.scene = scene
-        this.foodRadius = 1
-        this.stepping = true
+
+        // start initialization
         this.creatureInit(preyNum,predatorNum)
     }
 
     creatureInit(preyNum,predatorNum){
         for (var i =0;i<preyNum;i++){    // 1차 소비자
-            this.prey.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100+ 2*i,100, this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100,100, this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100,100+ 2*i, this.scene, this.size,1,1, true))
-            // this.prey.push(new Creature(this.cid++, 100,100- 2*i, this.scene, this.size,1,1, true))
+            this.prey.push(new Creature({
+                id:this.cid++, 
+                x: Math.floor(Math.random() * this.size), 
+                z: Math.floor(Math.random() * this.size), 
+                scene: this.scene, 
+                worldSize: this.size,
+                type: 1,
+                speed: 1, 
+                sight: 10,
+                coldresist: 1,
+                hotresist:1,
+                efficiency: 1,
+                isfarsighted: true
+            }))
         }
         for (var j =0;j<predatorNum;j++){    // 2차 소비자
-            this.predator.push(new Creature(this.cid++, Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), this.scene, this.size,2,2, true))
-            //this.predator.push(new Creature(this.cid++, 100,100, this.scene, this.size,0,2, true))
+            this.predator.push(new Creature({
+                id: this.cid++, 
+                x: Math.floor(Math.random() * this.size), 
+                z: Math.floor(Math.random() * this.size), 
+                scene: this.scene, 
+                worldSize: this.size,
+                type: 2,
+                speed: 3,
+                sight: 5, 
+                coldresist: 1,
+                hotresist: 1,
+                efficiency: 1,
+                isfarsighted: true
+            }))
         }
 
         this.prey.forEach((creatures)=>{
@@ -42,19 +76,38 @@ export default class World{
         
     }
 
+    getCurrentEnv(xpos, zpos){
+        let x_idx = parseInt(xpos/(size/4)) 
+        let z_idx = parseInt(zpos/(size/4)) 
+        console.log(this.env[z_idx*4 + x_idx])
+
+        return this.env[z_idx*4 + x_idx]
+    }
+
 
     foodInit(){
-        let i=0
-        while(i<this.food_num){
-            let x = Math.floor(Math.random() * this.size)
-            let z = Math.floor(Math.random() * this.size)
-            if(this.foodMap[z][x]>0) continue;
-            const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
-            food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
-            this.foodDict[[x,z]]=food_sphere
-            this.foodMap[z][x] += 1  // save food's position to my world!
-            this.scene.add(food_sphere)
-            i++;
+        for(let i=0; i<4; i++){
+            for(let j=0; j<4; j++){
+                // Get environment
+                let env = this.envs[i*4 + j]
+                console.log(env, env.foodSpawn)
+                let start_z = this.size/4*i
+                let start_x = this.size/4*j
+                let k=0
+
+                // Food initialization
+                while(k<env.foodSpawn){
+                    let x = Math.floor(Math.random() * this.size/4) + start_x
+                    let z = Math.floor(Math.random() * this.size/4) + start_z
+                    if(this.foodMap[z][x]>0) continue;
+                    const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
+                    food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
+                    this.foodDict[[x,z]]=food_sphere
+                    this.foodMap[z][x] += 1  // save food's position to my world!
+                    this.scene.add(food_sphere)
+                    k++;
+                }
+            }
         }
     }
 
@@ -135,7 +188,7 @@ export default class World{
                 for (var p of this.creatures[creature.position.z][creature.position.x]){
                     //console.log(p)
                     //console.log(p.type)
-                    if(p.type==1 ){
+                    if(p.type==1){
                         this.scene.remove(p.object)
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
                         this.prey= this.prey.filter((element)=>element.object!==p.object);
@@ -158,7 +211,20 @@ export default class World{
             else if(creature.food>=2){
 
                 var position = creature.position
-                var newCreature =new Creature(this.cid, position.x, position.z, this.scene, this.size,1,1,isfarsighted)
+                var newCreature =new Creature({
+                    id:this.cid++, 
+                    x: position.x, 
+                    z: position.z, 
+                    scene: this.scene, 
+                    worldSize: this.size,
+                    type: 1,
+                    speed: 1, 
+                    sight: 10,
+                    coldresist: 1,
+                    hotresist:1,
+                    efficiency: 1,
+                    isfarsighted: isfarsighted
+                })
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
@@ -180,7 +246,20 @@ export default class World{
             }
             else if(creature.food>=2){
                 var position = creature.position
-                var newCreature =new Creature(this.cid, position.x, position.z, this.scene, this.size,3,2, isfarsighted)
+                var newCreature =new Creature({
+                    id:this.cid++, 
+                    x: position.x, 
+                    z: position.z, 
+                    scene: this.scene, 
+                    worldSize: this.size,
+                    type: 2,
+                    speed: 3, 
+                    sight: 10,
+                    coldresist: 1,
+                    hotresist:1,
+                    efficiency: 1,
+                    isfarsighted: isfarsighted
+                })
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
@@ -274,7 +353,7 @@ export default class World{
         // 포식자를 주위에서 찾았다면 반대 방향으로 도망침
         direction = this.searchAlgo(each_creature,xpos,zpos,scope,2)
         if(direction.length !=0){
-            console.log("search enemy" ,direction)
+            // console.log("search enemy" ,direction)
             return direction
         }
 
@@ -325,7 +404,9 @@ export default class World{
         var zpos = each_creature.position.z
 
         // 현재 위치에 먹이가 있다면 안 움직임
-        if(this.creatures[zpos][xpos].type==1){
+        if(this.food >2){
+            return this.makeRandomDirec()
+        }else if(this.creatures[zpos][xpos].type==1){
             console.log("predactor no move")
             return direction
         }

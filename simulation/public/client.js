@@ -66,7 +66,7 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 50, 10)
+const myWorld = new World(scene, 10, 1)
 console.log("=====world creation done=====")
 
 //create adam and eve
@@ -82,8 +82,10 @@ var basic_frame = 60
 var target_frame = 15
 var frame = 0
 let animateId
+
 function animate() {
-    animateId = requestAnimationFrame(animate)
+    animateId= requestAnimationFrame(animate)
+    light.position.copy( camera.position );
 
     if(frame > basic_frame){
         frame -= basic_frame
@@ -190,6 +192,8 @@ function getOffset(el){
     const rect = el.getBoundingClientRect();
     return {
         left: rect.left + window.scrollX,
-        top: rect.top + window.scrollY
+        top: rect.top + window.scrollY,
+        right: rect.right + window.scrollX,
+        bottom: rect.bottom + window.scrollY
     }
 }
