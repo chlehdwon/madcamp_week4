@@ -50,7 +50,7 @@ scene.add(plane)
 plane.rotation.x = -0.5*Math.PI
 plane.receiveShadow = true
 
-// =================== ENV GLTF (TODO: should remove and module)===
+// // =================== ENV GLTF (TODO: should remove and module)===
 // const loader = new GLTFLoader();
 // const iceURL = new URL('./assets/ground.glb', import.meta.url)
 // let backgorund
@@ -135,3 +135,15 @@ window.addEventListener(
     },
     false
 )
+
+var creatureBtn = document.getElementById('creatureBtn')
+var creatureDialog = document.getElementById('creatureDialog')
+
+creatureBtn.addEventListener('click', function onOpen(){
+    if (typeof creatureDialog.showModal === 'function') {
+        creatureDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
+})
+

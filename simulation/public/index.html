@@ -23,12 +23,33 @@
       <canvas id="c"></canvas>
     </div>
     
-    <div class="controlbar">
-      <button class="button" id="cSpeciesBtn">creature</button>
-      <button class="button">env</button>
-      <button class="button">disasters</button>
-      <button class="button">뭐쓰지</button>
-      <button class="button">뭐쓸까</button>
+    <div class="settingbox">
+
+      <div class="controlbar">
+        <button class="button" id="creatureBtn">creature</button>
+        <button class="button">env</button>
+        <button class="button">disasters</button>
+        <button class="button">뭐쓰지</button>
+        <button class="button">뭐쓸까</button>
+      </div>
+
+      <dialog id="creatureDialog">
+        <form method="dialog">
+          <p><label>좋아하는 동물:
+            <select>
+              <option></option>
+              <option>아르테미아</option>
+              <option>레서판다</option>
+              <option>거미원숭이</option>
+            </select>
+          </label></p>
+          <menu>
+            <button value="cancel">취소</button>
+            <button id="confirmBtn" value="default">확인</button>
+          </menu>
+        </form>
+      </dialog>
+
     </div>
 
     <div class="statisticBox">
@@ -41,7 +62,7 @@
       </ul>
       <div class="chartContainer">
         statistics here
-      </dif>
+      </dif> 
 
     </div>
   </body>
