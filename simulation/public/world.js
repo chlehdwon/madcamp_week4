@@ -121,13 +121,6 @@ export default class World{
 
             direction = creature.direction
             creature.changeDirect--;
-
-
-            // console.log("dirrection",direction)
-            // console.log("speed",creature.speed)
-
-
-
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
 
@@ -186,8 +179,6 @@ export default class World{
                 
                 // 이동한 곳에 prey가 있고 포식자의 food가 2보다 작으면 prey 먹음
                 for (var p of this.creatures[creature.position.z][creature.position.x]){
-                    //console.log(p)
-                    //console.log(p.type)
                     if(p.type==1){
                         this.scene.remove(p.object)
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
