@@ -17,7 +17,7 @@ export default class Creature{
         
         // creature parameter
         this.type = type
-        this.speed =speed
+        this.speed = speed
         this.sight = sight
         this.coldresist = coldresist
         this.hotresist = hotresist

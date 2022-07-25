@@ -79,7 +79,7 @@ myWorld.foodInit()
 console.log("=====food creation done=====")
 console.log(myWorld.prey[0])
 var basic_frame = 60
-var target_frame = 15
+var target_frame = 10
 var frame = 0
 let animateId
 
