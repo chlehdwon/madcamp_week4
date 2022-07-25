@@ -110,7 +110,6 @@ export default class World{
     }
 
     day(isfarsighted){
-
         this.prey.forEach((creature) => {
             var direction = this.searchFood(creature)
             if(creature.changeDirect==0 || creature.isChasing){
@@ -127,20 +126,24 @@ export default class World{
                 var next_z = creature.position.z + direction[0]
 
                 if(next_x >= this.size){
+                    creature.changeDirect=0
                     next_x = this.size-1
                 }
                 if(next_x <0){
+                    creature.changeDirect=0
                     next_x = 0
                 }
                 if(next_z >= this.size){
+                    creature.changeDirect=0
                     next_z = this.size-1
                 }
                 if(next_z <0){
+                    creature.changeDirect=0
                     next_z = 0
                 }
                 
                 creature.update(next_x, next_z, isfarsighted)
-
+                
                 // 이동한 후 생명체의 위치 저장
                 this.creatures[creature.position.z][creature.position.x].push(creature)
 
@@ -150,7 +153,8 @@ export default class World{
                     this.scene.remove(this.foodDict[[next_x, next_z]])
                     creature.hp += creature.efficiency * creature.hpScale
                 }
-            }
+            } 
+
             creature.hp -= creature.speed
 
             if(creature.hp<=0){
@@ -174,15 +178,19 @@ export default class World{
                 var next_z = creature.position.z + direction[0]
 
                 if(next_x >= this.size){
+                    creature.changeDirect=0
                     next_x = this.size-1
                 }
                 if(next_x <0){
+                    creature.changeDirect=0
                     next_x = 0
                 }
                 if(next_z >= this.size){
+                    creature.changeDirect=0
                     next_z = this.size-1
                 }
                 if(next_z <0){
+                    creature.changeDirect=0
                     next_z = 0
                 }
                 creature.update(next_x,next_z, isfarsighted)
@@ -430,9 +438,13 @@ export default class World{
         // 주위에 먹이가 없다면 랜덤하게 움직임
         const xMoves = [1, -1, 0, 0, 1, -1, 1, -1]
         const zMoves = [0, 0, 1, -1, 1, 1, -1, -1]
+        // const xMoves = []
+        // const zMoves = []
+
+
         const idx = Math.floor(Math.random() * xMoves.length);
-        direction[0]=zMoves[idx]
-        direction[1]=xMoves[idx]
+        direction[0]=xMoves[idx]
+        direction[1]=zMoves[idx]
         return direction
     }
 
