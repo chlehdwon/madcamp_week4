@@ -9,32 +9,33 @@ const colorList = [0x000000,0x0000FF, 0xFF0000]
 
 // Animation object (= Creatures)
 export default class Creature{
-    constructor({id, x, z, scene, worldSize, type, speed, sight, coldresist, hotresist, efficiency, isfarsighted}){
-        this.position = {x, z}            
+    constructor({id, x, z, scene, worldSize, type, speed, sight, coldresist, hotresist, efficiency, isfarsighted}){     
+        // basic parameter
         this.id = id   
-        this.scene = scene   
         this.food = 1                // creation id of creature
-        this.radius = 1          // radius of 3D-sphere
         this.worldSize = worldSize // information of world
         
         // creature parameter
         this.type = type
-        this.speed =speed
+        this.speed = speed
         this.sight = sight
         this.coldresist = coldresist
         this.hotresist = hotresist
         this.efficiency = efficiency
 
+        // moving parameter
+        this.position = {x, z}       
         this.changeDirect = 0      // change direction when this value is 0
         this.direction = [0,0]     // store creature's direction
         this.isChasing = false
 
+        // rendering parameter
+        this.scene = scene   
         this.isfarsighted = isfarsighted
-
+        this.radius = 1          // radius of 3D-sphere
         this.object = null
         this.closeView = null
         this.farView = this.draw()
-        
         this.clock = new THREE.Clock()
         this.animateMixer = null
 

@@ -1,22 +1,35 @@
 import * as THREE from 'three'
 import Creature from './creature.js' 
+import {Jungle, Desert, Glacier, Grass} from './env.js'
 
 export default class World{
-    constructor(scene, preyNum, predatorNum){
+    constructor(scene, preyNum,predatorNum){
+        // basic information
+        this.size = 300
+        this.turn = 1
+        this.cid = 1    
+        this.scene = scene
+
+        // creature information
         this.prey = []
         this.predator = []
-        this.size = 300
         this.creatures = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // creature map
+
+        // food information
         this.foodMap = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // food map
         this.foodDict = {}
-        this.turn = 1
-        this.cid = 1
-        this.food_num = 100      //
+        this.food_num = 100  
+        this.foodRadius = 1
+
+        // env information
+        this.envs = [new Glacier(), new Desert(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass(), new Grass()]
+        
+
+        // turn information
         this.energy = 300       // number of initial energy
         this.steps = 300        // number of energy amount
-        this.scene = scene
-        this.foodRadius = 1
-        this.stepping = true
+
+        // start initialization
         this.creatureInit(preyNum,predatorNum)
     }
 
@@ -52,6 +65,7 @@ export default class World{
                 efficiency: 1,
                 isfarsighted: true
             }))
+            console.log(this.predator)
         }
 
         this.prey.forEach((creatures)=>{
@@ -63,19 +77,38 @@ export default class World{
         
     }
 
+    getCurrentEnv(xpos, zpos){
+        let x_idx = parseInt(xpos/(size/4)) 
+        let z_idx = parseInt(zpos/(size/4)) 
+        console.log(this.env[z_idx*4 + x_idx])
+
+        return this.env[z_idx*4 + x_idx]
+    }
+
 
     foodInit(){
-        let i=0
-        while(i<this.food_num){
-            let x = Math.floor(Math.random() * this.size)
-            let z = Math.floor(Math.random() * this.size)
-            if(this.foodMap[z][x]>0) continue;
-            const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
-            food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
-            this.foodDict[[x,z]]=food_sphere
-            this.foodMap[z][x] += 1  // save food's position to my world!
-            this.scene.add(food_sphere)
-            i++;
+        for(let i=0; i<4; i++){
+            for(let j=0; j<4; j++){
+                // Get environment
+                let env = this.envs[i*4 + j]
+                // console.log(env, env.foodSpawn)
+                let start_z = this.size/4*i
+                let start_x = this.size/4*j
+                let k=0
+
+                // Food initialization
+                while(k<env.foodSpawn){
+                    let x = Math.floor(Math.random() * this.size/4) + start_x
+                    let z = Math.floor(Math.random() * this.size/4) + start_z
+                    if(this.foodMap[z][x]>0) continue;
+                    const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
+                    food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
+                    this.foodDict[[x,z]]=food_sphere
+                    this.foodMap[z][x] += 1  // save food's position to my world!
+                    this.scene.add(food_sphere)
+                    k++;
+                }
+            }
         }
     }
 

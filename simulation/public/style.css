@@ -96,7 +96,8 @@ body{
 .grid-item{
     display: inline-grid;
     background-color: aquamarine;
-
+    width: 10vh;
+    height:10vh;
 }
 
 /* statisticBOX */
