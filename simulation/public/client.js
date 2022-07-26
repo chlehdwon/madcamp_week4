@@ -2,9 +2,10 @@ import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 // import {Chart} from 'chart.js/auto'
-import { Loader } from 'three'
+import { Loader, TrianglesDrawMode } from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
+import {Jungle, Desert, Glacier, Grass, Damaged} from './env.js'
 // import {makeChart,updateChart} from './chart.js'
 
 
@@ -103,6 +104,7 @@ function animate() {
         
         myWorld.day(isfarsighted)
         if(myWorld.turn%365==0){
+            myWorld.age += 1
             myWorld.monthOver(isfarsighted)
             updateChart()
         }
@@ -130,18 +132,7 @@ window.addEventListener(
     false
 )
 
-var creatureBtn = document.getElementById('creatureBtn')
-var creatureDialog = document.getElementById('creatureDialog')
-
-creatureBtn.addEventListener('click', function onOpen(){
-    if (typeof creatureDialog.showModal === 'function') {
-        creatureDialog.showModal()
-    }else {
-        alert("the dialog api is not supported by this browser")
-    }
-})
-
-
+// ==================== Create Creature =======================
 var creatureBtn = document.getElementById('creatureBtn')
 var creatureDialog = document.getElementById('creatureDialog')
 var previewBtn = document.getElementById('previewBtn')
@@ -152,15 +143,18 @@ let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
-
 creatureBtn.addEventListener('click', function onOpen(){
+    if (typeof creatureDialog.showModal === 'function') {
+        creatureDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
     cancelAnimationFrame(animateId)
 })
 
-
 let newCreatureP
-let newPreyList
-let newPredetorList
+let newPreyList = []
+let newPredetorList = []
 let newCid
 let typeColor = [0x000000, 0x0000FF,0xFF0000] // for visualizing click
 
@@ -191,6 +185,8 @@ confirmBtn.addEventListener('click', function(){
         alert("타입을 선택해 주세요.")
         return
     }
+    
+    confirmBtn.style.display = 'none'
     newCreatureP = {
         scene: scene,
         type : ctype,
@@ -254,7 +250,6 @@ gridmapList.forEach(grid => {
 gridConfirmBtn.addEventListener('click', function(){
     myWorld.prey = myWorld.prey.concat(newPreyList)
     myWorld.predator = myWorld.predator.concat(newPredetorList)
-    
     initCreatureD()
     animate()
     render()
@@ -274,6 +269,7 @@ function getOffset(el){
 }
 
 function initCreatureD(){
+    confirmBtn.style.display = 'inline'
     newPredetorList = []
     newPreyList = []
     let input = document.getElementsByClassName('creatureInput')
@@ -286,7 +282,194 @@ function initCreatureD(){
         grid.width = grid.width // canvas 초기화
     })
 }
+// ======================================================
 
+
+// ====================== Envs ===========================
+let envBtn = document.getElementById("envBtn")
+let envDialog = document.getElementById('envDialog')
+const envGrids = document.querySelectorAll('.grid-item-env')
+let envCancel = document.querySelector('#envCancel')
+let envConfirm = document.querySelector('#envConfirm')
+
+envGrids.forEach(grid=>{
+    grid.addEventListener('dragenter', dragEnter)
+    grid.addEventListener('dragover', dragOver)
+    grid.addEventListener('dragleave', dragLeave)
+    grid.addEventListener('drop', drop)
+})
+function dragEnter(e) {
+    e.target.classList.add('drag-over');
+}
+function dragOver(e) {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+}
+
+function dragLeave(e) {
+    e.target.classList.remove('drag-over');
+}
+let backgroundImgList = Array(16).fill(null)
+function drop(e) {
+    e.preventDefault();
+    e.target.classList.remove('drag-over');
+    // get the draggable element
+    const data = e.dataTransfer.getData('text/html')
+    const imgid = data.substring(data.indexOf("id=")+4, data.indexOf(" draggable")-1)
+    const imgurl = e.dataTransfer.getData('text');
+
+    // add it to the drop target
+    console.log(e.target.id)
+    e.target.style.backgroundImage = `url(${imgurl})`
+}
+envBtn.addEventListener('click', function onOpen(){
+    if (typeof envDialog.showModal === 'function') {
+        envDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
+    cancelAnimationFrame(animateId)
+})
+envCancel.addEventListener('click', function(){
+    envDialog.close('no env chosen')
+})
+envConfirm.addEventListener('click', function(){
+    // 여기서 tile type 설정
+    envDialog.close('env chosen')
+})
+// =======================================================
+
+
+// ================ Disasters ============================
+let disasterBtn = document.getElementById("disasterBtn")
+let disasterDialog = document.getElementById('disasterDialog')
+let lightningBtn = document.getElementById('lightningBtn')
+
+var gridmapLightning = document.getElementById('gridmapLightning')
+let gridmaps_small = document.getElementsByClassName('grid-item-small')
+let gridmapSmallList = Array.prototype.slice.call(gridmaps_small)
+
+let meteorBtn = document.getElementById('meteorBtn')
+let iceAgeBtn = document.getElementById('iceAgeBtn')
+let globalWarmingBtn = document.getElementById('globalWarmingBtn')
+let disasterCancel = document.getElementById('disasterCancel')
+
+disasterBtn.addEventListener('click', function onOpen(){
+    if (typeof disasterDialog.showModal === 'function') {
+        disasterDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
+    cancelAnimationFrame(animateId)
+})
+
+disasterCancel.addEventListener('click', function(){
+    gridmapLightning.style.display = "none"
+    disasterDialog.close('no disaster chosen')
+})
+
+// lightning
+lightningBtn.addEventListener('click', function (){
+    gridmapLightning.style.display = "block"
+})
+gridmapSmallList.forEach((tileElem) => {
+    tileElem.addEventListener('click', function(e){
+        gridmapLightning.style.display = "none"
+        disasterDialog.close('lightning confirmed')
+        lightning(e.target.id)
+    })
+})
+meteorBtn.addEventListener('click', function(){
+    disasterDialog.close('meteor confirmed')
+    meteor()
+})
+globalWarmingBtn.addEventListener('click', function(){
+    disasterDialog.close('global warming confirmed')
+    globalWarming()
+})
+iceAgeBtn.addEventListener('click', function(){
+    disasterDialog.close('ice age confirmed')
+    iceAge()
+})
+function lightning(tile){
+    // 선택한 땅이 날아감.
+    // tile input should be 00 01 ...
+    cancelAnimationFrame(animateId)
+    console.log(`Disaster: Lightning on ${tile}`)
+    let tileleft = parseInt(tile[0])*PLANESIZE/4    //x
+    let tileright = tileleft + PLANESIZE/4          //x
+    let tiletop = parseInt(tile[1])*PLANESIZE/4     //z
+    let tilebtm = tiletop + PLANESIZE/4             //z
+    for(let i=tiletop; i<tilebtm; i++){
+        for(let j=tileleft; j<tileright; j++){
+            myWorld.creatures[i][j].forEach((creature)=>{
+                myWorld.predator = myWorld.predator.filter((element)=>element.object!==creature.object);
+                myWorld.prey = myWorld.prey.filter((element)=>element.object!==creature.object);
+                scene.remove(creature.object)
+            })
+            myWorld.creatures[i][j] = []    // remove all creatures from the position.
+            if(myWorld.foodDict[[i,j]] != null){
+                scene.remove(myWorld.foodDict[[i,j]])
+                myWorld.foodMap[i][j] = 0
+                myWorld.foodDict[[i,j]] = null;
+            }
+        }
+    }
+    myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 1    // damaged for 1month
+    animate()
+}
+
+function meteor(){
+    // grid 절반을 날려버림. 날려버릴 grid는 랜덤선택
+    const tileIdArray = ["00","10","20","30","01","11","21","31","02","12","22","31","03","13","23","33"]
+    let selectedTile = []
+    for (let i=0; i<8; i++){
+        let newElem = tileIdArray[Math.floor(Math.random() * 16)]
+        while(selectedTile.includes(newElem)){
+            newElem = tileIdArray[Math.floor(Math.random() * 16)]
+        }
+        selectedTile.push(newElem)
+    }
+    selectedTile.forEach((elem) => {
+        console.log(`Disaster: Meteor on ${elem}`)
+        let tileleft = parseInt(elem[0])*PLANESIZE/4    //x
+        let tileright = tileleft + PLANESIZE/4          //x
+        let tiletop = parseInt(elem[1])*PLANESIZE/4     //z
+        let tilebtm = tiletop + PLANESIZE/4             //z
+        for(let i=tiletop; i<tilebtm; i++){
+            for(let j=tileleft; j<tileright; j++){
+                myWorld.creatures[i][j].forEach((creature)=>{
+                    myWorld.predator = myWorld.predator.filter((element)=>element.object!==creature.object);
+                    myWorld.prey = myWorld.prey.filter((element)=>element.object!==creature.object);
+                    scene.remove(creature.object)
+                })
+                myWorld.creatures[i][j] = []    // remove all creatures from the position.
+                if(myWorld.foodDict[[i,j]] != null){
+                    scene.remove(myWorld.foodDict[[i,j]])
+                    myWorld.foodMap[i][j] = 0
+                    myWorld.foodDict[[i,j]] = null;
+                }
+            }
+        }
+        myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 1    // damaged for 1month
+    })
+
+}
+function iceAge(){
+    // 3 달동안 전체 env의 온도가 하강함
+    cancelAnimationFrame(animateId)
+    myWorld.isIceAge = 3   // rise for 3 months
+    animate()
+}
+function globalWarming(){
+    cancelAnimationFrame(animateId)
+    myWorld.isWarming = 3   // rise for 3 months
+    animate()
+}
+// =======================================================
+
+
+// ================ Play/ Pause Bar =====================
 let framecount = document.getElementById("framecount")
 let pauseBtn = document.getElementById("pause")
 let playBtn = document.getElementById("aniplay")
@@ -305,14 +488,12 @@ framecount.addEventListener('input', function(){
     target_frame = parseInt(framecount.value)
     animate()
 }, false)
+// =======================================================
 
-let disasterBtn = document.getElementById("disasterBtn")
-disasterBtn.addEventListener("click", function(){
 
-})
+
+// ===================== Chart =============================
 function updateChart(){
-
-
     new Chart(document.getElementById("line-chart").getContext("2d"), {
         type: 'pie',
         data: {
@@ -331,4 +512,5 @@ function updateChart(){
         }
     });
 }
+// ==============================================================
 

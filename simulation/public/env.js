@@ -3,6 +3,7 @@ class env{
         this.hot = 1
         this.cold = 1
         this.foodSpawn = 15
+        this.isDamaged = 0
     }
 }
 
@@ -33,5 +34,15 @@ export class Jungle extends env{
         super()
         this.hot = 3
         this.cold = 3
+    }
+}
+
+export class Damaged extends env{
+    // 벼락맞거나 운석떨어져서 그냥 불모지인 상황!
+    constructor(){
+        super()
+        this.hot = 10
+        this.cold = 10
+        this.foodSpawn = 0
     }
 }

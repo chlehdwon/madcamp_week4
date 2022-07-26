@@ -6,6 +6,7 @@ export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
         this.size = 300
+        this.age = 0
         this.turn = 1
         this.cid = 1    
         this.scene = scene
@@ -28,7 +29,10 @@ export default class World{
                 new Glacier(), new Glacier(), new Glacier(), new Glacier(),
                 new Desert(), new Desert(), new Desert(), new Desert(),
                 new Desert(), new Desert(), new Desert(), new Desert()]
-        
+        this.baseEnvs = JSON.parse(JSON.stringify(this.envs))
+        this.isWarming = 0
+        this.isIceAge = 0
+
 
         // turn information
         this.energy = 300       // number of initial energy
@@ -167,8 +171,8 @@ export default class World{
                 }
             }
             creature.hp -= (creature.speed + hotDamage + coldDamage)
-            if(hotDamage>0) console.log("so hot")
-            if(coldDamage>0) console.log("so cold")
+            if(hotDamage>0) // console.log("so hot")
+            if(coldDamage>0) // console.log("so cold")
 
             if(creature.hp<=0){
                 this.prey = this.prey.filter((element)=>element.object!==creature.object);
@@ -315,6 +319,59 @@ export default class World{
         })
         this.predator.push(...babyCreature)
 
+        // Disaster: env change
+        this.envs.forEach((item, idx)=>{
+            if (item.isDamaged > 0){
+                // 불모지
+                item.foodSpawn = 0
+                if(item.isDamaged == 1){
+                    item.cold = this.baseEnvs[idx].cold
+                    item.hot = this.baseEnvs[idx].hot
+                    item.foodSpawn = this.baseEnvs[idx].foodSpawn
+                }
+                item.isDamaged -= 1
+            }else{
+                item = item.originalEnv
+            }
+        })
+        if(this.isWarming > 0){
+            this.envs.forEach((item)=>{
+                // 지구온난화
+                item.hot += 1
+                item.cold -= 1
+            })
+            if(this.isWarming == 1){
+                this.baseEnvs = JSON.parse(JSON.stringify(this.envs)) // 영원하게 변형
+            }
+            
+            console.log(`globalwarming Countdown: ${this.isWarming}`)
+            console.log(this.envs[0])
+            console.log(this.baseEnvs)
+
+            this.isWarming -= 1
+        }
+        
+        if(this.isIceAge > 0){
+            this.envs.forEach((item, idx)=>{
+                // 빙하기
+                item.hot =  this.baseEnvs[idx].hot - 5
+                item.cold = this.baseEnvs[idx].cold + 5
+                item.foodSpawn = parseInt(this.baseEnvs[idx].foodSpawn/2)
+            })
+            if(this.isIceAge == 1){ // 원상복귀
+                this.envs.forEach((item, idx)=>{
+                    item.cold = this.baseEnvs[idx].cold
+                    item.hot = this.baseEnvs[idx].hot
+                    item.foodSpawn = this.baseEnvs[idx].foodSpawn
+                })
+            }
+
+            console.log(`IceAge Countdown: ${this.isIceAge}`)
+            console.log(this.envs[0])
+            console.log(this.baseEnvs)
+
+            this.isIceAge -= 1
+        }
         if(this.prey.length>0)
             this.foodInit()
         
@@ -344,7 +401,6 @@ export default class World{
             attributeArray[upperAttribute] += 1
             attributeArray[downAttribute]  -= 1
         }
-        console.log(attributeArray)
         attributeArray[1] = attributeArray[1]*2 + 2 
 
         newCreatureInfo.speed      = attributeArray[0]
