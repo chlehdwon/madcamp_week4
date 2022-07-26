@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 // import {Chart} from 'chart.js/auto'
-import { Loader } from 'three'
+import { Loader} from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
 // import {makeChart,updateChart} from './chart.js'
@@ -26,7 +26,7 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  1500)
+  10000)
 camera.position.set(0, 370, 340)
 camera.lookAt(0,0,0)
 
@@ -41,17 +41,42 @@ light.receiveShadow = true
 scene.add(light)
 scene.add(light.target)
 
+
+
+// =================== World ========================
+const myWorld = new World(scene, 30, 15)
+console.log("=====world creation done=====")
+
 // =================== PLANE =========================
-const PLANESIZE = 300
-const planeGeometry = new THREE.PlaneGeometry(PLANESIZE,PLANESIZE)
-const planeMaterial = new THREE.MeshBasicMaterial({
-    color: 0xE4AE5B,
-    side: THREE.DoubleSide
-})
-const plane = new THREE.Mesh(planeGeometry, planeMaterial)
-scene.add(plane)
-plane.rotation.x = -0.5*Math.PI
-plane.receiveShadow = true
+
+var desertTexture = new THREE.TextureLoader().load("./assets/desert_texture.jpg")
+var glacierTexture = new THREE.TextureLoader().load("./assets/glacier_texture.jpg")
+var grassTexture = new THREE.TextureLoader().load("./assets/grass_texture.jpg")
+var jungleTexture = new THREE.TextureLoader().load("./assets/jungle_texture.jpg")
+
+const textures = [grassTexture, jungleTexture, desertTexture, glacierTexture]
+
+const PLANESIZE = myWorld.size
+for(var i=0; i<4; i++){
+    for(var j=0; j<4; j++){
+        const planeGeometry = new THREE.PlaneGeometry(PLANESIZE/4,PLANESIZE/4)
+        var planeMaterial = new THREE.MeshBasicMaterial({
+            map: textures[myWorld.envs[i*4+j].textureIdx],
+            side: THREE.DoubleSide
+        })
+        
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial)
+        scene.add(plane)
+        plane.rotation.x = -0.5*Math.PI
+        plane.position.x = -(PLANESIZE/8*3) + (j * PLANESIZE/4)
+        plane.position.z = -(PLANESIZE/8*3) + (i * PLANESIZE/4)
+        plane.receiveShadow = true
+        
+    }
+}
+
+
+
 
 // // =================== ENV GLTF (TODO: should remove and module)===
 // const loader = new GLTFLoader();
@@ -70,8 +95,6 @@ plane.receiveShadow = true
 
 
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 0, 0)
-console.log("=====world creation done=====")
 
 //create adam and eve
 let isfarsighted = true
@@ -81,7 +104,8 @@ console.log("=====creature creation done=====")
 // create food
 myWorld.foodInit()
 console.log("=====food creation done=====")
-console.log(myWorld.prey[0])
+
+updateChart()
 var basic_frame = 60
 var target_frame = 15
 var frame = 0
@@ -311,8 +335,6 @@ disasterBtn.addEventListener("click", function(){
 
 })
 function updateChart(){
-
-
     new Chart(document.getElementById("line-chart").getContext("2d"), {
         type: 'pie',
         data: {

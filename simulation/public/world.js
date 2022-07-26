@@ -23,11 +23,11 @@ export default class World{
 
         // env information
 
-        // Jungle, Desert, Glacier, Grass
-        this.envs = [new Glacier(), new Glacier(), new Glacier(), new Glacier(),
-                new Glacier(), new Glacier(), new Glacier(), new Glacier(),
-                new Desert(), new Desert(), new Desert(), new Desert(),
-                new Desert(), new Desert(), new Desert(), new Desert()]
+        // Grass, Jungle, Desert, Glacier 
+        this.envs = [new Grass(), new Jungle(), new Desert(), new Glacier(),
+                new Glacier(), new Grass(), new Jungle(), new Desert(),
+                new Desert(), new Glacier(), new Grass(), new Jungle(),
+                new Jungle(), new Desert(), new Glacier(), new Grass()]
         
 
         // turn information
@@ -115,7 +115,6 @@ export default class World{
     }
 
     day(isfarsighted){
-
         this.prey.forEach((creature) => {
             var direction = this.searchFood(creature)
             let coldDamage = 0
@@ -165,10 +164,13 @@ export default class World{
                     this.scene.remove(this.foodDict[[next_x, next_z]])
                     creature.hp += creature.efficiency * creature.hpScale
                 }
+
+                if(creature.isChasing){
+                    direction = this.searchFood(creature)
+                    creature.direction = direction
+                }
             }
             creature.hp -= (creature.speed + hotDamage + coldDamage)
-            if(hotDamage>0) console.log("so hot")
-            if(coldDamage>0) console.log("so cold")
 
             if(creature.hp<=0){
                 this.prey = this.prey.filter((element)=>element.object!==creature.object);
@@ -220,13 +222,17 @@ export default class World{
                 
                 // 이동한 곳에 prey가 있고 포식자의 food가 2보다 작으면 prey 먹음
                 for (var p of this.creatures[creature.position.z][creature.position.x]){
-                    if(p.type==1){
+                    if(p.type==1 && creature.hp<=creature.hpScale*2){
                         this.scene.remove(p.object)
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
                         this.prey= this.prey.filter((element)=>element.object!==p.object);
                         // creature.food+=1
                         creature.hp += creature.efficiency * creature.hpScale
                     }
+                }
+                if(creature.isChasing){
+                    direction = this.searchPrey(creature)
+                    creature.direction = direction
                 }
             }
             creature.hp -= (creature.speed + hotDamage + coldDamage)
@@ -344,7 +350,7 @@ export default class World{
             attributeArray[upperAttribute] += 1
             attributeArray[downAttribute]  -= 1
         }
-        console.log(attributeArray)
+        // console.log(attributeArray)
         attributeArray[1] = attributeArray[1]*2 + 2 
 
         newCreatureInfo.speed      = attributeArray[0]
