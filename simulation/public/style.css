@@ -50,57 +50,7 @@ body{
     color:black;
 }
 
-#creatureBtn{
-    background-image: url('assets/createbtn.jpg');
-    background-size:cover;
-    background-position: center;
-}
-#creatureDialog{
-    position: absolute;
-    margin-top: 9vh;
-    margin-left: 8vw;
-}
-#preview{
-    width: 20vh;
-    height:22vh;
-    background-image: url('assets/createbtn.jpg');
-    background-size:cover;
-    background-position: center;
-}
-#dialogContainer{
-    display: flex;
-}
-#featureList{
-    padding-left:2vh;
-}
-#featureBar{
-    padding-bottom: 0.5vh;
-    padding-top:0.5vh;
-}
-.featureTag{
-    width: 130px;
-    white-space: nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
-    display:inline-block;
-}
-#gridmapContainer{
-    display:none;
-    padding-left: 2vh;
-}
-.grid-container{
-    display: grid;
-    column-gap:10px;
-    row-gap:10px;
-    grid-template-columns: 10vh 10vh 10vh 10vh;
-    grid-template-rows: 10vh 10vh 10vh 10vh;
-}
-.grid-item{
-    display: inline-grid;
-    background-color: aquamarine;
-    width: 10vh;
-    height:10vh;
-}
+
 #gridmapLightning{
     display:none;
     padding-left: 2vh;

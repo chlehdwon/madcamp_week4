@@ -28,7 +28,7 @@ export default class World{
 
         // env information
         this.lightning = -365
-        this.meteor = -365
+        this.meteor = -365*3
 
         // Jungle, Desert, Glacier, Grass
         this.envs = [new Grass(), new Grass(), new Grass(), new Grass(),
