@@ -1,11 +1,17 @@
 import * as THREE from 'three'
 import Creature from './creature.js' 
 import {Jungle, Desert, Glacier, Grass} from './env.js'
+import Food from './food.js';
+import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
+
+
+const loader = new GLTFLoader();
+let foodURL = 'assets/food.glb'
 
 export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
-        this.size = 300
+        this.size = 1000
         this.age = 0
         this.turn = 1
         this.cid = 1    
@@ -92,7 +98,6 @@ export default class World{
         return this.envs[z_idx*4 + x_idx]
     }
 
-
     foodInit(){
         for(let i=0; i<4; i++){
             for(let j=0; j<4; j++){
@@ -107,11 +112,13 @@ export default class World{
                     let x = Math.floor(Math.random() * this.size/4) + start_x
                     let z = Math.floor(Math.random() * this.size/4) + start_z
                     if(this.foodMap[z][x]>0) continue;
-                    const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
-                    food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
-                    this.foodDict[[x,z]]=food_sphere
+
+                    let food_obj = new Food({x: x-this.size/2, y: this.foodRadius, z: z-this.size/2, radius: this.foodRadius, scene: this.scene})
+                
+                    // const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
+                    // food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
+                    this.foodDict[[x,z]]=food_obj
                     this.foodMap[z][x] += 1  // save food's position to my world!
-                    this.scene.add(food_sphere)
                     k++;
                 }
             }
@@ -165,7 +172,7 @@ export default class World{
 
                 if(this.foodMap[next_z][next_x] > 0){
                     this.foodMap[next_z][next_x]-=1
-                    this.scene.remove(this.foodDict[[next_x, next_z]])
+                    this.scene.remove(this.foodDict[[next_x, next_z]].mesh)
                     creature.hp += creature.efficiency * creature.hpScale
                 }
 

@@ -35,7 +35,7 @@ camera.lookAt(0,0,0)
 const controls = new OrbitControls(camera, renderer.domElement)
 
 // ===================== LIGHT ========================
-const light = new THREE.DirectionalLight(0xffffff, 1.5)
+const light = new THREE.DirectionalLight(0xffffff, 3)
 light.position.copy( camera.position );
 light.castShadow = true
 light.receiveShadow = true
@@ -45,7 +45,7 @@ scene.add(light.target)
 
 
 // =================== World ========================
-const myWorld = new World(scene, 30, 15)
+const myWorld = new World(scene,0,0)
 console.log("=====world creation done=====")
 
 // =================== PLANE =========================
@@ -157,6 +157,7 @@ window.addEventListener(
 // ==================== Create Creature =======================
 var creatureBtn = document.getElementById('creatureBtn')
 var creatureDialog = document.getElementById('creatureDialog')
+let previewImg = document.querySelector('#preview')
 var previewBtn = document.getElementById('previewBtn')
 var confirmBtn = document.getElementById('confirmBtn')
 var cancelBtn = document.getElementById('cancelBtn')
@@ -225,7 +226,12 @@ confirmBtn.addEventListener('click', function(){
 })
 
 previewBtn.addEventListener('click', function(){
-    // TODO: input 스탯 받아서 적절한 애로 보여주기
+    let input = document.getElementsByClassName('creatureInput')
+    let inputList = Array.prototype.slice.call(input)
+    let type = inputList[0].checked ? "prey" : "predetor"
+    let cold = inputList[4].value
+    let hot = inputList[5].value
+    previewImg.style.backgroundImage = (`url(assets/preview/${type}_${cold}${hot}_img.png)`)
 })
 
 gridmapList.forEach(grid => {
@@ -300,6 +306,7 @@ function initCreatureD(){
         elem.checked = false
         elem.value = null
     }) 
+    previewImg.style.backgroundImage = (`url(assets/createbtn.jpg)`)
     gridmapList.forEach(grid => {
         grid.width = grid.width // canvas 초기화
     })

@@ -3,8 +3,9 @@ import { Loader } from 'three'
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 
 
-const urlList = [`assets/nullbird.glb`, `assets/prey/prey_51.glb`, `assets/predetor/predetor_plain.glb`] // new URL(`assets/cow.glb`, import.meta.url)
+const urlList = [`assets/nullbird.glb`, `assets/prey/prey_34.glb`, `assets/predetor/predetor_plain.glb`] // new URL(`assets/cow.glb`, import.meta.url)
 const colorList = [0x000000,0x0000FF, 0xFF0000]
+const typelist = ['food','prey','predetor']
 
 
 // Animation object (= Creatures)
@@ -16,7 +17,6 @@ export default class Creature{
         this.worldSize = worldSize // information of world
         this.hpScale = 365*speed      // food per efficiency (1 eat => 30*speed*efficiency energy)
         this.hp = efficiency * this.hpScale
-        
 
 
         // creature parameter
@@ -36,7 +36,8 @@ export default class Creature{
         // rendering parameter
         this.scene = scene   
         this.isfarsighted = isfarsighted
-        this.radius = 0.5          // radius of 3D-sphere
+        this.objectUrl = `assets/${typelist[this.type]}/${typelist[this.type]}_${coldresist}${hotresist}.glb`
+        this.radius = 1          // radius of 3D-sphere
         this.object = null
         this.closeView = null
         this.farView = this.draw()
@@ -47,9 +48,9 @@ export default class Creature{
     } 
     async init(){
         const loader = new GLTFLoader();
-        let gltfData = await loader.loadAsync(urlList[this.type])
+        let gltfData = await loader.loadAsync(this.objectUrl)
 
-        gltfData.scene.position.set(this.position.x-this.worldSize/2, this.radius, this.position.z-this.worldSize/2)
+        gltfData.scene.position.set(this.position.x-this.worldSize/2, this.radius * this.type * 1.5, this.position.z-this.worldSize/2)
         gltfData.scene.scale.set(this.radius,this.radius,this.radius)
         gltfData.scene.rotation.y = Math.PI
         gltfData.scene.castShadow = true
