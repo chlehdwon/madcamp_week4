@@ -58,10 +58,10 @@ export default class World{
                 scene: this.scene, 
                 worldSize: this.size,
                 type: 1,
-                speed: 1, 
+                speed: 3, 
                 sight: 8,
-                coldresist: 2,
-                hotresist:2,
+                coldresist: 3,
+                hotresist: 3,
                 efficiency: 1,
                 isfarsighted: true
             }))
@@ -74,7 +74,7 @@ export default class World{
                 scene: this.scene, 
                 worldSize: this.size,
                 type: 2,
-                speed: 2,
+                speed: 4,
                 sight: 4, 
                 coldresist: 2,
                 hotresist: 2,
@@ -140,7 +140,7 @@ export default class World{
             creature.changeDirect--;
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
-
+                console.log("prey: ",direction)
                 let env = this.getCurrentEnv(creature.position.x, creature.position.z)
                 coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
                 hotDamage += env.hot-creature.hotresist > 0 ? env.hot-creature.hotresist : 0
@@ -171,10 +171,14 @@ export default class World{
                 this.creatures[creature.position.z][creature.position.x].push(creature)
 
 
-                if(this.foodMap[next_z][next_x] > 0){
+                if(this.foodMap[next_z][next_x] > 0 && creature.hp<=creature.hpScale*2){
                     this.foodMap[next_z][next_x]-=1
                     this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
-                    creature.hp += creature.efficiency * creature.hpScale
+                    let full = creature.hpScale*creature.efficiency*2
+                    let plus = creature.hp>=full ? 0 : full/4
+                    creature.hp += plus
+
+
                 }
                 if(creature.isChasing){
                     direction = this.searchFood(creature)
@@ -197,13 +201,14 @@ export default class World{
             let hotDamage = 0
             if(creature.changeDirect==0 || creature.isChasing){
                 creature.direction = direction
-                creature.changeDirect = creature.isChasing ? 1 : Math.floor(Math.random() * 5) + 10;;
+                creature.changeDirect = creature.isChasing ? 1 : Math.floor(Math.random() * 5) + 10;
             }
             direction = creature.direction
             creature.changeDirect--;
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
-                
+                console.log("predator: ",direction)
+                if(direction===[0,0]) console.log("prdator no move!!!!!!!")
                 let env = this.getCurrentEnv(creature.position.x, creature.position.z)
                 
                 coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
@@ -240,7 +245,7 @@ export default class World{
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
                         this.prey= this.prey.filter((element)=>element.object!==p.object);
                         // creature.food+=1
-                        creature.hp += creature.efficiency * creature.hpScale
+                        creature.hp = creature.efficiency * creature.hpScale
                     }
                 }
                 if(creature.isChasing){
@@ -260,7 +265,7 @@ export default class World{
         this.turn += 1
     }
 
-    monthOver(isfarsighted){
+    yearOver(isfarsighted){
         var babyCreature = []
         this.prey.forEach((creature) => {
             // if(creature.hp<=0){
@@ -326,7 +331,7 @@ export default class World{
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
-                creature.hp -= creature.hpScale
+                creature.hp -= creature.hpScale * 2
             }
             // else{
             //     creature.food -= 1
@@ -455,8 +460,9 @@ export default class World{
         }
         
         // 만약 scope안에 prey가 없다면 랜덤으로 움직임
-        if(minDistance==100 || each_creature.hp >= each_creature.hpScale*2){
+        if(minDistance==100 || each_creature.hp > each_creature.hpScale*2*each_creature.efficiency){
             each_creature.isChasing = false;
+            
             // prey가 찾는거면 빈칸 return
             if(opposite_type == 2){return([])}
 
@@ -527,9 +533,10 @@ export default class World{
             }
         }
         // 주위에 먹이가 없다면 랜덤하게 움직임
-        if(minDistance==100 || each_creature.hp >= each_creature.hpScale*2){
+        if(minDistance==100 || each_creature.hp > each_creature.hpScale*2*each_creature.efficiency){
             direction = this.makeRandomDirec()
-            each_creature.isChasing = false;
+            each_creature.isChasing = false
+            
         }
         // 주위에 먹이가 있으면 가장 가까운 것을 저장한 nearlist 배열에서 랜덤하게 얻어서 그 방향으로 감
         else{
