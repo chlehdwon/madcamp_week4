@@ -393,7 +393,7 @@ export default class World{
     
     mutationAlgo(each_creature){
         let newCreatureInfo = Object.assign({},each_creature)
-        let mutationPercent = 20
+        let mutationPercent = 90
         let attributeArray = [each_creature.speed, each_creature.sight/2 - 1 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
 
         // 변이가 일어난다면 한 특정한 속성 하나는 올리고 한개는 내림

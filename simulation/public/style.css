@@ -80,6 +80,7 @@ body{
     background-color: aquamarine;
     width: 5vh;
     height:5vh;
+    background-position: center;
 }
 #imageContainer{
     display: flex;

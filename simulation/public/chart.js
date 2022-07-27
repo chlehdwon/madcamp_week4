@@ -140,7 +140,7 @@ function makeCharGragh(gridNum){
     curGragh3.data.datasets[0].label = "포식자 (" + predactorNum + " 마리)"
     curGragh3.data.datasets[0].data  = predatorCharAvg
 
-    curGragh3.data.datasets[1].label = "포식자 (" + preyNum + " 마리)"
+    curGragh3.data.datasets[1].label = "피식자 (" + preyNum + " 마리)"
     curGragh3.data.datasets[1].data  = preyCharAvg
 
     curGragh3.options.title.text = "grid "+(gridNum+1) +"의 평균 특성"
@@ -191,7 +191,5 @@ function makeCharGragh(gridNum){
 });
 }
 }
-function deleteCurGragh(){
-  //curGragh.destory()
-}
-export {makeAccGraph,stack_data,makeCurGraph,makeCharGragh,deleteCurGragh}
+
+export {makeAccGraph,stack_data,makeCurGraph,makeCharGragh}
