@@ -50,7 +50,7 @@ scene.add(light.target)
 
 
 // =================== World ========================
-const myWorld = new World(scene,30,15)
+const myWorld = new World(scene,1,0)
 console.log("=====world creation done=====")
 
 // =================== PLANE =========================
@@ -127,12 +127,21 @@ var frame = 0
 let animateId
 let particles
 let recover=0
+let dday = document.querySelector("#dday")
+let age = document.querySelector("#calender")
+var date = new Date()
+date.setFullYear(0)
+date.setMonth(0)
+date.setDate(1)
 
 function animate() {
     animateId= requestAnimationFrame(animate)
-    light.position.copy( camera.position );
+    light.position.copy( camera.position )
 
     if(frame > basic_frame){
+        dday.innerHTML = "D-"+myWorld.turn
+        age.innerHTML = getYMD()
+        date.setDate(date.getDate()+1)
         frame -= basic_frame
         // set farsighted & closesighted
         const dist = Math.sqrt((camera.position.x*camera.position.x) + (camera.position.y*camera.position.y) + (camera.position.z*camera.position.z))
@@ -196,6 +205,12 @@ function render() {
     renderer.render(scene, camera)
 }
 animate()
+
+function getYMD(){
+    var year = date.getFullYear()
+
+    return "서기 " + year + "년"
+}
 
 
 window.addEventListener(

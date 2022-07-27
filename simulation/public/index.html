@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Three.js 튜토리얼</title>
+    <title>Real Wild Variety</title>
     <meta name="viewport"
       content="width=device-width,initial-scale=1.0,
       minimum-scale=1.0,maximum-scale=1.0" />
@@ -14,7 +14,6 @@
       }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
     <script type="module" src="client.js" defer></script>
     <script type="module" src="chart.js" defer></script>
     <link rel="stylesheet" href="css/style.css">
@@ -29,6 +28,14 @@
     <div class="canvas">
       <canvas id="c"></canvas>
     </div>
+    <div class="date">
+      <div id="dday">
+      </div>
+      <div id="calender">
+        0
+      </div>
+    </div>
+    
     
     <div class="settingbox">
 
@@ -201,48 +208,48 @@
     </div>
     <div class="rightsidedBox">
       <div id="speedControlBar">
-        <label for="vol" id="frameTag">change speed</label>
+        <!-- <label for="vol" id="frameTag">change speed</label> -->
         <button id="aniplay">play</button>
         <button id="pause">pause</button>
         <input type="range" id="framecount" min="1" max="30">
         <output id="frameNum">15</output>
       </div>
 
-    <div class="statisticBox">
-      <ul>
-        <li><a id="currentCreature">현재 개체수</a></li>
-        <li><a id="changeCreature">개체수 변화</a></li>
-        <li><a id="creatureCharacter">지역별 성격</a></li>
-      </ul>
-      <div class="chartContainer">
-        <canvas id="cur-chart"></canvas>
-        <canvas id="line-chart"></canvas>
-        <canvas id="char-chart"></canvas>
-        <div id="selectgridMap">
-          <div class="grid-c">
-            <canvas class="grid-" id="00">0</canvas>
-            <canvas class="grid-" id="10">1</canvas>
-            <canvas class="grid-" id="20">2</canvas>
-            <canvas class="grid-" id="30">3</canvas>
-            
-            <canvas class="grid-" id="01">4</canvas>
-            <canvas class="grid-" id="11">5</canvas>
-            <canvas class="grid-" id="21">6</canvas>
-            <canvas class="grid-" id="31">7</canvas>
-            
-            <canvas class="grid-" id="02">8</canvas>
-            <canvas class="grid-" id="12">9</canvas>
-            <canvas class="grid-" id="22">10</canvas>
-            <canvas class="grid-" id="32">11</canvas>
-            
-            <canvas class="grid-" id="03">12</canvas>
-            <canvas class="grid-" id="13">13</canvas>
-            <canvas class="grid-" id="23">14</canvas>
-            <canvas class="grid-" id="33">15</canvas>
+      <div class="statisticBox">
+        <ul>
+          <li><a id="currentCreature">현재 개체수</a></li>
+          <li><a id="changeCreature">개체수 변화</a></li>
+          <li><a id="creatureCharacter">지역별 성격</a></li>
+        </ul>
+        <div class="chartContainer">
+          <canvas id="cur-chart"></canvas>
+          <canvas id="line-chart"></canvas>
+          <canvas id="char-chart"></canvas>
+          <div id="selectgridMap">
+            <div class="grid-c">
+              <canvas class="grid-" id="00">0</canvas>
+              <canvas class="grid-" id="10">1</canvas>
+              <canvas class="grid-" id="20">2</canvas>
+              <canvas class="grid-" id="30">3</canvas>
+              
+              <canvas class="grid-" id="01">4</canvas>
+              <canvas class="grid-" id="11">5</canvas>
+              <canvas class="grid-" id="21">6</canvas>
+              <canvas class="grid-" id="31">7</canvas>
+              
+              <canvas class="grid-" id="02">8</canvas>
+              <canvas class="grid-" id="12">9</canvas>
+              <canvas class="grid-" id="22">10</canvas>
+              <canvas class="grid-" id="32">11</canvas>
+              
+              <canvas class="grid-" id="03">12</canvas>
+              <canvas class="grid-" id="13">13</canvas>
+              <canvas class="grid-" id="23">14</canvas>
+              <canvas class="grid-" id="33">15</canvas>
+            </div>
           </div>
-        </div>
-        <button class='cancel-button' id="gragh-cancel">cancel</button>
-      </dif> 
-    </div>
+          <button class='cancel-button' id="gragh-cancel">cancel</button>
+        </div> 
+      </div>
   </body>
 </html> 

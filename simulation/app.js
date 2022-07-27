@@ -4,6 +4,7 @@ const path = require('path')
  
 app.use(express.static(__dirname + '/public'))
  
+ 
 app.use(
   '/build/',
   express.static(path.join(
