@@ -178,7 +178,7 @@
             <div class="grid-item-small" id="02">9</div>
             <div class="grid-item-small" id="12">10</div>
             <div class="grid-item-small" id="22">11</div>
-            <div class="grid-item-small" id="31">12</div>
+            <div class="grid-item-small" id="32">12</div>
             
             <div class="grid-item-small" id="03">13</div>
             <div class="grid-item-small" id="13">14</div>
@@ -201,11 +201,39 @@
 
     <div class="statisticBox">
       <ul>
-       
+        <li><a id="currentCreature">현재 개체수</a></li>
+        <li><a id="changeCreature">개체수 변화</a></li>
+        <li><a id="creatureCharacter">지역별 성격</a></li>
       </ul>
       <div class="chartContainer">
+        <canvas id="cur-chart"></canvas>
         <canvas id="line-chart"></canvas>
-      </div> 
+        <canvas id="char-chart"></canvas>
+        <div id="selectgridMap">
+          <div class="grid-c">
+            <canvas class="grid-" id="00">0</canvas>
+            <canvas class="grid-" id="10">1</canvas>
+            <canvas class="grid-" id="20">2</canvas>
+            <canvas class="grid-" id="30">3</canvas>
+            
+            <canvas class="grid-" id="01">4</canvas>
+            <canvas class="grid-" id="11">5</canvas>
+            <canvas class="grid-" id="21">6</canvas>
+            <canvas class="grid-" id="31">7</canvas>
+            
+            <canvas class="grid-" id="02">8</canvas>
+            <canvas class="grid-" id="12">9</canvas>
+            <canvas class="grid-" id="22">10</canvas>
+            <canvas class="grid-" id="32">11</canvas>
+            
+            <canvas class="grid-" id="03">12</canvas>
+            <canvas class="grid-" id="13">13</canvas>
+            <canvas class="grid-" id="23">14</canvas>
+            <canvas class="grid-" id="33">15</canvas>
+          </div>
+        </div>
+        <button class='cancel-button' id="gragh-cancel">cancel</button>
+      </dif> 
     </div>
   </body>
 </html> 

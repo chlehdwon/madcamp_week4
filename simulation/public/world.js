@@ -57,7 +57,7 @@ export default class World{
                 scene: this.scene, 
                 worldSize: this.size,
                 type: 1,
-                speed: 2, 
+                speed: 3, 
                 sight: 8,
                 coldresist: 2,
                 hotresist:2,
@@ -175,7 +175,6 @@ export default class World{
                     this.scene.remove(this.foodDict[[next_x, next_z]].mesh)
                     creature.hp += creature.efficiency * creature.hpScale
                 }
-
                 if(creature.isChasing){
                     direction = this.searchFood(creature)
                     creature.direction = direction

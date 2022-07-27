@@ -5,8 +5,8 @@ import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 import { Loader} from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
+import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh} from './chart.js'
 import {Jungle, Desert, Glacier, Grass} from './env.js'
-// import {makeChart,updateChart} from './chart.js'
 
 
 // =============== RENDERER ===================
@@ -93,6 +93,13 @@ for(var i=0; i<4; i++){
 //     scene.add(backgorund)
 // })
 
+// ================== FOR GRAGH ========================
+var graghType = 0
+var gragh1_click = 0
+var gragh2_click = 0
+var gragh3_click = 0
+var search_grid  = 0
+
 // ================== MAIN LOOP 1 ========================
 
 //create adam and eve
@@ -104,7 +111,6 @@ console.log("=====creature creation done=====")
 myWorld.foodInit()
 console.log("=====food creation done=====")
 
-updateChart()
 var basic_frame = 60
 var target_frame = 15
 var frame = 0
@@ -122,13 +128,26 @@ function animate() {
         else
             isfarsighted = false
     
+        // graghData get
+        if(myWorld.turn%20==0){
+            stack_data()
+        }
+
         // creatures move
-        
         myWorld.day(isfarsighted)
         if(myWorld.turn%365==0){
             myWorld.age += 1
             myWorld.monthOver(isfarsighted)
-            updateChart()
+
+            if(graghType==1){
+                makeCurGraph()
+            }
+            else if(graghType ==2){
+                makeAccGraph()
+            }
+            else if(graghType ==3){
+                makeCharGragh(3)
+            }
         }
     }
     
@@ -165,6 +184,98 @@ var gridmapC = document.getElementById('gridmapContainer')
 let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
+
+// ----------------- for gragh----------------------
+var curCreatureGragh    = document.getElementById('currentCreature')
+var changeCreatureGragh = document.getElementById('changeCreature')
+var curCharaterGragh    = document.getElementById('creatureCharacter')
+
+var gragh1 = document.getElementById('cur-chart')
+var gragh2 = document.getElementById('line-chart')
+var gragh3 = document.getElementById('char-chart')
+
+let chartContainer = document.querySelector('.chartContainer')
+var s_gridmapC = document.getElementById('selectgridMap')
+let s_gridmaps = document.querySelectorAll('.grid-')
+console.log(s_gridmaps)
+let s_gridmapList = Array.prototype.slice.call(s_gridmaps)
+
+let graghCancelBtn = document.getElementById('gragh-cancel')
+
+curCreatureGragh.addEventListener('click',function(){
+    chartContainer.style.display = "block"
+    gragh1.style.display = "block"
+    graghType = 1
+    makeCurGraph()
+    
+    gragh1_click = 1
+
+    s_gridmapC.style.display = "none"
+    gragh2.style.display = "none"
+    gragh3.style.display = "none"
+    gragh2_click = 0
+    gragh3_click = 0 
+})
+changeCreatureGragh.addEventListener('click',function(){
+    chartContainer.style.display = "block"
+    gragh2.style.display = "block"
+    graghType = 2
+    makeAccGraph()
+    gragh2_click = 1
+
+    s_gridmapC.style.display = "none"
+    gragh1.style.display = "none"
+    gragh3.style.display = "none"
+    gragh1_click = 0
+    gragh3_click = 0
+})
+curCharaterGragh.addEventListener('click',function(){
+    camera.position.set(0, 370, 340)
+    camera.lookAt(0,0,0)
+    
+    gragh3.style.display="none"
+    chartContainer.style.display = "block"
+    s_gridmapC.style.display = "block"
+    s_gridmaps.forEach((grid,idx)=>{
+        console.log(textureUrl[planeList[idx].type])
+        grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+    })
+    // gragh3.style.display = "block"
+    // graghType = 3
+    // makeCharGragh(3)
+    gragh3_click = 1
+
+    gragh1.style.display = "none"
+    gragh2.style.display = "none"
+    gragh1_click = 0
+    gragh2_click = 0  
+})
+
+// 그 grid를 클릭하면 그 grid의 차트 출력
+s_gridmapList.forEach(grid => {
+    grid.addEventListener('click', function(event){
+        const xi = parseInt(event.target.id[0])
+        const yi = parseInt(event.target.id[1])
+        gragh3.style.display = "block"
+        graghType = 3
+        makeCharGragh(yi*4+xi)
+        s_gridmapC.style.display = "none"
+    })
+})
+
+graghCancelBtn.addEventListener('click',function(){
+    chartContainer.style.display = "none"
+    s_gridmapC.style.display = "none"
+    gragh1.style.display = "none"
+    gragh2.style.display = "none"
+    gragh3.style.display = "none"
+    gragh1_click = 0
+    gragh2_click = 0
+    gragh3_click = 0
+})
+// -------------------------------------------------
+
+
 
 creatureBtn.addEventListener('click', function onOpen(){
     if (typeof creatureDialog.showModal === 'function') {
@@ -295,6 +406,7 @@ function getOffset(el){
         bottom: rect.bottom + window.scrollY
     }
 }
+
 
 function initCreatureD(){
     confirmBtn.style.display = 'inline'
@@ -549,29 +661,5 @@ framecount.addEventListener('input', function(){
     target_frame = parseInt(framecount.value)
     animate()
 }, false)
-// =======================================================
 
-
-
-// ===================== Chart =============================
-function updateChart(){
-    new Chart(document.getElementById("line-chart").getContext("2d"), {
-        type: 'pie',
-        data: {
-          labels: ["predator", "prey"],
-          datasets: [{
-            label: "Population (millions)",
-            backgroundColor: ["#3e95cd", "#8e5ea2",],
-            data: [myWorld.predator.length,myWorld.prey.length]
-          }]
-        },
-        options: {
-          title: {
-            display: false,
-            text: 'Predicted world population (millions) in 2050'
-          }
-        }
-    });
-}
-// ==============================================================
-
+export default myWorld

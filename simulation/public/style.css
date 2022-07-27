@@ -181,6 +181,8 @@ body{
     padding-right: 2vw;
     right: 0;
     width:25vw;
+    text-align:center;
+    
 }
 ul {
     display:flex;
@@ -196,8 +198,9 @@ ul {
     color:#ffffff;
     padding:1vh;
     text-decoration: none;
-    text-align: center;
+    justify-content: center;
     font-weight: bold;
+    width: 16vh;
   }
   li a:hover{
     background-color: #558ABB;
@@ -206,8 +209,28 @@ ul {
   .chartContainer{
     color:black;
     background-color:beige;
-    display:block;
+    display:none;
   }
+#selectgridMap{
+    display:none;
+    padding-left: 2vh;
+}
+.grid-c{
+    display: grid;
+    padding: 1vh;
+    column-gap:10px;
+    row-gap:10px;
+    grid-template-columns: 10vh 10vh 10vh 10vh;
+    grid-template-rows: 10vh 10vh 10vh 10vh;
+}
+.grid-{
+    display: inline-grid;
+    background-color: aquamarine;
+    width: 10vh;
+    height:10vh;
+}
+
+
 
 #speedControlBar{
     display: flex;
