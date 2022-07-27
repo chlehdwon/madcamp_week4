@@ -2,10 +2,10 @@ import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 // import {Chart} from 'chart.js/auto'
-import { Loader, TrianglesDrawMode } from 'three'
+import { Loader} from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
-import {Jungle, Desert, Glacier, Grass, Damaged} from './env.js'
+import {Jungle, Desert, Glacier, Grass} from './env.js'
 // import {makeChart,updateChart} from './chart.js'
 
 
@@ -27,7 +27,7 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  1500)
+  10000)
 camera.position.set(0, 370, 340)
 camera.lookAt(0,0,0)
 
@@ -42,17 +42,41 @@ light.receiveShadow = true
 scene.add(light)
 scene.add(light.target)
 
+
+
+// =================== World ========================
+const myWorld = new World(scene, 30, 15)
+console.log("=====world creation done=====")
+
 // =================== PLANE =========================
-const PLANESIZE = 300
-const planeGeometry = new THREE.PlaneGeometry(PLANESIZE,PLANESIZE)
-const planeMaterial = new THREE.MeshBasicMaterial({
-    color: 0xE4AE5B,
-    side: THREE.DoubleSide
-})
-const plane = new THREE.Mesh(planeGeometry, planeMaterial)
-scene.add(plane)
-plane.rotation.x = -0.5*Math.PI
-plane.receiveShadow = true
+
+var desertTexture = new THREE.TextureLoader().load("./assets/desert_texture.jpg")
+var glacierTexture = new THREE.TextureLoader().load("./assets/glacier_texture.jpg")
+var grassTexture = new THREE.TextureLoader().load("./assets/grass_texture.jpg")
+var jungleTexture = new THREE.TextureLoader().load("./assets/jungle_texture.jpg")
+
+const textures = [grassTexture, jungleTexture, desertTexture, glacierTexture]
+const textureUrl = ['assets/grass_texture.jpg', 'assets/jungle_texture.jpg', 'assets/desert_texture.jpg', 'assets/glacier_texture.jpg']
+
+const PLANESIZE = myWorld.size
+let planeList = []
+for(var i=0; i<4; i++){
+    for(var j=0; j<4; j++){
+        const planeGeometry = new THREE.PlaneGeometry(PLANESIZE/4,PLANESIZE/4)
+        var planeMaterial = new THREE.MeshBasicMaterial({
+            map: textures[myWorld.envs[i*4+j].textureIdx],
+            side: THREE.DoubleSide
+        })
+        
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial)
+        scene.add(plane)
+        plane.rotation.x = -0.5*Math.PI
+        plane.position.x = -(PLANESIZE/8*3) + (j * PLANESIZE/4)
+        plane.position.z = -(PLANESIZE/8*3) + (i * PLANESIZE/4)
+        plane.receiveShadow = true
+        planeList.push({plane:plane, type:myWorld.envs[i*4+j].textureIdx})
+    }
+}
 
 // // =================== ENV GLTF (TODO: should remove and module)===
 // const loader = new GLTFLoader();
@@ -69,10 +93,7 @@ plane.receiveShadow = true
 //     scene.add(backgorund)
 // })
 
-
 // ================== MAIN LOOP 1 ========================
-const myWorld = new World(scene, 0, 0)
-console.log("=====world creation done=====")
 
 //create adam and eve
 let isfarsighted = true
@@ -82,7 +103,8 @@ console.log("=====creature creation done=====")
 // create food
 myWorld.foodInit()
 console.log("=====food creation done=====")
-console.log(myWorld.prey[0])
+
+updateChart()
 var basic_frame = 60
 var target_frame = 15
 var frame = 0
@@ -309,10 +331,11 @@ function dragOver(e) {
 function dragLeave(e) {
     e.target.classList.remove('drag-over');
 }
-let backgroundImgList = Array(16).fill(null)
+let newEnvList = Array(16).fill(null)
 function drop(e) {
     e.preventDefault();
     e.target.classList.remove('drag-over');
+    const targetid = e.target.id
     // get the draggable element
     const data = e.dataTransfer.getData('text/html')
     const imgid = data.substring(data.indexOf("id=")+4, data.indexOf(" draggable")-1)
@@ -321,9 +344,14 @@ function drop(e) {
     // add it to the drop target
     console.log(e.target.id)
     e.target.style.backgroundImage = `url(${imgurl})`
+    newEnvList[parseInt(targetid[0]) + parseInt(targetid[1])*4] = imgid
 }
 envBtn.addEventListener('click', function onOpen(){
     if (typeof envDialog.showModal === 'function') {
+        envGrids.forEach((grid, idx)=>{
+            console.log(textureUrl[planeList[idx].type])
+            grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+        })
         envDialog.showModal()
     }else {
         alert("the dialog api is not supported by this browser")
@@ -332,10 +360,35 @@ envBtn.addEventListener('click', function onOpen(){
 })
 envCancel.addEventListener('click', function(){
     envDialog.close('no env chosen')
+    animate()
 })
 envConfirm.addEventListener('click', function(){
     // 여기서 tile type 설정
+    console.log("Called!")
+    newEnvList.forEach((id, idx) =>{
+        console.log(id)
+        if(id == "grass"){
+            myWorld.envs[idx] = new Grass()
+            planeList[idx].plane.material.map = grassTexture
+            planeList[idx].type = 0
+        } else if(id == "jungle"){
+            myWorld.envs[idx] = new Jungle()
+            planeList[idx].plane.material.map = jungleTexture
+            planeList[idx].type = 1
+        } else if(id == "desert"){
+            myWorld.envs[idx] = new Desert()
+            planeList[idx].plane.material.map = desertTexture
+            planeList[idx].type = 2
+        }else if(id == "glacier"){
+            myWorld.envs[idx] = new Glacier()
+            planeList[idx].plane.material.map = glacierTexture
+            planeList[idx].type = 3
+        }
+    })
+    newEnvList = Array(16).fill(null)
     envDialog.close('env chosen')
+    console.log(myWorld.envs)
+    animate()
 })
 // =======================================================
 
@@ -366,6 +419,7 @@ disasterBtn.addEventListener('click', function onOpen(){
 disasterCancel.addEventListener('click', function(){
     gridmapLightning.style.display = "none"
     disasterDialog.close('no disaster chosen')
+    animate()
 })
 
 // lightning
@@ -453,7 +507,7 @@ function meteor(){
         }
         myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 1    // damaged for 1month
     })
-
+    animate()
 }
 function iceAge(){
     // 3 달동안 전체 env의 온도가 하강함
