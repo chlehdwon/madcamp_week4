@@ -36,6 +36,8 @@ const controls = new OrbitControls(camera, renderer.domElement)
 controls.addEventListener( 'change', render )
 controls.minPolarAngle = -Math.PI/2
 controls.maxPolarAngle =  Math.PI / 2 - 0.05;
+controls.minDistance=0
+controls.maxDistance= 9000
 
 // ===================== LIGHT ========================
 const light = new THREE.DirectionalLight(0xffffff, 2)
@@ -57,6 +59,8 @@ var desertTexture = new THREE.TextureLoader().load("./assets/desert_texture.jpg"
 var glacierTexture = new THREE.TextureLoader().load("./assets/glacier_texture.jpg")
 var grassTexture = new THREE.TextureLoader().load("./assets/grass_texture.jpg")
 var jungleTexture = new THREE.TextureLoader().load("./assets/jungle_texture.jpg")
+var lightningTexture = new THREE.TextureLoader().load("./assets/lightning_texture.jpg")
+var meteorTexture = new THREE.TextureLoader().load("./assets/meteor_texture.jpg")
 
 const textures = [grassTexture, jungleTexture, desertTexture, glacierTexture]
 const textureUrl = ['assets/grass_texture.jpg', 'assets/jungle_texture.jpg', 'assets/desert_texture.jpg', 'assets/glacier_texture.jpg']
@@ -80,7 +84,6 @@ for(var i=0; i<4; i++){
         planeList.push({plane:plane, type:myWorld.envs[i*4+j].textureIdx})
     }
 }
-
 
 
 
@@ -122,6 +125,8 @@ var basic_frame = 60
 var target_frame = 15
 var frame = 0
 let animateId
+let particles
+let recover=0
 let dday = document.querySelector("#dday")
 let age = document.querySelector("#calender")
 var date = new Date()
@@ -132,6 +137,7 @@ date.setDate(1)
 function animate() {
     animateId= requestAnimationFrame(animate)
     light.position.copy( camera.position )
+
     if(frame > basic_frame){
         dday.innerHTML = "D-"+myWorld.turn
         age.innerHTML = getYMD()
@@ -143,15 +149,23 @@ function animate() {
             isfarsighted = true
         else
             isfarsighted = false
-    
+
         // graghData get
         if(myWorld.turn%20==0){
             stack_data()
         }
 
+        // set IceAge
+        if(myWorld.isIceAge > 0){
+            snowing()
+        }else{
+            scene.remove(particles)
+        }
+
         if(myWorld.lightning > myWorld.turn){
             vibrateCamera()
         }
+
         if(myWorld.meteor > myWorld.turn){
             vibrateCamera()
         }
@@ -171,11 +185,20 @@ function animate() {
             else if(graghType ==3){
                 makeCharGragh(3)
             }
+
+            if(recover == 1){
+                console.log(recover)
+                planeList.forEach((_, idx)=>{
+                    console.log(planeList[idx].type)
+                    planeList[idx].plane.material.map = textures[planeList[idx].type]
+                })
+                recover = 0
+            }
         }
+
     }
     render() 
     frame += target_frame
-    
 }
  
 function render() {
@@ -215,97 +238,6 @@ let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
-// ----------------- for gragh----------------------
-var curCreatureGragh    = document.getElementById('currentCreature')
-var changeCreatureGragh = document.getElementById('changeCreature')
-var curCharaterGragh    = document.getElementById('creatureCharacter')
-
-var gragh1 = document.getElementById('cur-chart')
-var gragh2 = document.getElementById('line-chart')
-var gragh3 = document.getElementById('char-chart')
-
-let chartContainer = document.querySelector('.chartContainer')
-var s_gridmapC = document.getElementById('selectgridMap')
-let s_gridmaps = document.querySelectorAll('.grid-')
-console.log(s_gridmaps)
-let s_gridmapList = Array.prototype.slice.call(s_gridmaps)
-
-let graghCancelBtn = document.getElementById('gragh-cancel')
-
-curCreatureGragh.addEventListener('click',function(){
-    chartContainer.style.display = "block"
-    gragh1.style.display = "block"
-    graghType = 1
-    makeCurGraph()
-    
-    gragh1_click = 1
-
-    s_gridmapC.style.display = "none"
-    gragh2.style.display = "none"
-    gragh3.style.display = "none"
-    gragh2_click = 0
-    gragh3_click = 0 
-})
-changeCreatureGragh.addEventListener('click',function(){
-    chartContainer.style.display = "block"
-    gragh2.style.display = "block"
-    graghType = 2
-    makeAccGraph()
-    gragh2_click = 1
-
-    s_gridmapC.style.display = "none"
-    gragh1.style.display = "none"
-    gragh3.style.display = "none"
-    gragh1_click = 0
-    gragh3_click = 0
-})
-curCharaterGragh.addEventListener('click',function(){
-    camera.position.set(0, 370, 340)
-    camera.lookAt(0,0,0)
-    
-    gragh3.style.display="none"
-    chartContainer.style.display = "block"
-    s_gridmapC.style.display = "block"
-    s_gridmaps.forEach((grid,idx)=>{
-        console.log(textureUrl[planeList[idx].type])
-        grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
-    })
-    // gragh3.style.display = "block"
-    // graghType = 3
-    // makeCharGragh(3)
-    gragh3_click = 1
-
-    gragh1.style.display = "none"
-    gragh2.style.display = "none"
-    gragh1_click = 0
-    gragh2_click = 0  
-})
-
-// 그 grid를 클릭하면 그 grid의 차트 출력
-s_gridmapList.forEach(grid => {
-    grid.addEventListener('click', function(event){
-        const xi = parseInt(event.target.id[0])
-        const yi = parseInt(event.target.id[1])
-        gragh3.style.display = "block"
-        graghType = 3
-        makeCharGragh(yi*4+xi)
-        s_gridmapC.style.display = "none"
-    })
-})
-
-graghCancelBtn.addEventListener('click',function(){
-    chartContainer.style.display = "none"
-    s_gridmapC.style.display = "none"
-    gragh1.style.display = "none"
-    gragh2.style.display = "none"
-    gragh3.style.display = "none"
-    gragh1_click = 0
-    gragh2_click = 0
-    gragh3_click = 0
-})
-// -------------------------------------------------
-
-
 
 creatureBtn.addEventListener('click', function onOpen(){
     if (typeof creatureDialog.showModal === 'function') {
@@ -321,6 +253,7 @@ let newPreyList = []
 let newPredetorList = []
 let newCid
 let typeColor = [0x000000, 0x0000FF,0xFF0000] // for visualizing click
+let errmsg = document.querySelector('.errorMsg')
 
 cancelBtn.addEventListener('click', function(){
     newPredetorList.forEach((elem)=>{
@@ -346,10 +279,23 @@ confirmBtn.addEventListener('click', function(){
     } else if(document.getElementById('predetor').checked){
         ctype = 2;
     } else{
-        alert("타입을 선택해 주세요.")
+        errmsg.style.display = 'block'
+        errmsg.innerHTML = "Please select the creature type"
         return
     }
     
+    let speed = parseInt(document.getElementById('speed').value)
+    let sight = parseInt(document.getElementById('sight').value)
+    let coldresist = parseInt(document.getElementById('cold').value)
+    let hotresist = parseInt(document.getElementById('hot').value)
+    let efficiency = parseInt(document.getElementById('eff').value) 
+
+    if(speed + sight + coldresist + hotresist + efficiency > 15){
+        errmsg.style.display = 'block'
+        errmsg.innerHTML = "Sum of performance should be below 15."
+        return
+    }
+    errmsg.style.display = 'none'
     confirmBtn.style.display = 'none'
     newCreatureP = {
         scene: scene,
@@ -369,7 +315,13 @@ confirmBtn.addEventListener('click', function(){
 previewBtn.addEventListener('click', function(){
     let input = document.getElementsByClassName('creatureInput')
     let inputList = Array.prototype.slice.call(input)
-    let type = inputList[0].checked ? "prey" : "predetor"
+    let type
+    if (inputList[0].checked)    type="prey"
+    else if (inputList[1].checked)    type="predetor"
+    else {
+        previewImg.style.backgroundImage = (`url(assets/createbtn.jpg)`)
+        return
+    } 
     let cold = inputList[4].value
     let hot = inputList[5].value
     previewImg.style.backgroundImage = (`url(assets/preview/${type}_${cold}${hot}_img.png)`)
@@ -452,6 +404,7 @@ function initCreatureD(){
     gridmapList.forEach(grid => {
         grid.width = grid.width // canvas 초기화
     })
+    errmsg.style.display = 'none'
 }
 // ======================================================
 
@@ -595,7 +548,6 @@ iceAgeBtn.addEventListener('click', function(){
     iceAge()
 })
 function lightning(tile){
-    // 선택한 땅이 날아감.
     // tile input should be 00 01 ...
     if(myWorld.turn < myWorld.lightning + 365){
         console.log('Disaster Failed')
@@ -625,6 +577,9 @@ function lightning(tile){
         }
         myWorld.lightning = myWorld.turn+3
         myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 1    // damaged for 1month
+        
+        planeList[parseInt(tile[0])+parseInt(tile[1])*4].plane.material.map = lightningTexture
+        recover=1
         animate()
     }
 }
@@ -688,6 +643,8 @@ function meteor(){
                 }
             }
             myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 1    // damaged for 1month
+            planeList[parseInt(elem[0])+parseInt(elem[1])*4].plane.material.map = meteorTexture
+            recover = 1
         })
         myWorld.meteor = myWorld.turn+5
         animate()
@@ -697,12 +654,98 @@ function iceAge(){
     // 3 달동안 전체 env의 온도가 하강함
     cancelAnimationFrame(animateId)
     myWorld.isIceAge = 3   // rise for 3 months
+    snowInit()
     animate()
 }
 function globalWarming(){
     cancelAnimationFrame(animateId)
     myWorld.isWarming = 3   // rise for 3 months
+    const sphereGeometry = new THREE.SphereGeometry( PLANESIZE*0.9, 32, 16, 0, Math.PI*2,  Math.PI/2, Math.PI )
+    var sphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0xFF0000,
+        side: THREE.DoubleSide,
+        opacity: 0.1,
+        transparent: true,
+    })
+    const redsphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+    
+    redsphere.position.z = 15
+    redsphere.position.x = -30
+    redsphere.rotation.x = Math.PI
+    scene.add(redsphere)
     animate()
+}
+
+const particleNum = 10000;
+const textureSize = 64.0;
+
+const drawRadialGradation = (ctx, canvasRadius, canvasW, canvasH) => {
+    ctx.save();
+    const gradient = ctx.createRadialGradient(canvasRadius,canvasRadius,0,canvasRadius,canvasRadius,canvasRadius);
+    gradient.addColorStop(0, 'rgba(255,255,255,1.0)');
+    gradient.addColorStop(0.5, 'rgba(255,255,255,0.5)');
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0,0,canvasW,canvasH);
+    ctx.restore();
+}
+const getTexture = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const diameter = textureSize;
+    canvas.width = diameter;
+    canvas.height = diameter;
+    const canvasRadius = diameter / 2;
+
+    drawRadialGradation(ctx, canvasRadius, canvas.width, canvas.height);
+
+    const texture = new THREE.Texture(canvas);
+    texture.type = THREE.FloatType;
+    texture.needsUpdate = true;
+    return texture;
+}
+function snowInit(){
+    /* Snow Particles
+   -------------------------------------------------------------*/
+   const snowpoints = []
+   for (let i = 0; i < particleNum; i++) {
+       const x = Math.floor(Math.random() * 800 - 400);
+       const y = Math.floor(Math.random() * 400 - 100);
+       const z = Math.floor(Math.random() * 800 - 400);
+       const particle = new THREE.Vector3(x, y, z);
+       snowpoints.push(particle);
+   }   
+   let pointGeometry = new THREE.BufferGeometry().setFromPoints(snowpoints)
+   
+   const pointMaterial = new THREE.PointsMaterial({
+       size: 8,
+       color: 0xffffff,
+       vertexColors: false,
+       map: getTexture(),
+       transparent: true,
+       fog: true,
+       depthWrite: false
+   });
+
+   const velocities = [];
+   for (let i = 0; i < particleNum; i++) {
+       const x = Math.floor(Math.random() * 6 - 10) * 0.1;
+       const y = Math.floor(Math.random() * 6 + 3) * 0.1;
+       const z = Math.floor(Math.random() * 6 - 3) * 0.1;
+       const particle = new THREE.Vector3(x, y, z);
+       velocities.push(particle);
+   }
+
+   particles = new THREE.Points(pointGeometry, pointMaterial);
+   particles.geometry.velocities = velocities;
+   particles.geometry.vertices = snowpoints;
+   scene.add(particles);
+}
+
+function snowing(){
+    const speed = 0.05
+    particles.rotation.y += speed
 }
 // =======================================================
 
@@ -728,9 +771,94 @@ framecount.addEventListener('input', function(){
 }, false)
 
 
+// ----------------- for graph----------------------
+var curCreatureGragh    = document.getElementById('currentCreature')
+var changeCreatureGragh = document.getElementById('changeCreature')
+var curCharaterGragh    = document.getElementById('creatureCharacter')
 
+var gragh1 = document.getElementById('cur-chart')
+var gragh2 = document.getElementById('line-chart')
+var gragh3 = document.getElementById('char-chart')
 
+let chartContainer = document.querySelector('.chartContainer')
+var s_gridmapC = document.getElementById('selectgridMap')
+let s_gridmaps = document.querySelectorAll('.grid-')
+console.log(s_gridmaps)
+let s_gridmapList = Array.prototype.slice.call(s_gridmaps)
 
+let graghCancelBtn = document.getElementById('gragh-cancel')
 
+curCreatureGragh.addEventListener('click',function(){
+    chartContainer.style.display = "block"
+    gragh1.style.display = "block"
+    graghType = 1
+    makeCurGraph()
+    
+    gragh1_click = 1
+
+    s_gridmapC.style.display = "none"
+    gragh2.style.display = "none"
+    gragh3.style.display = "none"
+    gragh2_click = 0
+    gragh3_click = 0 
+})
+changeCreatureGragh.addEventListener('click',function(){
+    chartContainer.style.display = "block"
+    gragh2.style.display = "block"
+    graghType = 2
+    makeAccGraph()
+    gragh2_click = 1
+
+    s_gridmapC.style.display = "none"
+    gragh1.style.display = "none"
+    gragh3.style.display = "none"
+    gragh1_click = 0
+    gragh3_click = 0
+})
+curCharaterGragh.addEventListener('click',function(){
+    camera.position.set(0, 370, 340)
+    camera.lookAt(0,0,0)
+    
+    gragh3.style.display="none"
+    chartContainer.style.display = "block"
+    s_gridmapC.style.display = "block"
+    s_gridmaps.forEach((grid,idx)=>{
+        console.log(textureUrl[planeList[idx].type])
+        grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+    })
+    // gragh3.style.display = "block"
+    // graghType = 3
+    // makeCharGragh(3)
+    gragh3_click = 1
+
+    gragh1.style.display = "none"
+    gragh2.style.display = "none"
+    gragh1_click = 0
+    gragh2_click = 0  
+})
+
+// 그 grid를 클릭하면 그 grid의 차트 출력
+s_gridmapList.forEach(grid => {
+    grid.addEventListener('click', function(event){
+        const xi = parseInt(event.target.id[0])
+        const yi = parseInt(event.target.id[1])
+        gragh3.style.display = "block"
+        graghType = 3
+        makeCharGragh(yi*4+xi)
+        s_gridmapC.style.display = "none"
+    })
+})
+
+graghCancelBtn.addEventListener('click',function(){
+    chartContainer.style.display = "none"
+    s_gridmapC.style.display = "none"
+    gragh1.style.display = "none"
+    gragh2.style.display = "none"
+    gragh3.style.display = "none"
+    gragh1_click = 0
+    gragh2_click = 0
+    gragh3_click = 0
+})
+// -------------------------------------------------
 
 export default myWorld
