@@ -5,7 +5,7 @@ import {Jungle, Desert, Glacier, Grass} from './env.js'
 export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
-        this.size = 300
+        this.size = 700
         this.age = 0
         this.turn = 1
         this.cid = 1    
@@ -173,7 +173,7 @@ export default class World{
                     creature.direction = direction
                 }
             }
-            creature.hp -= (creature.speed + hotDamage + coldDamage)
+            creature.hp -= (creature.speed + (hotDamage + coldDamage)*3)
             if(hotDamage>0) // console.log("so hot")
             if(coldDamage>0) // console.log("so cold")
 
@@ -240,7 +240,7 @@ export default class World{
                     creature.direction = direction
                 }
             }
-            creature.hp -= (creature.speed + hotDamage + coldDamage)
+            creature.hp -= (creature.speed + (hotDamage + coldDamage)*3)
 
             if(creature.hp<=0){
                 this.predator = this.predator.filter((element)=>element.object!==creature.object);
@@ -386,7 +386,7 @@ export default class World{
     
     mutationAlgo(each_creature){
         let newCreatureInfo = Object.assign({},each_creature)
-        let mutationPercent = 5
+        let mutationPercent = 20
         let attributeArray = [each_creature.speed, each_creature.sight/2 - 1 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
 
         // 변이가 일어난다면 한 특정한 속성 하나는 올리고 한개는 내림

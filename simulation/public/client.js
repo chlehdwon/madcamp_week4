@@ -5,7 +5,7 @@ import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 import { Loader} from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
-import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh} from './chart.js'
+import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh,deleteCurGragh} from './chart.js'
 import {Jungle, Desert, Glacier, Grass} from './env.js'
 
 
@@ -146,7 +146,7 @@ function animate() {
                 makeAccGraph()
             }
             else if(graghType ==3){
-                makeCharGragh(3)
+                makeCharGragh(search_grid)
             }
         }
     }
@@ -206,6 +206,7 @@ curCreatureGragh.addEventListener('click',function(){
     gragh1.style.display = "block"
     graghType = 1
     makeCurGraph()
+    console.log("1")
     
     gragh1_click = 1
 
@@ -221,6 +222,7 @@ changeCreatureGragh.addEventListener('click',function(){
     graghType = 2
     makeAccGraph()
     gragh2_click = 1
+    console.log("2")
 
     s_gridmapC.style.display = "none"
     gragh1.style.display = "none"
@@ -231,7 +233,6 @@ changeCreatureGragh.addEventListener('click',function(){
 curCharaterGragh.addEventListener('click',function(){
     camera.position.set(0, 370, 340)
     camera.lookAt(0,0,0)
-    
     gragh3.style.display="none"
     chartContainer.style.display = "block"
     s_gridmapC.style.display = "block"
@@ -257,6 +258,7 @@ s_gridmapList.forEach(grid => {
         const yi = parseInt(event.target.id[1])
         gragh3.style.display = "block"
         graghType = 3
+        search_grid = yi*4+xi
         makeCharGragh(yi*4+xi)
         s_gridmapC.style.display = "none"
     })

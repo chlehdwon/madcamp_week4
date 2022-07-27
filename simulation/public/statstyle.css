@@ -1,5 +1,58 @@
-#line-chart{
-    width:100vh;
-    height:50vh;
-    display: block;
+/* statisticBOX */
+.statisticBox{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+    width:25vw;
+    text-align:center;
+    
+}
+ul {
+    display:flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+    border-radius: 12px;
+  }
+  li{float:left;}
+  li a{
+    display: flex;
+    background-color:#94B49F;
+    color:#ffffff;
+    padding:1vh;
+    text-decoration: none;
+    justify-content: center;
+    font-weight: bold;
+    width: 16vh;
+  }
+  li a:hover{
+    background-color: #558ABB;
+    color:black;
+  }
+  .chartContainer{
+    width: 53vh;
+    color:black;
+    background-color:rgb(252,248,232);
+    display:none;
+    border-radius: 12px;
+  }
+#selectgridMap{
+    display:none;
+    padding-left: 3.5vh;
+}
+.grid-c{
+    display: grid;
+    padding: 1vh;
+    column-gap:10px;
+    row-gap:10px;
+    grid-template-columns: 10vh 10vh 10vh 10vh;
+    grid-template-rows: 10vh 10vh 10vh 10vh;
+}
+.grid-{
+    display: inline-grid;
+    background-color: aquamarine;
+    width: 10vh;
+    height:10vh;
 }
