@@ -12,7 +12,6 @@ export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
         this.size = 700
-        this.age = 0
         this.turn = 1
         this.cid = 1    
         this.scene = scene
@@ -140,7 +139,6 @@ export default class World{
             creature.changeDirect--;
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
-                console.log("prey: ",direction)
                 let env = this.getCurrentEnv(creature.position.x, creature.position.z)
                 coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
                 hotDamage += env.hot-creature.hotresist > 0 ? env.hot-creature.hotresist : 0
@@ -171,14 +169,12 @@ export default class World{
                 this.creatures[creature.position.z][creature.position.x].push(creature)
 
 
-                if(this.foodMap[next_z][next_x] > 0 && creature.hp<=creature.hpScale*2){
+                if(this.foodMap[next_z][next_x] > 0){
                     this.foodMap[next_z][next_x]-=1
                     this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
                     let full = creature.hpScale*creature.efficiency*2
                     let plus = creature.hp>=full ? 0 : full/4
                     creature.hp += plus
-
-
                 }
                 if(creature.isChasing){
                     direction = this.searchFood(creature)
@@ -399,7 +395,7 @@ export default class World{
     
     mutationAlgo(each_creature){
         let newCreatureInfo = Object.assign({},each_creature)
-        let mutationPercent = 20
+        let mutationPercent = 90
         let attributeArray = [each_creature.speed, each_creature.sight/2 - 1 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
 
         // 변이가 일어난다면 한 특정한 속성 하나는 올리고 한개는 내림
