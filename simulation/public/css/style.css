@@ -20,11 +20,6 @@ body{
     position:relative;
 }
 
-.btn{
-    height:20px;
-    width:20px;
-}
-
 .date{
     position: absolute;
     display: flex;
@@ -91,6 +86,7 @@ body{
 #speedControlBar{
     display: flex;
     right: 0;
+    
 }
 
 #frameNum{
@@ -99,15 +95,45 @@ body{
 #frameTag{
     color: white;
 }
-/* #speedControlBar{
-    position:absolute;
-    padding-top:2vh;
-    padding-right: 2vw;
-    right: 0;
-} */
 .rightsidedBox{
     position:absolute;
     padding-top:2vh;
     padding-right: 2vw;
     right: 0;
+}
+
+.cancel-button{
+    background-color:#ecb390; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 10px 10px; /* Some padding */
+    font-size: 2vh; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+    border-radius: 6px;
+}
+.confirm-button{
+    background-color: #ecb390; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 10px 10px; /* Some padding */
+    font-size: 2vh; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+    border-radius: 6px;
+}
+.btn{
+    background-color: #ecb390; /* Blue background */
+    color: white; /* White text */
+    height:20px;
+    width:20px;
+    font-size: 1vh;
+    align-items: center;
+    padding:1px;
+    border-radius: 5px;
+}
+button{
+    margin:2px;
+}
+
+input[type='range']{
+    color: #ecb390; 
 }

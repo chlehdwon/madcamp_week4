@@ -5,7 +5,7 @@ import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 import { Loader} from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
-import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh,deleteCurGragh} from './chart.js'
+import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh} from './chart.js'
 import {Jungle, Desert, Glacier, Grass} from './env.js'
 
 
@@ -23,7 +23,7 @@ document.body.appendChild(renderer.domElement)
 const scene = new THREE.Scene()
 
 // =============== CAMERA =====================
-const camera = new THREE.PerspectiveCamera(
+var camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
@@ -32,7 +32,7 @@ camera.position.set(0, 500, 3000)
 camera.lookAt(0,0,0)
 
 // ==================== ORBITCONTROL =========================
-const controls = new OrbitControls(camera, renderer.domElement)
+var controls = new OrbitControls(camera, renderer.domElement)
 controls.addEventListener( 'change', render )
 controls.minPolarAngle = -Math.PI/2
 controls.maxPolarAngle =  Math.PI / 2 - 0.05;
@@ -136,8 +136,7 @@ date.setDate(1)
 
 function animate() {
     animateId= requestAnimationFrame(animate)
-    light.position.copy( camera.position )
-
+    light.position.copy( camera.position );
     if(frame > basic_frame){
         dday.innerHTML = "D+"+myWorld.turn
         age.innerHTML = getYMD()
@@ -235,6 +234,15 @@ var gridmapC = document.getElementById('gridmapContainer')
 let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
+
+creatureBtn.addEventListener('click', function onOpen(){
+    if (typeof creatureDialog.showModal === 'function') {
+        creatureDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
+    cancelAnimationFrame(animateId)
+})
 
 let newCreatureP
 let newPreyList = []
@@ -367,11 +375,7 @@ gridmapList.forEach(grid => {
         let scaleX_c = cwidth/absoluteX
         let scaleY_c = cheight/absoluteY
         let ctx = event.target.getContext('2d')
-        ctx.beginPath()
-        ctx.arc(parseInt(inputX*scaleX_c), parseInt(inputY*scaleY_c), 2, 0, 2*Math.PI)
-        ctx.stroke()
-        ctx.fillStyle = typeColor[newCreatureP.type]
-        ctx.fill()
+        ctx.fillRect(parseInt(inputX*scaleX_c), parseInt(inputY*scaleY_c), 10, 5)
 
         newCreatureP.x = parseInt(xi*singleGridCount + inputX*scaleX)
         newCreatureP.z = parseInt(yi*singleGridCount + inputY*scaleY)
@@ -786,6 +790,31 @@ framecount.addEventListener('input', function(){
     animate()
 }, false)
 
+// ================ Play KEY =====================
+
+
+
+// 스페이스 바를 누르면 카메라 초기 상태로 돌려놓음
+document.addEventListener("keydown",keyFuction,false);
+function keyFuction(event){
+    if(event.keyCode == 32){
+        camera = new THREE.PerspectiveCamera(
+            45,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            10000)
+        camera.position.set(0, 500, 3000)
+        camera.lookAt(0,0,0)
+
+        controls = new OrbitControls(camera, renderer.domElement)
+        controls.addEventListener( 'change', render )
+        controls.minPolarAngle = -Math.PI/2
+        controls.maxPolarAngle =  Math.PI / 2 - 0.05;
+        controls.minDistance=0
+        controls.maxDistance= 9000
+
+    }
+}
 
 // ----------------- for gragh----------------------
 var curCreatureGragh    = document.getElementById('currentCreature')
@@ -839,15 +868,13 @@ curCharaterGragh.addEventListener('click',function(){
     gragh3.style.display="none"
     chartContainer.style.display = "block"
     s_gridmapC.style.display = "block"
+
+    // grid를 
     s_gridmaps.forEach((grid,idx)=>{
-        console.log(textureUrl[planeList[idx].type])
         grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
     })
-    // gragh3.style.display = "block"
-    // graghType = 3
-    // makeCharGragh(3)
-    gragh3_click = 1
 
+    gragh3_click = 1
     gragh1.style.display = "none"
     gragh2.style.display = "none"
     gragh1_click = 0
