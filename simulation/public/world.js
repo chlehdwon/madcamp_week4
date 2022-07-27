@@ -171,7 +171,7 @@ export default class World{
                 this.creatures[creature.position.z][creature.position.x].push(creature)
 
 
-                if(this.foodMap[next_z][next_x] > 0 && creature.hp<=creature.hpScale*2){
+                if(this.foodMap[next_z][next_x] > 0){
                     this.foodMap[next_z][next_x]-=1
                     this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
                     let full = creature.hpScale*creature.efficiency*2
@@ -207,8 +207,8 @@ export default class World{
             creature.changeDirect--;
             for(var i = 0;i<creature.speed;i++){
                 this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
-                console.log("predator: ",direction)
-                if(direction===[0,0]) console.log("prdator no move!!!!!!!")
+                // console.log("predator: ",direction)
+                // if(direction===[0,0]) console.log("prdator no move!!!!!!!")
                 let env = this.getCurrentEnv(creature.position.x, creature.position.z)
                 
                 coldDamage += env.cold-creature.coldresist > 0 ? env.cold-creature.coldresist : 0
@@ -365,8 +365,8 @@ export default class World{
             }
             
             console.log(`globalwarming Countdown: ${this.isWarming}`)
-            console.log(this.envs[0])
-            console.log(this.baseEnvs)
+            // console.log(this.envs[0])
+            // console.log(this.baseEnvs)
 
             this.isWarming -= 1
         }
