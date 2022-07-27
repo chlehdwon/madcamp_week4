@@ -47,7 +47,7 @@ export default class World{
                 scene: this.scene, 
                 worldSize: this.size,
                 type: 1,
-                speed: 2, 
+                speed: 3, 
                 sight: 8,
                 coldresist: 2,
                 hotresist:2,
@@ -165,10 +165,14 @@ export default class World{
                     this.scene.remove(this.foodDict[[next_x, next_z]])
                     creature.hp += creature.efficiency * creature.hpScale
                 }
+                if(creature.isChasing){
+                    direction = this.searchFood(creature)
+                    creature.direction = direction
+                }
             }
             creature.hp -= (creature.speed + hotDamage + coldDamage)
-            if(hotDamage>0) console.log("so hot")
-            if(coldDamage>0) console.log("so cold")
+            // if(hotDamage>0) console.log("so hot")
+            // if(coldDamage>0) console.log("so cold")
 
             if(creature.hp<=0){
                 this.prey = this.prey.filter((element)=>element.object!==creature.object);
