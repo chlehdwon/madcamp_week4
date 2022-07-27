@@ -533,6 +533,9 @@ let disasterCancel = document.getElementById('disasterCancel')
 
 disasterBtn.addEventListener('click', function onOpen(){
     if (typeof disasterDialog.showModal === 'function') {
+        gridmapSmallList.forEach((grid, idx)=>{
+            grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+        })
         disasterDialog.showModal()
     }else {
         alert("the dialog api is not supported by this browser")
