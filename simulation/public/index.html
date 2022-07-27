@@ -31,10 +31,9 @@
 
       <div class="controlbar">
         <button class="button" id="creatureBtn">creature</button>
-        <button class="button">env</button>
-        <button class="button">disasters</button>
-        <button class="button">뭐쓰지</button>
-        <button class="button">뭐쓸까</button>
+        <button class="button" id="envBtn">env</button>
+        <button class="button" id="disasterBtn">disasters</button>
+        <button class="button">Guide</button>
       </div>
 
       <dialog id="creatureDialog">
@@ -48,43 +47,43 @@
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Property</label>
-                <label><input type="radio" id="prey" name="property" value="prey">Prey</label>
-                <label><input type="radio" id="predetor"name="property" value="predetor">Predetor</label>
+                <label><input class="creatureInput" type="radio" id="prey" name="property" value="prey">Prey</label>
+                <label><input  class="creatureInput" type="radio" id="predetor"name="property" value="predetor">Predetor</label>
               </form>
             </div>
 
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Speed</label>
-                <input type="range" id="speed" min="1" max="5">
+                <input  class="creatureInput" type="range" id="speed" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Visible Range</label>
-                <input type="range" id="sight" min="1" max="5">
+                <input  class="creatureInput" type="range" id="sight" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Cold Resistance</label>
-                <input type="range" id="cold" min="1" max="5">
+                <input  class="creatureInput" type="range" id="cold" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Hot Resistance</label>
-                <input type="range" id="hot" min="1" max="5">
+                <input  class="creatureInput" type="range" id="hot" min="1" max="5">
               </form>
             </div>
             
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Energy Efficiency</label>
-                <input type="range" id="eff" min="1" max="5">
+                <input  class="creatureInput" type="range" id="eff" min="1" max="5">
               </form>
             </div>
             <menu>
@@ -120,6 +119,76 @@
         </div>
       </dialog>
 
+      <dialog id="envDialog">
+        <h5>Drag and drop each env to each tile</h5>
+        <div id="imageContainer">
+          <img class="draggableItem" id="grass" draggable="true" src="assets/grass_texture.jpg"></img>
+          <img class="draggableItem" id="jungle" draggable="true" src="assets/jungle_texture.jpg"></img>
+          <img class="draggableItem" id="glacier" draggable="true" src="assets/glacier_texture.jpg"></img>
+          <img class="draggableItem" id="desert" draggable="true" src="assets/desert_texture.jpg"></img>
+        </div>
+
+        <div id="envGrids">
+          <div class="grid-container-env">
+            <div class="grid-item-env" id="00">1</div>
+            <div class="grid-item-env" id="10">2</div>
+            <div class="grid-item-env" id="20">3</div>
+            <div class="grid-item-env" id="30">4</div>
+            
+            <div class="grid-item-env" id="01">5</div>
+            <div class="grid-item-env" id="11">6</div>
+            <div class="grid-item-env" id="21">7</div>
+            <div class="grid-item-env" id="31">8</div>
+            
+            <div class="grid-item-env" id="02">9</div>
+            <div class="grid-item-env" id="12">10</div>
+            <div class="grid-item-env" id="22">11</div>
+            <div class="grid-item-env" id="32">12</div>
+            
+            <div class="grid-item-env" id="03">13</div>
+            <div class="grid-item-env" id="13">14</div>
+            <div class="grid-item-env" id="23">15</div>
+            <div class="grid-item-env" id="33">16</div>
+          </div>
+        </div>
+        <button class='cancel-button' id="envCancel">cancel</button>
+        <button class='confirm-button' id="envConfirm">confirm</button>
+      </dialog>
+
+      <dialog id="disasterDialog">
+        <!-- <form method="dialog"> -->
+        <div id="buttonContainer">
+          <button id="lightningBtn">Lightning</button>
+          <button id="meteorBtn">Meteor</button>
+          <button id="iceAgeBtn">Ice Age</button>
+          <button id="globalWarmingBtn">Global Warming</button>
+        </div>
+        <div id="gridmapLightning">
+          <div class="grid-container-small">
+            <div class="grid-item-small" id="00">1</div>
+            <div class="grid-item-small" id="10">2</div>
+            <div class="grid-item-small" id="20">3</div>
+            <div class="grid-item-small" id="30">4</div>
+            
+            <div class="grid-item-small" id="01">5</div>
+            <div class="grid-item-small" id="11">6</div>
+            <div class="grid-item-small" id="21">7</div>
+            <div class="grid-item-small" id="31">8</div>
+            
+            <div class="grid-item-small" id="02">9</div>
+            <div class="grid-item-small" id="12">10</div>
+            <div class="grid-item-small" id="22">11</div>
+            <div class="grid-item-small" id="31">12</div>
+            
+            <div class="grid-item-small" id="03">13</div>
+            <div class="grid-item-small" id="13">14</div>
+            <div class="grid-item-small" id="23">15</div>
+            <div class="grid-item-small" id="33">16</div>
+          </div>
+        </div>
+        <button class='cancel-button' id="disasterCancel">cancel</button>
+      </dialog>
+
     </div>
     <div class="rightsidedBox">
       <div id="speedControlBar">
@@ -131,7 +200,6 @@
       </div>
 
     <div class="statisticBox">
-      <!-- 여기에 확률 그래프들 얹기 -->
       <ul>
         <li><a id="currentCreature">현재 개체수</a></li>
         <li><a id="changeCreature">개체수 변화</a></li>

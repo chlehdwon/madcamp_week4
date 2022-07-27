@@ -3,7 +3,7 @@ import { Loader } from 'three'
 import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 
 
-const urlList = [`assets/nullbird.glb`, `assets/bird1.glb`, `assets/bird.glb`] // new URL(`assets/cow.glb`, import.meta.url)
+const urlList = [`assets/nullbird.glb`, `assets/prey/prey_51.glb`, `assets/predetor/predetor_plain.glb`] // new URL(`assets/cow.glb`, import.meta.url)
 const colorList = [0x000000,0x0000FF, 0xFF0000]
 
 
@@ -36,7 +36,7 @@ export default class Creature{
         // rendering parameter
         this.scene = scene   
         this.isfarsighted = isfarsighted
-        this.radius = 1          // radius of 3D-sphere
+        this.radius = 0.5          // radius of 3D-sphere
         this.object = null
         this.closeView = null
         this.farView = this.draw()
