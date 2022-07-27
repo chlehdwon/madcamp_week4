@@ -122,13 +122,20 @@ var basic_frame = 60
 var target_frame = 15
 var frame = 0
 let animateId
+let dday = document.querySelector("#dday")
 let age = document.querySelector("#calender")
+var date = new Date()
+date.setFullYear(0)
+date.setMonth(0)
+date.setDate(1)
 
 function animate() {
     animateId= requestAnimationFrame(animate)
     light.position.copy( camera.position )
-    age.innerHTML = myWorld.turn
     if(frame > basic_frame){
+        dday.innerHTML = "D-"+myWorld.turn
+        age.innerHTML = getYMD()
+        date.setDate(date.getDate()+1)
         frame -= basic_frame
         // set farsighted & closesighted
         const dist = Math.sqrt((camera.position.x*camera.position.x) + (camera.position.y*camera.position.y) + (camera.position.z*camera.position.z))
@@ -175,6 +182,14 @@ function render() {
     renderer.render(scene, camera)
 }
 animate()
+
+function getYMD(){
+    var year = ("000" + date.getFullYear()).slice(-4);
+    var month = ("0" + (1 + date.getMonth())).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+
+    return "A.D. " + year + "-" + month + "-" + day;
+}
 
 
 window.addEventListener(
