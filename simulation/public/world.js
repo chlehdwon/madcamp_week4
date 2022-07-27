@@ -24,10 +24,11 @@ export default class World{
         // food information
         this.foodMap = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // food map
         this.foodDict = {}
-        this.food_num = 100  
         this.foodRadius = 1
 
         // env information
+        this.lightning = -365
+        this.meteor = -365
 
         // Jungle, Desert, Glacier, Grass
         this.envs = [new Grass(), new Grass(), new Grass(), new Grass(),
@@ -116,7 +117,7 @@ export default class World{
                 
                     // const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
                     // food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
-                    this.foodDict[[x,z]]=food_obj
+                    this.foodDict[[z,x]]=food_obj
                     this.foodMap[z][x] += 1  // save food's position to my world!
                     k++;
                 }
@@ -171,7 +172,7 @@ export default class World{
 
                 if(this.foodMap[next_z][next_x] > 0){
                     this.foodMap[next_z][next_x]-=1
-                    this.scene.remove(this.foodDict[[next_x, next_z]].mesh)
+                    this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
                     creature.hp += creature.efficiency * creature.hpScale
                 }
                 if(creature.isChasing){
@@ -179,7 +180,7 @@ export default class World{
                     creature.direction = direction
                 }
             }
-            creature.hp -= (creature.speed + hotDamage + coldDamage)
+            creature.hp -= (creature.speed + (hotDamage + coldDamage)*5)
             if(hotDamage>0) // console.log("so hot")
             if(coldDamage>0) // console.log("so cold")
 
@@ -246,7 +247,7 @@ export default class World{
                     creature.direction = direction
                 }
             }
-            creature.hp -= (creature.speed + hotDamage + coldDamage)
+            creature.hp -= (creature.speed + (hotDamage + coldDamage)*5)
 
             if(creature.hp<=0){
                 this.predator = this.predator.filter((element)=>element.object!==creature.object);
@@ -288,7 +289,7 @@ export default class World{
                 
                 // this.cid+=1
                 // creature.food -= 2
-                creature.hp -= creature.hpScale
+                creature.hp -= creature.hpScale * 2
             }
             // else{
             //     creature.food -= 1
@@ -453,7 +454,7 @@ export default class World{
         }
         
         // 만약 scope안에 prey가 없다면 랜덤으로 움직임
-        if(minDistance==100){
+        if(minDistance==100 || each_creature.hp >= each_creature.hpScale*2){
             each_creature.isChasing = false;
             // prey가 찾는거면 빈칸 return
             if(opposite_type == 2){return([])}
@@ -525,7 +526,7 @@ export default class World{
             }
         }
         // 주위에 먹이가 없다면 랜덤하게 움직임
-        if(minDistance==100){
+        if(minDistance==100 || each_creature.hp >= each_creature.hpScale*2){
             direction = this.makeRandomDirec()
             each_creature.isChasing = false;
         }

@@ -28,7 +28,7 @@ const camera = new THREE.PerspectiveCamera(
   window.innerWidth / window.innerHeight,
   0.1,
   10000)
-camera.position.set(3000, 500, 0)
+camera.position.set(0, 500, 3000)
 camera.lookAt(0,0,0)
 
 // ==================== ORBITCONTROL =========================
@@ -48,7 +48,7 @@ scene.add(light.target)
 
 
 // =================== World ========================
-const myWorld = new World(scene,30,10)
+const myWorld = new World(scene,30,15)
 console.log("=====world creation done=====")
 
 // =================== PLANE =========================
@@ -122,11 +122,12 @@ var basic_frame = 60
 var target_frame = 15
 var frame = 0
 let animateId
+var vibrate = false
 
 function animate() {
     animateId= requestAnimationFrame(animate)
-    console.log(camera.position)
-    light.position.copy( camera.position );
+    light.position.copy( camera.position )
+    
     if(frame > basic_frame){
         frame -= basic_frame
         // set farsighted & closesighted
@@ -139,6 +140,13 @@ function animate() {
         // graghData get
         if(myWorld.turn%20==0){
             stack_data()
+        }
+
+        if(myWorld.lightning > myWorld.turn){
+            vibrateCamera()
+        }
+        if(myWorld.meteor > myWorld.turn){
+            vibrateCamera()
         }
 
         // creatures move
@@ -158,7 +166,6 @@ function animate() {
             }
         }
     }
-    
     render() 
     frame += target_frame
     
@@ -575,47 +582,16 @@ iceAgeBtn.addEventListener('click', function(){
 function lightning(tile){
     // 선택한 땅이 날아감.
     // tile input should be 00 01 ...
-    cancelAnimationFrame(animateId)
-    console.log(`Disaster: Lightning on ${tile}`)
-    let tileleft = parseInt(tile[0])*PLANESIZE/4    //x
-    let tileright = tileleft + PLANESIZE/4          //x
-    let tiletop = parseInt(tile[1])*PLANESIZE/4     //z
-    let tilebtm = tiletop + PLANESIZE/4             //z
-    for(let i=tiletop; i<tilebtm; i++){
-        for(let j=tileleft; j<tileright; j++){
-            myWorld.creatures[i][j].forEach((creature)=>{
-                myWorld.predator = myWorld.predator.filter((element)=>element.object!==creature.object);
-                myWorld.prey = myWorld.prey.filter((element)=>element.object!==creature.object);
-                scene.remove(creature.object)
-            })
-            myWorld.creatures[i][j] = []    // remove all creatures from the position.
-            if(myWorld.foodDict[[i,j]] != null){
-                scene.remove(myWorld.foodDict[[i,j]])
-                myWorld.foodMap[i][j] = 0
-                myWorld.foodDict[[i,j]] = null;
-            }
-        }
+    if(myWorld.turn < myWorld.lightning + 365){
+        console.log('Disaster Failed')
+        animate()
     }
-    myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 1    // damaged for 1month
-    animate()
-}
-
-function meteor(){
-    // grid 절반을 날려버림. 날려버릴 grid는 랜덤선택
-    const tileIdArray = ["00","10","20","30","01","11","21","31","02","12","22","31","03","13","23","33"]
-    let selectedTile = []
-    for (let i=0; i<8; i++){
-        let newElem = tileIdArray[Math.floor(Math.random() * 16)]
-        while(selectedTile.includes(newElem)){
-            newElem = tileIdArray[Math.floor(Math.random() * 16)]
-        }
-        selectedTile.push(newElem)
-    }
-    selectedTile.forEach((elem) => {
-        console.log(`Disaster: Meteor on ${elem}`)
-        let tileleft = parseInt(elem[0])*PLANESIZE/4    //x
+    else{
+        cancelAnimationFrame(animateId)
+        console.log(`Disaster: Lightning on ${tile}`)
+        let tileleft = parseInt(tile[0])*PLANESIZE/4    //x
         let tileright = tileleft + PLANESIZE/4          //x
-        let tiletop = parseInt(elem[1])*PLANESIZE/4     //z
+        let tiletop = parseInt(tile[1])*PLANESIZE/4     //z
         let tilebtm = tiletop + PLANESIZE/4             //z
         for(let i=tiletop; i<tilebtm; i++){
             for(let j=tileleft; j<tileright; j++){
@@ -626,15 +602,81 @@ function meteor(){
                 })
                 myWorld.creatures[i][j] = []    // remove all creatures from the position.
                 if(myWorld.foodDict[[i,j]] != null){
-                    scene.remove(myWorld.foodDict[[i,j]])
+                    scene.remove(myWorld.foodDict[[i,j]].mesh)
                     myWorld.foodMap[i][j] = 0
                     myWorld.foodDict[[i,j]] = null;
                 }
             }
         }
-        myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 1    // damaged for 1month
-    })
-    animate()
+        myWorld.lightning = myWorld.turn+3
+        myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 1    // damaged for 1month
+        animate()
+    }
+}
+
+// function vibrateCamera(){
+//     camera.lookAt(new THREE.Vector3(0,-10,0))
+//     setTimeout(restoreCamera((0,10,0)), 20)
+//     setTimeout(restoreCamera((-10,0,0)), 40)
+//     setTimeout(restoreCamera((10,0,0)), 60)
+//     setTimeout(restoreCamera((0,0,10)), 80)
+//     setTimeout(restoreCamera((0,0,-10)), 100)
+// }
+
+
+
+function vibrateCamera(){
+    camera.lookAt(new THREE.Vector3(0,-10,0))
+    setTimeout(restoreCamera, 20)
+}
+
+function restoreCamera(){
+    camera.lookAt(new THREE.Vector3(0,0,0))
+}
+
+
+function meteor(){
+    // grid 절반을 날려버림. 날려버릴 grid는 랜덤선택
+    if(myWorld.turn < myWorld.meteor + 365*3){
+        console.log('Disaster Failed')
+        animate()
+    }
+    else{
+        const tileIdArray = ["00","10","20","30","01","11","21","31","02","12","22","31","03","13","23","33"]
+        let selectedTile = []
+        for (let i=0; i<8; i++){
+            let newElem = tileIdArray[Math.floor(Math.random() * 16)]
+            while(selectedTile.includes(newElem)){
+                newElem = tileIdArray[Math.floor(Math.random() * 16)]
+            }
+            selectedTile.push(newElem)
+        }
+        selectedTile.forEach((elem) => {
+            console.log(`Disaster: Meteor on ${elem}`)
+            let tileleft = parseInt(elem[0])*PLANESIZE/4    //x
+            let tileright = tileleft + PLANESIZE/4          //x
+            let tiletop = parseInt(elem[1])*PLANESIZE/4     //z
+            let tilebtm = tiletop + PLANESIZE/4             //z
+            for(let i=tiletop; i<tilebtm; i++){
+                for(let j=tileleft; j<tileright; j++){
+                    myWorld.creatures[i][j].forEach((creature)=>{
+                        myWorld.predator = myWorld.predator.filter((element)=>element.object!==creature.object);
+                        myWorld.prey = myWorld.prey.filter((element)=>element.object!==creature.object);
+                        scene.remove(creature.object)
+                    })
+                    myWorld.creatures[i][j] = []    // remove all creatures from the position.
+                    if(myWorld.foodDict[[i,j]] != null){
+                        scene.remove(myWorld.foodDict[[i,j]].mesh)
+                        myWorld.foodMap[i][j] = 0
+                        myWorld.foodDict[[i,j]] = null;
+                    }
+                }
+            }
+            myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 1    // damaged for 1month
+        })
+        myWorld.meteor = myWorld.turn+5
+        animate()
+    }
 }
 function iceAge(){
     // 3 달동안 전체 env의 온도가 하강함
@@ -669,5 +711,11 @@ framecount.addEventListener('input', function(){
     target_frame = parseInt(framecount.value)
     animate()
 }, false)
+
+
+
+
+
+
 
 export default myWorld
