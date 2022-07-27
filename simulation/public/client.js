@@ -28,7 +28,7 @@ const camera = new THREE.PerspectiveCamera(
   window.innerWidth / window.innerHeight,
   0.1,
   10000)
-camera.position.set(3000, 500, 0)
+camera.position.set(0, 500, 3000)
 camera.lookAt(0,0,0)
 
 // ==================== ORBITCONTROL =========================
@@ -36,6 +36,8 @@ const controls = new OrbitControls(camera, renderer.domElement)
 controls.addEventListener( 'change', render )
 controls.minPolarAngle = -Math.PI/2
 controls.maxPolarAngle =  Math.PI / 2 - 0.05;
+controls.minDistance=0
+controls.maxDistance= 9000
 
 // ===================== LIGHT ========================
 const light = new THREE.DirectionalLight(0xffffff, 2)
@@ -57,6 +59,8 @@ var desertTexture = new THREE.TextureLoader().load("./assets/desert_texture.jpg"
 var glacierTexture = new THREE.TextureLoader().load("./assets/glacier_texture.jpg")
 var grassTexture = new THREE.TextureLoader().load("./assets/grass_texture.jpg")
 var jungleTexture = new THREE.TextureLoader().load("./assets/jungle_texture.jpg")
+var lightningTexture = new THREE.TextureLoader().load("./assets/lightning_texture.jpg")
+var meteorTexture = new THREE.TextureLoader().load("./assets/meteor_texture.jpg")
 
 const textures = [grassTexture, jungleTexture, desertTexture, glacierTexture]
 const textureUrl = ['assets/grass_texture.jpg', 'assets/jungle_texture.jpg', 'assets/desert_texture.jpg', 'assets/glacier_texture.jpg']
@@ -122,11 +126,13 @@ var basic_frame = 60
 var target_frame = 15
 var frame = 0
 let animateId
+let particles
+let damagerecover=0
 
 function animate() {
     animateId= requestAnimationFrame(animate)
-    console.log(camera.position)
     light.position.copy( camera.position );
+
     if(frame > basic_frame){
         frame -= basic_frame
         // set farsighted & closesighted
@@ -135,10 +141,21 @@ function animate() {
             isfarsighted = true
         else
             isfarsighted = false
-    
+
         // graghData get
         if(myWorld.turn%20==0){
             stack_data()
+        }
+
+        // set IceAge
+        if(myWorld.isIceAge > 0){
+            snowing()
+        }else{
+            scene.remove(particles)
+        }
+
+        if(myWorld.isDamaged > 1){
+            damagerecover = 1
         }
 
         // creatures move
@@ -156,7 +173,17 @@ function animate() {
             else if(graghType ==3){
                 makeCharGragh(3)
             }
+
+            if(damagerecover == 1){
+                console.log("damagerecover")
+                planeList.forEach((_, idx)=>{
+                    console.log("idx")
+                    planeList[idx].plane.material.map = textures[planeList[idx].type]
+                })
+                damagerecover = 0
+            }
         }
+
     }
     
     render() 
@@ -347,7 +374,13 @@ confirmBtn.addEventListener('click', function(){
 previewBtn.addEventListener('click', function(){
     let input = document.getElementsByClassName('creatureInput')
     let inputList = Array.prototype.slice.call(input)
-    let type = inputList[0].checked ? "prey" : "predetor"
+    let type
+    if (inputList[0].checked)    type="prey"
+    else if (inputList[1].checked)    type="predetor"
+    else {
+        previewImg.style.backgroundImage = (`url(assets/createbtn.jpg)`)
+        return
+    } 
     let cold = inputList[4].value
     let hot = inputList[5].value
     previewImg.style.backgroundImage = (`url(assets/preview/${type}_${cold}${hot}_img.png)`)
@@ -573,7 +606,6 @@ iceAgeBtn.addEventListener('click', function(){
     iceAge()
 })
 function lightning(tile){
-    // 선택한 땅이 날아감.
     // tile input should be 00 01 ...
     cancelAnimationFrame(animateId)
     console.log(`Disaster: Lightning on ${tile}`)
@@ -581,6 +613,7 @@ function lightning(tile){
     let tileright = tileleft + PLANESIZE/4          //x
     let tiletop = parseInt(tile[1])*PLANESIZE/4     //z
     let tilebtm = tiletop + PLANESIZE/4             //z
+
     for(let i=tiletop; i<tilebtm; i++){
         for(let j=tileleft; j<tileright; j++){
             myWorld.creatures[i][j].forEach((creature)=>{
@@ -590,13 +623,14 @@ function lightning(tile){
             })
             myWorld.creatures[i][j] = []    // remove all creatures from the position.
             if(myWorld.foodDict[[i,j]] != null){
-                scene.remove(myWorld.foodDict[[i,j]])
+                scene.remove(myWorld.foodDict[[i,j]].mesh)
                 myWorld.foodMap[i][j] = 0
                 myWorld.foodDict[[i,j]] = null;
             }
         }
     }
     myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 1    // damaged for 1month
+    planeList[parseInt(tile[0])+parseInt(tile[1])*4].plane.material.map = lightningTexture
     animate()
 }
 
@@ -626,13 +660,14 @@ function meteor(){
                 })
                 myWorld.creatures[i][j] = []    // remove all creatures from the position.
                 if(myWorld.foodDict[[i,j]] != null){
-                    scene.remove(myWorld.foodDict[[i,j]])
+                    scene.remove(myWorld.foodDict[[i,j]].mesh)
                     myWorld.foodMap[i][j] = 0
                     myWorld.foodDict[[i,j]] = null;
                 }
             }
         }
         myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 1    // damaged for 1month
+        planeList[parseInt(elem[0])+parseInt(elem[1])*4].plane.material.map = meteorTexture
     })
     animate()
 }
@@ -640,12 +675,98 @@ function iceAge(){
     // 3 달동안 전체 env의 온도가 하강함
     cancelAnimationFrame(animateId)
     myWorld.isIceAge = 3   // rise for 3 months
+    snowInit()
     animate()
 }
 function globalWarming(){
     cancelAnimationFrame(animateId)
     myWorld.isWarming = 3   // rise for 3 months
+    const sphereGeometry = new THREE.SphereGeometry( PLANESIZE*0.9, 32, 16, 0, Math.PI*2,  Math.PI/2, Math.PI )
+    var sphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0xFF0000,
+        side: THREE.DoubleSide,
+        opacity: 0.1,
+        transparent: true,
+    })
+    const redsphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+    
+    redsphere.position.z = 15
+    redsphere.position.x = -30
+    redsphere.rotation.x = Math.PI
+    scene.add(redsphere)
     animate()
+}
+
+const particleNum = 10000;
+const textureSize = 64.0;
+
+const drawRadialGradation = (ctx, canvasRadius, canvasW, canvasH) => {
+    ctx.save();
+    const gradient = ctx.createRadialGradient(canvasRadius,canvasRadius,0,canvasRadius,canvasRadius,canvasRadius);
+    gradient.addColorStop(0, 'rgba(255,255,255,1.0)');
+    gradient.addColorStop(0.5, 'rgba(255,255,255,0.5)');
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0,0,canvasW,canvasH);
+    ctx.restore();
+}
+const getTexture = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const diameter = textureSize;
+    canvas.width = diameter;
+    canvas.height = diameter;
+    const canvasRadius = diameter / 2;
+
+    drawRadialGradation(ctx, canvasRadius, canvas.width, canvas.height);
+
+    const texture = new THREE.Texture(canvas);
+    texture.type = THREE.FloatType;
+    texture.needsUpdate = true;
+    return texture;
+}
+function snowInit(){
+    /* Snow Particles
+   -------------------------------------------------------------*/
+   const snowpoints = []
+   for (let i = 0; i < particleNum; i++) {
+       const x = Math.floor(Math.random() * 800 - 400);
+       const y = Math.floor(Math.random() * 400 - 100);
+       const z = Math.floor(Math.random() * 800 - 400);
+       const particle = new THREE.Vector3(x, y, z);
+       snowpoints.push(particle);
+   }   
+   let pointGeometry = new THREE.BufferGeometry().setFromPoints(snowpoints)
+   
+   const pointMaterial = new THREE.PointsMaterial({
+       size: 8,
+       color: 0xffffff,
+       vertexColors: false,
+       map: getTexture(),
+       transparent: true,
+       fog: true,
+       depthWrite: false
+   });
+
+   const velocities = [];
+   for (let i = 0; i < particleNum; i++) {
+       const x = Math.floor(Math.random() * 6 - 10) * 0.1;
+       const y = Math.floor(Math.random() * 6 + 3) * 0.1;
+       const z = Math.floor(Math.random() * 6 - 3) * 0.1;
+       const particle = new THREE.Vector3(x, y, z);
+       velocities.push(particle);
+   }
+
+   particles = new THREE.Points(pointGeometry, pointMaterial);
+   particles.geometry.velocities = velocities;
+   particles.geometry.vertices = snowpoints;
+   scene.add(particles);
+}
+
+function snowing(){
+    const speed = 0.05
+    particles.rotation.y += speed
 }
 // =======================================================
 
