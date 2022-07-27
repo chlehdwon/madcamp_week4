@@ -122,12 +122,12 @@ var basic_frame = 60
 var target_frame = 15
 var frame = 0
 let animateId
-var vibrate = false
+let age = document.querySelector("#calender")
 
 function animate() {
     animateId= requestAnimationFrame(animate)
     light.position.copy( camera.position )
-    
+    age.innerHTML = myWorld.turn
     if(frame > basic_frame){
         frame -= basic_frame
         // set farsighted & closesighted
