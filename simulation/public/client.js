@@ -50,7 +50,7 @@ scene.add(light.target)
 
 
 // =================== World ========================
-const myWorld = new World(scene,30,15)
+const myWorld = new World(scene,1,0)
 console.log("=====world creation done=====")
 
 // =================== PLANE =========================
@@ -207,11 +207,9 @@ function render() {
 animate()
 
 function getYMD(){
-    var year = ("000" + date.getFullYear()).slice(-4);
-    var month = ("0" + (1 + date.getMonth())).slice(-2);
-    var day = ("0" + date.getDate()).slice(-2);
+    var year = date.getFullYear()
 
-    return "A.D. " + year + "-" + month + "-" + day;
+    return "서기 " + year + "년"
 }
 
 
