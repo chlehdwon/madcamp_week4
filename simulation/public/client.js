@@ -27,15 +27,18 @@ const camera = new THREE.PerspectiveCamera(
   window.innerWidth / window.innerHeight,
   0.1,
   10000)
-camera.position.set(0, 370, 340)
+camera.position.set(3000, 500, 0)
 camera.lookAt(0,0,0)
 
 // ==================== ORBITCONTROL =========================
 const controls = new OrbitControls(camera, renderer.domElement)
+controls.addEventListener( 'change', render )
+controls.minPolarAngle = 0
+controls.maxPolarAngle =  Math.PI * 0.5
 
 // ===================== LIGHT ========================
 const light = new THREE.DirectionalLight(0xffffff, 1.5)
-light.position.copy( camera.position );
+light.position.copy( camera.position )
 light.castShadow = true
 light.receiveShadow = true
 scene.add(light)
@@ -78,20 +81,21 @@ for(var i=0; i<4; i++){
 
 
 
-// // =================== ENV GLTF (TODO: should remove and module)===
-// const loader = new GLTFLoader();
-// const iceURL = new URL('./assets/ground.glb', import.meta.url)
-// let backgorund
-// loader.load(iceURL.href, function(gltf){
-//     backgorund = gltf.scene
-//     backgorund.rotation
-//     backgorund.scale.set(50, 10, 50)
-//     backgorund.position.z = 30
-//     backgorund.position.x = 10
-//     backgorund.castShadow = true
-//     backgorund.receiveShadow = true
-//     scene.add(backgorund)
-// })
+// =================== ENV GLTF (TODO: should remove and module)===
+const loader = new GLTFLoader();
+const islandURL = new URL('./assets/island.glb', import.meta.url)
+let backgorund
+loader.load(islandURL.href, function(gltf){
+    backgorund = gltf.scene
+    backgorund.rotation
+    backgorund.scale.set(85, 100, 85)
+    backgorund.position.z = 15
+    backgorund.position.x = -30
+    backgorund.position.y = -666
+    backgorund.castShadow = true
+    backgorund.receiveShadow = true
+    scene.add(backgorund)
+})
 
 
 // ================== MAIN LOOP 1 ========================
@@ -113,6 +117,7 @@ let animateId
 
 function animate() {
     animateId= requestAnimationFrame(animate)
+    console.log(camera.position)
     light.position.copy( camera.position );
     if(frame > basic_frame){
         frame -= basic_frame

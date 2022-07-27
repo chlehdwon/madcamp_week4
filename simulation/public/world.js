@@ -5,7 +5,7 @@ import {Jungle, Desert, Glacier, Grass} from './env.js'
 export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
-        this.size = 300
+        this.size = 700
         this.turn = 1
         this.cid = 1    
         this.scene = scene
