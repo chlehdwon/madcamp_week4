@@ -367,11 +367,7 @@ gridmapList.forEach(grid => {
         let scaleX_c = cwidth/absoluteX
         let scaleY_c = cheight/absoluteY
         let ctx = event.target.getContext('2d')
-        ctx.beginPath()
-        ctx.arc(parseInt(inputX*scaleX_c), parseInt(inputY*scaleY_c), 2, 0, 2*Math.PI)
-        ctx.stroke()
-        ctx.fillStyle = typeColor[newCreatureP.type]
-        ctx.fill()
+        ctx.fillRect(parseInt(inputX*scaleX_c), parseInt(inputY*scaleY_c), 10, 5)
 
         newCreatureP.x = parseInt(xi*singleGridCount + inputX*scaleX)
         newCreatureP.z = parseInt(yi*singleGridCount + inputY*scaleY)

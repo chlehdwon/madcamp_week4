@@ -16,6 +16,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="module" src="client.js" defer></script>
     <script type="module" src="chart.js" defer></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/statstyle.css">
     <link rel="stylesheet" href="css/creaturestyle.css">
@@ -103,8 +105,8 @@
             </div>
             <div class="errorMsg"></div>
             <menu>
-              <button id="cancelBtn" type="reset">cancle</button>
-              <button id="confirmBtn">confirm</button>
+              <button class="cancel-button" id="cancelBtn" type="reset"><i class="fa fa-times" aria-hidden="true"></i></button>
+              <button class="confirm-button" id="confirmBtn"><i class="fa fa-check" aria-hidden="true"></i></button>
             </menu>
           </div>
         </div>
@@ -131,7 +133,7 @@
             <canvas class="grid-item" id="23">15</canvas>
             <canvas class="grid-item" id="33">16</canvas>
           </div>
-          <button id="gridConfirmBtn">GO!!</button>
+          <button class="confirm-button" id="gridConfirmBtn"><i class="fa fa-check" aria-hidden="true"></i></button>
         </div>
       </dialog>
 
@@ -167,8 +169,8 @@
             <div class="grid-item-env" id="33">16</div>
           </div>
         </div>
-        <button class='cancel-button' id="envCancel">cancel</button>
-        <button class='confirm-button' id="envConfirm">confirm</button>
+        <button class='cancel-button' id="envCancel"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <button class='confirm-button' id="envConfirm"><i class="fa fa-check" aria-hidden="true"></i></button>
       </dialog>
 
       <dialog id="disasterDialog">
@@ -202,7 +204,7 @@
             <div class="grid-item-small" id="33">16</div>
           </div>
         </div>
-        <button class='cancel-button' id="disasterCancel">cancel</button>
+        <button class='cancel-button' id="disasterCancel"><i class="fa fa-times" aria-hidden="true"></i></button>
       </dialog>
 
     </div>
@@ -248,7 +250,7 @@
               <canvas class="grid-" id="33">15</canvas>
             </div>
           </div>
-          <button class='cancel-button' id="gragh-cancel">cancel</button>
+          <button class='cancel-button' id="gragh-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
         </div> 
       </div>
   </body>
