@@ -45,7 +45,7 @@ scene.add(light.target)
 
 
 // =================== World ========================
-const myWorld = new World(scene,0,0)
+const myWorld = new World(scene,30,10)
 console.log("=====world creation done=====")
 
 // =================== PLANE =========================
