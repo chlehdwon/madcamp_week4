@@ -8,13 +8,32 @@
     position: absolute;
     margin-top: 9vh;
     margin-left: 8vw;
+    border-radius: 12px;
 }
 #preview{
     width: 20vh;
-    height:22vh;
+    height:25vh;
     background-image: url('../assets/createbtn.jpg');
     background-size:cover;
     background-position: center;
+}
+#previewContainer{
+    display: block;
+    align-items: center;
+}
+#previewBtn{  
+    background-color: #ecb390; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 10px 10px; /* Some padding */
+    font-size: 2vh; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+    border-radius: 6px;
+}
+
+.btn-row{
+    display:block;
+    text-align: center;
 }
 #dialogContainer{
     display: flex;
@@ -37,19 +56,20 @@
 #gridmapContainer{
     display:none;
     padding-left: 2vh;
+    text-align: center;
 }
 .grid-container{
     display: grid;
-    column-gap:10px;
-    row-gap:10px;
-    grid-template-columns: 10vh 10vh 10vh 10vh;
-    grid-template-rows: 10vh 10vh 10vh 10vh;
+    column-gap:0.5vh;
+    row-gap:0.5vh;
+    grid-template-columns: 6vh 6vh 6vh 6vh;
+    grid-template-rows: 6vh 6vh 6vh 6vh;
 }
 .grid-item{
     display: inline-grid;
     background-color: aquamarine;
-    width: 10vh;
-    height:10vh;
+    width: 6vh;
+    height:6vh;
     background-size:cover;
     background-position: center;
 }
@@ -57,4 +77,13 @@
     display:none;
     align-items: center;
     color:red;
+}
+.confirm-button2{
+    background-color: #ecb390; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 10px 10px; /* Some padding */
+    font-size: 2vh; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+    border-radius: 6px;
 }

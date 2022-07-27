@@ -26,15 +26,8 @@
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
-      <title id="title">리얼 야생 버라이어티</title>
-      <div id="speedControlBar">
-        <!-- <label for="vol" id="frameTag">change speed</label> -->
-        <button type="button" class="btn" id="aniplay"><img src="assets/icon_play.png"></button>
-        <button type="button" class="btn" id="pause"><img src="assets/icon_pause.png"></button>
-        <input type="range" id="framecount" min="1" max="30">
-        <output id="frameNum">15</output>
-      </div>
-    </div>
+    <title id="title">리얼 야생 버라이어티</title>
+
     <div class="canvas">
       <canvas id="c"></canvas>
     </div>
@@ -59,10 +52,10 @@
       <dialog id="creatureDialog">
         <!-- <form method="dialog"> -->
         <div id="dialogContainer">
-          <div id="preview">
-            <button id="previewBtn">preview</button>
+          <div id="previewContainer">
+            <div id="preview"></div>
           </div>
-  
+
           <div id="featureList">
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
@@ -112,10 +105,11 @@
               </form>
             </div>
             <div class="errorMsg"></div>
-            <menu>
+            <div class="btn-row">
+              <button id="previewBtn"><i class="fa fa-magic" aria-hidden="true"></i>  preview</button>
               <button class="cancel-button" id="cancelBtn" type="reset"><i class="fa fa-times" aria-hidden="true"></i></button>
               <button class="confirm-button" id="confirmBtn"><i class="fa fa-check" aria-hidden="true"></i></button>
-            </menu>
+            </div>
           </div>
         </div>
         <!-- </form> -->
@@ -141,7 +135,7 @@
             <canvas class="grid-item" id="23">15</canvas>
             <canvas class="grid-item" id="33">16</canvas>
           </div>
-          <button class="confirm-button" id="gridConfirmBtn"><i class="fa fa-check" aria-hidden="true"></i></button>
+          <button class="confirm-button2" id="gridConfirmBtn"><i class="fa fa-check" aria-hidden="true"></i> Release</button>
         </div>
       </dialog>
 
@@ -217,6 +211,12 @@
 
     </div>
     <div class="rightsidedBox">
+      <div id="speedControlBar">
+        <button type="button" class="btn" id="aniplay"><i class="fa fa-play" aria-hidden="true"></i></button>
+        <button type="button" class="btn" id="pause"><i class="fa fa-pause" aria-hidden="true"></i></button>
+        <input type="range" id="framecount" min="1" max="30">
+        <output id="frameNum">15</output>
+      </div>
 
       <div class="statisticBox">
         <ul>
