@@ -50,7 +50,7 @@ scene.add(light.target)
 
 
 // =================== World ========================
-const myWorld = new World(scene,1,0)
+const myWorld = new World(scene,30,30)
 console.log("=====world creation done=====")
 
 // =================== PLANE =========================
@@ -139,7 +139,7 @@ function animate() {
     light.position.copy( camera.position )
 
     if(frame > basic_frame){
-        dday.innerHTML = "D-"+myWorld.turn
+        dday.innerHTML = "D+"+myWorld.turn
         age.innerHTML = getYMD()
         date.setDate(date.getDate()+1)
         frame -= basic_frame
@@ -174,7 +174,7 @@ function animate() {
         myWorld.day(isfarsighted)
         if(myWorld.turn%365==0){
             myWorld.age += 1
-            myWorld.monthOver(isfarsighted)
+            myWorld.yearOver(isfarsighted)
 
             if(graghType==1){
                 makeCurGraph()
@@ -321,7 +321,7 @@ confirmBtn.addEventListener('click', function(){
         type : ctype,
         worldSize : PLANESIZE,
         speed : parseInt(document.getElementById('speed').value),
-        sight : parseInt(document.getElementById('sight').value),
+        sight : parseInt(document.getElementById('sight').value)*2,
         coldresist : parseInt(document.getElementById('cold').value),
         hotresist : parseInt(document.getElementById('hot').value),
         efficiency : parseInt(document.getElementById('eff').value),
@@ -604,15 +604,6 @@ function lightning(tile){
         animate()
     }
 }
-
-// function vibrateCamera(){
-//     camera.lookAt(new THREE.Vector3(0,-10,0))
-//     setTimeout(restoreCamera((0,10,0)), 20)
-//     setTimeout(restoreCamera((-10,0,0)), 40)
-//     setTimeout(restoreCamera((10,0,0)), 60)
-//     setTimeout(restoreCamera((0,0,10)), 80)
-//     setTimeout(restoreCamera((0,0,-10)), 100)
-// }
 
 
 
