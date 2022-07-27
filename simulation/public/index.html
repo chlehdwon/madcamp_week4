@@ -23,7 +23,15 @@
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
-    <title id="title">리얼 야생 버라이어티</title>
+      <title id="title">리얼 야생 버라이어티</title>
+      <div id="speedControlBar">
+        <!-- <label for="vol" id="frameTag">change speed</label> -->
+        <button type="button" class="btn" id="aniplay"><img src="assets/icon_play.png"></button>
+        <button type="button" class="btn" id="pause"><img src="assets/icon_pause.png"></button>
+        <input type="range" id="framecount" min="1" max="30">
+        <output id="frameNum">15</output>
+      </div>
+    </div>
     <div class="canvas">
       <canvas id="c"></canvas>
     </div>
@@ -206,13 +214,6 @@
 
     </div>
     <div class="rightsidedBox">
-      <div id="speedControlBar">
-        <!-- <label for="vol" id="frameTag">change speed</label> -->
-        <button id="aniplay">play</button>
-        <button id="pause">pause</button>
-        <input type="range" id="framecount" min="1" max="30">
-        <output id="frameNum">15</output>
-      </div>
 
       <div class="statisticBox">
         <ul>
