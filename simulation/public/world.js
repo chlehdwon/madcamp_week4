@@ -1,12 +1,17 @@
 import * as THREE from 'three'
 import Creature from './creature.js' 
 import {Jungle, Desert, Glacier, Grass} from './env.js'
+import Food from './food.js';
+import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
+
+
+const loader = new GLTFLoader();
+let foodURL = 'assets/food.glb'
 
 export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
         this.size = 700
-        this.age = 0
         this.turn = 1
         this.cid = 1    
         this.scene = scene
@@ -19,10 +24,11 @@ export default class World{
         // food information
         this.foodMap = Array(this.size).fill(null).map(()=>Array(this.size).fill(null).map(()=>Array(0)))  // food map
         this.foodDict = {}
-        this.food_num = 100  
         this.foodRadius = 1
 
         // env information
+        this.lightning = -365
+        this.meteor = -365*3
 
         // Jungle, Desert, Glacier, Grass
         this.envs = [new Grass(), new Grass(), new Grass(), new Grass(),
@@ -92,7 +98,6 @@ export default class World{
         return this.envs[z_idx*4 + x_idx]
     }
 
-
     foodInit(){
         for(let i=0; i<4; i++){
             for(let j=0; j<4; j++){
@@ -107,11 +112,13 @@ export default class World{
                     let x = Math.floor(Math.random() * this.size/4) + start_x
                     let z = Math.floor(Math.random() * this.size/4) + start_z
                     if(this.foodMap[z][x]>0) continue;
-                    const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
-                    food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
-                    this.foodDict[[x,z]]=food_sphere
+
+                    let food_obj = new Food({x: x-this.size/2, y: this.foodRadius, z: z-this.size/2, radius: this.foodRadius, scene: this.scene})
+                
+                    // const food_sphere = new THREE.Mesh(new THREE.SphereGeometry(this.foodRadius), new THREE.MeshBasicMaterial({color: 0x00FF00}))
+                    // food_sphere.position.set(x-this.size/2, this.foodRadius, z-this.size/2)
+                    this.foodDict[[z,x]]=food_obj
                     this.foodMap[z][x] += 1  // save food's position to my world!
-                    this.scene.add(food_sphere)
                     k++;
                 }
             }
@@ -165,7 +172,7 @@ export default class World{
 
                 if(this.foodMap[next_z][next_x] > 0){
                     this.foodMap[next_z][next_x]-=1
-                    this.scene.remove(this.foodDict[[next_x, next_z]])
+                    this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
                     creature.hp += creature.efficiency * creature.hpScale
                 }
                 if(creature.isChasing){
@@ -282,7 +289,7 @@ export default class World{
                 
                 // this.cid+=1
                 // creature.food -= 2
-                creature.hp -= creature.hpScale
+                creature.hp -= creature.hpScale * 2
             }
             // else{
             //     creature.food -= 1
@@ -447,7 +454,7 @@ export default class World{
         }
         
         // 만약 scope안에 prey가 없다면 랜덤으로 움직임
-        if(minDistance==100){
+        if(minDistance==100 || each_creature.hp >= each_creature.hpScale*2){
             each_creature.isChasing = false;
             // prey가 찾는거면 빈칸 return
             if(opposite_type == 2){return([])}
@@ -519,7 +526,7 @@ export default class World{
             }
         }
         // 주위에 먹이가 없다면 랜덤하게 움직임
-        if(minDistance==100){
+        if(minDistance==100 || each_creature.hp >= each_creature.hpScale*2){
             direction = this.makeRandomDirec()
             each_creature.isChasing = false;
         }

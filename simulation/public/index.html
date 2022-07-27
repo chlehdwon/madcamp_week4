@@ -19,6 +19,7 @@
     <script type="module" src="chart.js" defer></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="statstyle.css">
+    <link rel="stylesheet" href="css/creaturestyle.css">
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
@@ -55,6 +56,7 @@
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Speed</label>
+                <output id="speedP">1</output>
                 <input  class="creatureInput" type="range" id="speed" min="1" max="5">
               </form>
             </div>
@@ -62,6 +64,7 @@
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Visible Range</label>
+                <output id="sightP">1</output>
                 <input  class="creatureInput" type="range" id="sight" min="1" max="5">
               </form>
             </div>
@@ -69,6 +72,7 @@
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Cold Resistance</label>
+                <output id="coldP">1</output>
                 <input  class="creatureInput" type="range" id="cold" min="1" max="5">
               </form>
             </div>
@@ -76,6 +80,7 @@
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Hot Resistance</label>
+                <output id="hotP">1</output>
                 <input  class="creatureInput" type="range" id="hot" min="1" max="5">
               </form>
             </div>
@@ -83,9 +88,11 @@
             <div id="featureBar">
               <form action="'/action_page.php" method="get">
                 <label for="vol" class="featureTag">Energy Efficiency</label>
+                <output id="effP">1</output>
                 <input  class="creatureInput" type="range" id="eff" min="1" max="5">
               </form>
             </div>
+            <div class="errorMsg"></div>
             <menu>
               <button id="cancelBtn" type="reset">cancle</button>
               <button id="confirmBtn">confirm</button>
