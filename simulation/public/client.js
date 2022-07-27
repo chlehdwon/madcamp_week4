@@ -5,7 +5,7 @@ import { GLTFLoader } from './jsm/loaders/GLTFLoader.js'
 import { Loader} from 'three'
 import World from './world.js' 
 import Creature from './creature.js' 
-import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh} from './chart.js'
+import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh,deleteCurGragh} from './chart.js'
 import {Jungle, Desert, Glacier, Grass} from './env.js'
 
 
@@ -183,7 +183,7 @@ function animate() {
                 makeAccGraph()
             }
             else if(graghType ==3){
-                makeCharGragh(3)
+                makeCharGragh(search_grid)
             }
 
             if(recover == 1){
@@ -224,7 +224,7 @@ window.addEventListener(
     false
 )
 
-// ==================== Create Creature =======================
+// ==================== CreatureCreate =======================
 var creatureBtn = document.getElementById('creatureBtn')
 var creatureDialog = document.getElementById('creatureDialog')
 let previewImg = document.querySelector('#preview')
@@ -236,22 +236,43 @@ let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
-
-creatureBtn.addEventListener('click', function onOpen(){
-    if (typeof creatureDialog.showModal === 'function') {
-        creatureDialog.showModal()
-    }else {
-        alert("the dialog api is not supported by this browser")
-    }
-    cancelAnimationFrame(animateId)
-})
-
 let newCreatureP
 let newPreyList = []
 let newPredetorList = []
 let newCid
 let typeColor = [0x000000, 0x0000FF,0xFF0000] // for visualizing click
 let errmsg = document.querySelector('.errorMsg')
+
+let input = document.getElementsByClassName('creatureInput')
+let speedP = document.querySelector('#speedP')
+let sightP = document.querySelector('#sightP')
+let coldP = document.querySelector('#coldP')
+let hotP = document.querySelector('#hotP')
+let effP = document.querySelector('#effP')
+let outputList = [speedP, sightP, coldP, hotP, effP]
+
+let inputList = Array.prototype.slice.call(input)
+inputList.forEach((elem, idx) => {
+    if(idx == 0 || idx == 1){}
+    else{
+        console.log(elem)
+        elem.addEventListener('input', function(e){
+            outputList[idx-2].innerHTML = e.target.value
+        })
+    }
+}) 
+
+creatureBtn.addEventListener('click', function onOpen(){
+    if (typeof creatureDialog.showModal === 'function') {
+        gridmapList.forEach((grid, idx)=>{
+            grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+        })
+        creatureDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
+    cancelAnimationFrame(animateId)
+})
 
 cancelBtn.addEventListener('click', function(){
     newPredetorList.forEach((elem)=>{
@@ -402,6 +423,9 @@ function initCreatureD(){
     gridmapList.forEach(grid => {
         grid.width = grid.width // canvas 초기화
     })
+    outputList.forEach(elem => {
+        elem.innerHTML = 3
+    })
     errmsg.style.display = 'none'
 }
 // ======================================================
@@ -509,6 +533,9 @@ let disasterCancel = document.getElementById('disasterCancel')
 
 disasterBtn.addEventListener('click', function onOpen(){
     if (typeof disasterDialog.showModal === 'function') {
+        gridmapSmallList.forEach((grid, idx)=>{
+            grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+        })
         disasterDialog.showModal()
     }else {
         alert("the dialog api is not supported by this browser")
@@ -748,7 +775,7 @@ function snowing(){
 // =======================================================
 
 
-// ================ Play/ Pause Bar =====================
+// ================ PlayPause =====================
 let framecount = document.getElementById("framecount")
 let pauseBtn = document.getElementById("pause")
 let playBtn = document.getElementById("aniplay")
@@ -769,7 +796,7 @@ framecount.addEventListener('input', function(){
 }, false)
 
 
-// ----------------- for graph----------------------
+// ----------------- for gragh----------------------
 var curCreatureGragh    = document.getElementById('currentCreature')
 var changeCreatureGragh = document.getElementById('changeCreature')
 var curCharaterGragh    = document.getElementById('creatureCharacter')
@@ -791,6 +818,7 @@ curCreatureGragh.addEventListener('click',function(){
     gragh1.style.display = "block"
     graghType = 1
     makeCurGraph()
+    console.log("1")
     
     gragh1_click = 1
 
@@ -806,6 +834,7 @@ changeCreatureGragh.addEventListener('click',function(){
     graghType = 2
     makeAccGraph()
     gragh2_click = 1
+    console.log("2")
 
     s_gridmapC.style.display = "none"
     gragh1.style.display = "none"
@@ -816,7 +845,6 @@ changeCreatureGragh.addEventListener('click',function(){
 curCharaterGragh.addEventListener('click',function(){
     camera.position.set(0, 370, 340)
     camera.lookAt(0,0,0)
-    
     gragh3.style.display="none"
     chartContainer.style.display = "block"
     s_gridmapC.style.display = "block"
@@ -842,6 +870,7 @@ s_gridmapList.forEach(grid => {
         const yi = parseInt(event.target.id[1])
         gragh3.style.display = "block"
         graghType = 3
+        search_grid = yi*4+xi
         makeCharGragh(yi*4+xi)
         s_gridmapC.style.display = "none"
     })

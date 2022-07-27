@@ -1,0 +1,19 @@
+#gridmapLightning{
+    display:none;
+    padding-left: 2vh;
+}
+.grid-container-small{
+    display: grid;
+    column-gap:5px;
+    row-gap:5px;
+    grid-template-columns: 5vh 5vh 5vh 5vh;
+    grid-template-rows: 5vh 5vh 5vh 5vh;
+}
+.grid-item-small{
+    display: inline-grid;
+    background-color: aquamarine;
+    width: 5vh;
+    height:5vh;
+    background-size:cover;
+    background-position: center;
+}
