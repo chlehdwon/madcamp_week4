@@ -1,0 +1,54 @@
+.grid-container-env{
+    display: grid;
+    column-gap:5px;
+    row-gap:5px;
+    grid-template-columns: 5vh 5vh 5vh 5vh;
+    grid-template-rows: 5vh 5vh 5vh 5vh;
+}
+.grid-item-env{
+    display: inline-grid;
+    background-color: aquamarine;
+    width: 5vh;
+    height:5vh;
+    background-size:cover;
+    background-position: center;
+}
+#imageContainer{
+    display: flex;
+    height: 10vh;
+}
+.drag-over {
+    border: dashed 3px red;
+}
+#grass{
+    display:block;
+    width:10vh;
+    height:10vh;
+    padding: 1vh;
+    background-size:cover;
+    background-position: center;
+}
+#jungle{
+    display:block;
+    width:10vh;
+    height:10vh;
+    padding: 1vh;
+    background-size:cover;
+    background-position: center;
+}
+#glacier{
+    display:block;
+    width:10vh;
+    height:10vh;
+    padding: 1vh;
+    background-size:cover;
+    background-position: center;
+}
+#desert{
+    display:block;
+    width:10vh;
+    height:10vh;
+    padding: 1vh;
+    background-size:cover;
+    background-position: center;
+}

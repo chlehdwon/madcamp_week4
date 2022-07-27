@@ -209,7 +209,7 @@ window.addEventListener(
     false
 )
 
-// ==================== Create Creature =======================
+// ==================== CreatureCreate =======================
 var creatureBtn = document.getElementById('creatureBtn')
 var creatureDialog = document.getElementById('creatureDialog')
 let previewImg = document.querySelector('#preview')
@@ -221,22 +221,43 @@ let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
-
-creatureBtn.addEventListener('click', function onOpen(){
-    if (typeof creatureDialog.showModal === 'function') {
-        creatureDialog.showModal()
-    }else {
-        alert("the dialog api is not supported by this browser")
-    }
-    cancelAnimationFrame(animateId)
-})
-
 let newCreatureP
 let newPreyList = []
 let newPredetorList = []
 let newCid
 let typeColor = [0x000000, 0x0000FF,0xFF0000] // for visualizing click
 let errmsg = document.querySelector('.errorMsg')
+
+let input = document.getElementsByClassName('creatureInput')
+let speedP = document.querySelector('#speedP')
+let sightP = document.querySelector('#sightP')
+let coldP = document.querySelector('#coldP')
+let hotP = document.querySelector('#hotP')
+let effP = document.querySelector('#effP')
+let outputList = [speedP, sightP, coldP, hotP, effP]
+
+let inputList = Array.prototype.slice.call(input)
+inputList.forEach((elem, idx) => {
+    if(idx == 0 || idx == 1){}
+    else{
+        console.log(elem)
+        elem.addEventListener('input', function(e){
+            outputList[idx-2].innerHTML = e.target.value
+        })
+    }
+}) 
+
+creatureBtn.addEventListener('click', function onOpen(){
+    if (typeof creatureDialog.showModal === 'function') {
+        gridmapList.forEach((grid, idx)=>{
+            grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+        })
+        creatureDialog.showModal()
+    }else {
+        alert("the dialog api is not supported by this browser")
+    }
+    cancelAnimationFrame(animateId)
+})
 
 cancelBtn.addEventListener('click', function(){
     newPredetorList.forEach((elem)=>{
@@ -386,6 +407,9 @@ function initCreatureD(){
     previewImg.style.backgroundImage = (`url(assets/createbtn.jpg)`)
     gridmapList.forEach(grid => {
         grid.width = grid.width // canvas 초기화
+    })
+    outputList.forEach(elem => {
+        elem.innerHTML = 3
     })
     errmsg.style.display = 'none'
 }
@@ -733,7 +757,7 @@ function snowing(){
 // =======================================================
 
 
-// ================ Play/ Pause Bar =====================
+// ================ PlayPause =====================
 let framecount = document.getElementById("framecount")
 let pauseBtn = document.getElementById("pause")
 let playBtn = document.getElementById("aniplay")

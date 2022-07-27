@@ -1,0 +1,61 @@
+#line-chart{
+    width:100vh;
+    height:50vh;
+    display: block;
+}
+
+
+.statisticBox{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+    width:25vw;
+    text-align:center;
+    
+}
+ul {
+    display:flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+  }
+  li{float:left;}
+  li a{
+    display: flex;
+    background-color:darkcyan;
+    color:#ffffff;
+    padding:1vh;
+    text-decoration: none;
+    justify-content: center;
+    font-weight: bold;
+    width: 16vh;
+  }
+  li a:hover{
+    background-color: #558ABB;
+    color:black;
+  }
+  .chartContainer{
+    color:black;
+    background-color:beige;
+    display:none;
+  }
+#selectgridMap{
+    display:none;
+    padding-left: 2vh;
+}
+.grid-c{
+    display: grid;
+    padding: 1vh;
+    column-gap:10px;
+    row-gap:10px;
+    grid-template-columns: 10vh 10vh 10vh 10vh;
+    grid-template-rows: 10vh 10vh 10vh 10vh;
+}
+.grid-{
+    display: inline-grid;
+    background-color: aquamarine;
+    width: 10vh;
+    height:10vh;
+}

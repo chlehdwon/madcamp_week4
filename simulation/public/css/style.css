@@ -1,0 +1,73 @@
+#title{
+    width:100%;
+    height:5vh;
+    color:white;
+    background-color:lightblue;
+    display: block;
+    text-align:center;
+    font-size:2.5vh;
+    padding:1vh;
+    font-weight: bold;
+    text-shadow: 5px 5px #558ABB;
+}
+body{
+    background-image: url('../assets/background2.jpg');
+    background-repeat : no-repeat;
+    background-size : cover;
+}
+.canvas{
+    position:relative;
+}
+
+.settingbox{
+    position: absolute;
+    display:inline;
+    padding-top: 2vh;
+    padding-left:1.5vw;
+}
+.controlbar{
+    position:absolute;
+    width: 5vw;
+    display:inline;
+    text-align:center;
+}
+.button {
+    background-color: #04AA6D;
+    border-color: white;
+    color: white;
+    padding-top: 5vh;
+    text-align:center;
+    vertical-align:bottom;
+    text-decoration: none;
+    font-size: 1.3vh;
+    margin-bottom: 3vh;
+    border-radius: 12px;
+    width:7vh;
+    height:7vh;
+}
+.button:hover{
+    opacity: 0.5;
+    color:black;
+}
+
+#speedControlBar{
+    display: flex;
+}
+#frameNum{
+    color:white;
+}
+#frameTag{
+    color: white;
+}
+/* #speedControlBar{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+} */
+.rightsidedBox{
+    position:absolute;
+    padding-top:2vh;
+    padding-right: 2vw;
+    right: 0;
+}
