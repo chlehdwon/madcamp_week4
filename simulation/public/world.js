@@ -58,7 +58,7 @@ export default class World{
                 scene: this.scene, 
                 worldSize: this.size,
                 type: 1,
-                speed: 3, 
+                speed: 1, 
                 sight: 8,
                 coldresist: 2,
                 hotresist:2,
@@ -74,11 +74,11 @@ export default class World{
                 scene: this.scene, 
                 worldSize: this.size,
                 type: 2,
-                speed: 3,
+                speed: 2,
                 sight: 4, 
                 coldresist: 2,
                 hotresist: 2,
-                efficiency: 1,
+                efficiency: 1.5,
                 isfarsighted: true
             }))
         }

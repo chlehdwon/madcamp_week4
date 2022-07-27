@@ -9,6 +9,7 @@
     padding:1vh;
     font-weight: bold;
     text-shadow: 5px 5px #558ABB;
+    width: 100%;
 }
 body{
     background-image: url('../assets/background2.jpg');
@@ -17,6 +18,11 @@ body{
 }
 .canvas{
     position:relative;
+}
+
+.btn{
+    height:20px;
+    width:20px;
 }
 
 .date{
@@ -84,7 +90,9 @@ body{
 
 #speedControlBar{
     display: flex;
+    right: 0;
 }
+
 #frameNum{
     color:white;
 }
