@@ -3,8 +3,7 @@
     height:50vh;
     display: block;
 }
-
-
+/* statisticBOX */
 .statisticBox{
     position:absolute;
     padding-top:2vh;
@@ -20,11 +19,12 @@ ul {
     margin: 0;
     padding: 0;
     overflow:hidden;
+    border-radius: 12px;
   }
   li{float:left;}
   li a{
     display: flex;
-    background-color:darkcyan;
+    background-color:#94B49F;
     color:#ffffff;
     padding:1vh;
     text-decoration: none;
@@ -37,13 +37,15 @@ ul {
     color:black;
   }
   .chartContainer{
+    width: 53vh;
     color:black;
-    background-color:beige;
+    background-color:rgb(252,248,232);
     display:none;
+    border-radius: 12px;
   }
 #selectgridMap{
     display:none;
-    padding-left: 2vh;
+    padding-left: 3.5vh;
 }
 .grid-c{
     display: grid;
@@ -58,4 +60,6 @@ ul {
     background-color: aquamarine;
     width: 10vh;
     height:10vh;
+    background-size:cover;
+    background-position: center;
 }
