@@ -175,12 +175,11 @@ function animate() {
             }
 
             if(damagerecover == 1){
-                console.log("damagerecover")
-                planeList.forEach((_, idx)=>{
-                    console.log("idx")
-                    planeList[idx].plane.material.map = textures[planeList[idx].type]
-                })
-                damagerecover = 0
+            planeList.forEach((_, idx)=>{
+                console.log(planeList[idx].type)
+                planeList[idx].plane.material.map = textures[planeList[idx].type]
+            })
+            damagerecover = 0
             }
         }
 
