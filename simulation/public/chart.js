@@ -31,23 +31,18 @@ function makeAccGraph(){
             display: true,
             text: '시간이 지남에 따른 개체수 변화'
           },
-          ticks:{
-            beginAtZero: true,
-            min: 0,
-            max: 5,
-            setpSize:1
-          }
+          
         }
       });
 }
 
 function makeCurGraph(){
   let food_num = 0
-    for(let i = 0 ;i<myWorld.size ; i++){
-        for(let j =0 ; j<myWorld.size ;j++){
-            food_num += Number(myWorld.foodMap[i][j])
-        }
+  for(let i = 0 ;i<myWorld.size ; i++){
+    for(let j =0 ; j<myWorld.size ;j++){
+      food_num += Number(myWorld.foodMap[i][j])
     }
+  }
   new Chart(document.getElementById("cur-chart").getContext("2d"), {
         type: 'pie',
         data: {
@@ -110,6 +105,8 @@ function makeCharGragh(gridNum){
     preyCharAvg[i]     = preyCharAvg[i] / preyNum
     predatorCharAvg[i] = predatorCharAvg[i] / predactorNum
   }
+  preyCharAvg[1] /=2
+  predatorCharAvg[1] /=2
   new Chart(document.getElementById("char-chart"), {
     type: 'radar',
     data: {
@@ -118,18 +115,18 @@ function makeCharGragh(gridNum){
         {
           label: "포식자",
           fill: true,
-          backgroundColor: "rgba(179,181,198,0.2)",
-          borderColor: "rgba(179,181,198,1)",
+          backgroundColor: "rgba(155,0,0,0.2)",
+          borderColor: "rgba(255,0,0,1)",
           pointBorderColor: "#fff",
-          pointBackgroundColor: "rgba(179,181,198,1)",
+          pointBackgroundColor: "rgba(255,0,0,1)",
           data: predatorCharAvg
         }, {
           label: "피식자",
           fill: true,
-          backgroundColor: "rgba(255,99,132,0.2)",
-          borderColor: "rgba(255,99,132,1)",
+          backgroundColor: "rgba(0,0,155,0.2)",
+          borderColor: "rgba(0,0,255,1)",
           pointBorderColor: "#fff",
-          pointBackgroundColor: "rgba(255,99,132,1)",
+          pointBackgroundColor: "rgba(0,0,155,1)",
           pointBorderColor: "#fff",
           data: preyCharAvg
         }
@@ -138,7 +135,15 @@ function makeCharGragh(gridNum){
     options: {
       title: {
         display: true,
-        text: 'grid ""의 평균 특성'
+        text: "grid "+(gridNum+1) +"의 평균 특성"
+      },
+      scale:{
+          ticks:{
+            beginAtZero: true,
+            min: 0,
+            max: 5,
+            stepSize:1
+          }
       }
     }
 });

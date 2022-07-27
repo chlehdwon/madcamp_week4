@@ -215,6 +215,7 @@ ul {
 }
 .grid-c{
     display: grid;
+    padding: 1vh;
     column-gap:10px;
     row-gap:10px;
     grid-template-columns: 10vh 10vh 10vh 10vh;

@@ -98,6 +98,7 @@ var graghType = 0
 var gragh1_click = 0
 var gragh2_click = 0
 var gragh3_click = 0
+var search_grid  = 0
 
 // ================== MAIN LOOP 1 ========================
 
@@ -110,7 +111,6 @@ console.log("=====creature creation done=====")
 myWorld.foodInit()
 console.log("=====food creation done=====")
 
-updateChart()
 var basic_frame = 60
 var target_frame = 15
 var frame = 0
@@ -195,66 +195,82 @@ var gragh3 = document.getElementById('char-chart')
 
 let chartContainer = document.querySelector('.chartContainer')
 var s_gridmapC = document.getElementById('selectgridMap')
-let s_gridmaps = document.getElementsByClassName('grid-')
+let s_gridmaps = document.querySelectorAll('.grid-')
+console.log(s_gridmaps)
+let s_gridmapList = Array.prototype.slice.call(s_gridmaps)
+
+let graghCancelBtn = document.getElementById('gragh-cancel')
 
 curCreatureGragh.addEventListener('click',function(){
-    if(gragh1_click == 1){
-        chartContainer.style.display = "none"
-        gragh1.style.display="none"
-        gragh1_click = 0
-    }
-    else{
-        chartContainer.style.display = "block"
-        gragh1.style.display = "block"
-        graghType = 1
-        makeCurGraph()
-        
-        gragh1_click = 1
+    chartContainer.style.display = "block"
+    gragh1.style.display = "block"
+    graghType = 1
+    makeCurGraph()
+    
+    gragh1_click = 1
 
-        gragh2.style.display = "none"
-        gragh3.style.display = "none"
-        gragh2_click = 0
-        gragh3_click = 0
-    }    
+    s_gridmapC.style.display = "none"
+    gragh2.style.display = "none"
+    gragh3.style.display = "none"
+    gragh2_click = 0
+    gragh3_click = 0 
 })
 changeCreatureGragh.addEventListener('click',function(){
-    if(gragh2_click == 1){
-        chartContainer.style.display = "none"
-        gragh2.style.display="none"
-        gragh2_click = 0
-    }
-    else{
-        chartContainer.style.display = "block"
-        gragh2.style.display = "block"
-        graghType = 2
-        makeAccGraph()
-        gragh2_click = 1
+    chartContainer.style.display = "block"
+    gragh2.style.display = "block"
+    graghType = 2
+    makeAccGraph()
+    gragh2_click = 1
 
-        gragh1.style.display = "none"
-        gragh3.style.display = "none"
-        gragh1_click = 0
-        gragh3_click = 0
-    }    
+    s_gridmapC.style.display = "none"
+    gragh1.style.display = "none"
+    gragh3.style.display = "none"
+    gragh1_click = 0
+    gragh3_click = 0
 })
 curCharaterGragh.addEventListener('click',function(){
-    if(gragh3_click == 1){
-        chartContainer.style.display = "none"
-        gragh3.style.display="none"
-        gragh3_click = 0
-    }
-    else{
-        s_gridmapC.style.display = "block"
-        chartContainer.style.display = "block"
+    camera.position.set(0, 370, 340)
+    camera.lookAt(0,0,0)
+    
+    gragh3.style.display="none"
+    chartContainer.style.display = "block"
+    s_gridmapC.style.display = "block"
+    s_gridmaps.forEach((grid,idx)=>{
+        console.log(textureUrl[planeList[idx].type])
+        grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
+    })
+    // gragh3.style.display = "block"
+    // graghType = 3
+    // makeCharGragh(3)
+    gragh3_click = 1
+
+    gragh1.style.display = "none"
+    gragh2.style.display = "none"
+    gragh1_click = 0
+    gragh2_click = 0  
+})
+
+// 그 grid를 클릭하면 그 grid의 차트 출력
+s_gridmapList.forEach(grid => {
+    grid.addEventListener('click', function(event){
+        const xi = parseInt(event.target.id[0])
+        const yi = parseInt(event.target.id[1])
         gragh3.style.display = "block"
         graghType = 3
-        makeCharGragh(3)
-        gragh3_click = 1
+        makeCharGragh(yi*4+xi)
+        s_gridmapC.style.display = "none"
+    })
+})
 
-        gragh1.style.display = "none"
-        gragh2.style.display = "none"
-        gragh1_click = 0
-        gragh2_click = 0
-    }    
+graghCancelBtn.addEventListener('click',function(){
+    chartContainer.style.display = "none"
+    s_gridmapC.style.display = "none"
+    gragh1.style.display = "none"
+    gragh2.style.display = "none"
+    gragh3.style.display = "none"
+    gragh1_click = 0
+    gragh2_click = 0
+    gragh3_click = 0
 })
 // -------------------------------------------------
 
