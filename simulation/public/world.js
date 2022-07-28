@@ -11,7 +11,7 @@ let foodURL = 'assets/food.glb'
 export default class World{
     constructor(scene, preyNum,predatorNum){
         // basic information
-        this.size = 400
+        this.size = 700
         this.turn = 1
         this.cid = 1    
         this.scene = scene
