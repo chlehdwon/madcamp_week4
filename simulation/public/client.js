@@ -795,6 +795,16 @@ skip1.addEventListener('click', function(){
         if(myWorld.turn%365==0){
             myWorld.age += 1
             myWorld.yearOver(isfarsighted)
+
+            if(graghType==1){
+                makeCurGraph()
+            }
+            else if(graghType ==2){
+                makeAccGraph()
+            }
+            else if(graghType ==3){
+                makeCharGragh(search_grid)
+            }
         }
     }
     animate()
@@ -815,6 +825,16 @@ skip5.addEventListener('click', function(){
         if(myWorld.turn%365==0){
             myWorld.age += 1
             myWorld.yearOver(isfarsighted)
+
+            if(graghType==1){
+                makeCurGraph()
+            }
+            else if(graghType ==2){
+                makeAccGraph()
+            }
+            else if(graghType ==3){
+                makeCharGragh(search_grid)
+            }
         }
     }
     animate()
