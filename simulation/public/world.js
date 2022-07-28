@@ -74,7 +74,7 @@ export default class World{
                 worldSize: this.size,
                 type: 2,
                 speed: 4,
-                sight: 4, 
+                sight: 6, 
                 coldresist: 2,
                 hotresist: 2,
                 efficiency: 1.5,
