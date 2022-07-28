@@ -5,11 +5,11 @@
 * [Developer Information](#developer-information)
 * [Development Environment](#development-environment)
 * [Application Information](#application-information)
-  * [0. 로그인/회원가입 화면](#0.-로그인/회원가입-화면)
-  * [1. 글목록](#1-글목록)
-  * [2. 글쓰기](#2-글쓰기)
-  * [3. 글 내용보기](#3-글-내용보기)
-  * [4. 글 수정](#4-글-수정)
+  * [0. 초기화면](#0-초기화면)
+  * [1. 생명체 생성](#1-생명체-생성)
+  * [2. 자연기후 변경](#2-자연기후-변경)
+  * [3. 자연재해](#3-자연재해)
+  * [4. 통계 보기](#4-통계-보기)
   * [5. 언젠가](#5-언젠가)
 ***
 
