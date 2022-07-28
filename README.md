@@ -1,5 +1,5 @@
 # <img src="https://user-images.githubusercontent.com/68576681/177258571-64e4855d-bdca-4335-b221-e23d54708cbe.jpg" width="30" height="30"> 나의 작은 갈라파고스
-> 2분반 3주차(2022.07.20~07.28) By 김태연, 남하욱, 최동원
+> 2분반 4주차(2022.07.20~07.28) By 김태연, 남하욱, 최동원
 # Table Of Contents
 * [Project Summary](#project-summary)
 * [Developer Information](#developer-information)
