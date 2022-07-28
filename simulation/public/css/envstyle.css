@@ -1,9 +1,27 @@
+
+#envDialog{
+    position: absolute;
+    margin-top: 9vh;
+    margin-left: 90px;
+    border-radius: 12px;
+}
+.dialog-body-flex{
+    display: flex;
+}
+#envGrids{
+    display:flex;
+    justify-content: center;
+    align-content: center;
+    padding-top: 10px;
+}
 .grid-container-env{
     display: grid;
-    column-gap:5px;
-    row-gap:5px;
+    column-gap:3px;
+    row-gap:3px;
     grid-template-columns: 5vh 5vh 5vh 5vh;
     grid-template-rows: 5vh 5vh 5vh 5vh;
+    justify-content: right;
+    align-content: right;
 }
 .grid-item-env{
     display: inline-grid;
@@ -14,41 +32,86 @@
     background-position: center;
 }
 #imageContainer{
-    display: flex;
-    height: 10vh;
+    width: 5vw;
+    display:inline;
+    text-align:center;
+    margin-top: 10px;
 }
 .drag-over {
     border: dashed 3px red;
 }
 #grass{
     display:block;
-    width:10vh;
-    height:10vh;
-    padding: 1vh;
+    width:7vh;
+    height:7vh;
     background-size:cover;
     background-position: center;
 }
 #jungle{
     display:block;
-    width:10vh;
-    height:10vh;
-    padding: 1vh;
+    width:7vh;
+    height:7vh;
     background-size:cover;
     background-position: center;
 }
 #glacier{
     display:block;
-    width:10vh;
-    height:10vh;
-    padding: 1vh;
+    width:7vh;
+    height:7vh;
     background-size:cover;
     background-position: center;
 }
 #desert{
     display:block;
-    width:10vh;
-    height:10vh;
-    padding: 1vh;
+    width:7vh;
+    height:7vh;
     background-size:cover;
     background-position: center;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    align-items: center;
+    font-size: 13px;
+}
+.tooltip .tooltiptext{
+    visibility: hidden;
+    width: 50px;
+    background-color: black;
+    color: #fff;
+    font-size: 7px;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    bottom: 50%;
+    left: 10%;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+.tooltip:hover .tooltiptext{
+    visibility: visible
+}
+
+#envCancel{
+    background-color: #ecb390; 
+    border: none; 
+    color: white; 
+    padding: 3px 5px; 
+    font-size: 2vh; 
+    cursor: pointer; 
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+#envConfirm{
+    background-color: #ecb390; 
+    border: none; 
+    color: white; 
+    padding: 3px 5px; 
+    font-size: 2vh; 
+    cursor: pointer; 
+    border-radius: 6px;
+    margin-bottom: 10px;
 }

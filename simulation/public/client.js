@@ -565,14 +565,17 @@ gridmapSmallList.forEach((tileElem) => {
     })
 })
 meteorBtn.addEventListener('click', function(){
+    gridmapLightning.style.display = "none"
     disasterDialog.close('meteor confirmed')
     meteor()
 })
 globalWarmingBtn.addEventListener('click', function(){
+    gridmapLightning.style.display = "none"
     disasterDialog.close('global warming confirmed')
     globalWarming()
 })
 iceAgeBtn.addEventListener('click', function(){
+    gridmapLightning.style.display = "none"
     disasterDialog.close('ice age confirmed')
     iceAge()
 })

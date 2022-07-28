@@ -1,13 +1,22 @@
+
+#disasterDialog{
+    position: absolute;
+    margin-top: 10vh;
+    margin-left: 90px;
+    border-radius: 12px;
+}
+
 #gridmapLightning{
     display:none;
-    padding-left: 2vh;
 }
 .grid-container-small{
     display: grid;
-    column-gap:5px;
-    row-gap:5px;
+    column-gap:3px;
+    row-gap:3px;
     grid-template-columns: 5vh 5vh 5vh 5vh;
     grid-template-rows: 5vh 5vh 5vh 5vh;
+    justify-content: center;
+    align-content: center;
 }
 .grid-item-small{
     display: inline-grid;
@@ -16,4 +25,39 @@
     height:5vh;
     background-size:cover;
     background-position: center;
+}
+
+#buttonContainer{
+    width: 5vw;
+    display:inline;
+    text-align:center;
+    margin-top: 10px;
+}
+.disaster-btn {
+    background-color: #94B49F;
+    border-color: white;
+    color: white;
+    text-align:center;
+    vertical-align:bottom;
+    text-decoration: none;
+    font-size: 1.3vh;
+    margin-bottom: 3vh;
+    border-radius: 12px;
+    width:7vh;
+    height:7vh;
+    border: none; 
+}
+.disaster-btn:hover{
+    opacity: 0.5;
+    color:black;
+}
+#disasterCancel{
+    background-color: #ecb390; 
+    border: none; 
+    color: white; 
+    padding: 3px 5px; 
+    font-size: 2vh; 
+    cursor: pointer; 
+    border-radius: 6px;
+    margin-bottom: 10px;
 }

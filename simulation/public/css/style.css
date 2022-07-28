@@ -2,13 +2,13 @@
     width:100%;
     height:5vh;
     color:white;
-    background-color:lightblue;
+    background-color:#CEE5D0;
     display: block;
     text-align:center;
     font-size:2.5vh;
     padding:1vh;
     font-weight: bold;
-    text-shadow: 5px 5px #558ABB;
+    text-shadow: 5px 5px black;
     width: 100%;
 }
 body{
@@ -56,7 +56,7 @@ body{
     position: absolute;
     display:inline;
     padding-top: 2vh;
-    padding-left:1.5vw;
+    padding-left: 10px;
 }
 .controlbar{
     position:absolute;
@@ -65,7 +65,7 @@ body{
     text-align:center;
 }
 .button {
-    background-color: #04AA6D;
+    background-color: #94B49F;
     border-color: white;
     color: white;
     padding-top: 5vh;
@@ -86,7 +86,6 @@ body{
 #speedControlBar{
     display: flex;
     right: 0;
-    
 }
 
 #frameNum{
@@ -100,6 +99,10 @@ body{
     padding-top:2vh;
     padding-right: 2vw;
     right: 0;
+}
+.upper-right-block{
+    padding-right: 0.5vh;
+    text-align: right;
 }
 
 .cancel-button{
@@ -136,4 +139,9 @@ button{
 
 input[type='range']{
     color: #ecb390; 
+}
+
+dialog{
+    border-radius: 12px;
+    background-color: #fcf8E8;
 }
