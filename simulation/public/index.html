@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="css/creaturestyle.css">
     <link rel="stylesheet" href="css/envstyle.css">
     <link rel="stylesheet" href="css/disasterstyle.css">
+    <link rel="stylesheet" href="css/guide.css">
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
@@ -36,10 +37,73 @@
       <div id="dday">
       </div>
       <div id="calender">
-        0
       </div>
+      
     </div>
     
+    <div class="guidebox" >
+
+      <div id = "introduce_page">
+        <h1>- introduce -</h5>
+        <div id = "playimage">
+          <div id="mar">
+            <h1>1</h1>
+          </div>
+        </div>
+      </div>
+      <div id = "creature_page">
+        <h1>- creature -</h5>
+        <div id = "playimage">
+          <div id="mar">
+            <h3>2</h3>
+          </div>
+        </div>
+      </div>
+      <div id = "creature_create_page">
+        <h1>- creature_create -</h5>
+        <div id = "playimage">
+          <div id="mar">
+            <h3>3</h3>
+          </div>
+        </div>
+      </div>
+      <div id = "environment">
+        <h1>- environment -</h5>
+        <div id = "playimage">
+          <div id="mar">
+            <h1>1</h1>
+          </div>
+        </div>
+      </div>
+      <div id = "disaster">
+        <h1>- disaster -</h5>
+        <div id = "playimage">
+          <div id="mar">
+            <h3>2</h3>
+          </div>
+        </div>
+      </div>
+      <div id = "graph">
+        <h1>- graph -</h5>
+        <div id = "playimage">
+          <div id="mar">
+            <h3>3</h3>
+          </div>
+        </div>
+      </div>
+      <div id = "etc">
+        <h1>- etc -</h5>
+        <div id = "playimage">
+          <div id="mar">
+            <h3>3</h3>
+          </div>
+        </div>
+      </div>
+
+
+
+      <button class='cancel-button' id="guide-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
+    </div>
     
     <div class="settingbox">
 
@@ -47,7 +111,7 @@
         <button class="button" id="creatureBtn">creature</button>
         <button class="button" id="envBtn">env</button>
         <button class="button" id="disasterBtn">disasters</button>
-        <button class="button">Guide</button>
+        <button class="button" id="guideBtn">Guide</button>
       </div>
 
       <dialog id="creatureDialog">
@@ -110,40 +174,40 @@
               <button id="previewBtn"><i class="fa fa-magic" aria-hidden="true"></i>  preview</button>
               <button class="cancel-button" id="cancelBtn" type="reset"><i class="fa fa-times" aria-hidden="true"></i>  cancel</button>
               <button class="confirm-button" id="confirmBtn"><i class="fa fa-check" aria-hidden="true"></i>  confirm</button>
+              <button class="confirm-button2" id="gridConfirmBtn"><i class="fa fa-check" aria-hidden="true"></i> release</button>
+        
             </div>
           </div>
         </div>
         <!-- </form> -->
         <div id="gridmapContainer">
           <div class="grid-container">
-            <canvas class="grid-item" id="00">1</canvas>
-            <canvas class="grid-item" id="10">2</canvas>
-            <canvas class="grid-item" id="20">3</canvas>
-            <canvas class="grid-item" id="30">4</canvas>
+            <canvas class="grid-item" id="00"></canvas>
+            <canvas class="grid-item" id="10"></canvas>
+            <canvas class="grid-item" id="20"></canvas>
+            <canvas class="grid-item" id="30"></canvas>
             
-            <canvas class="grid-item" id="01">5</canvas>
-            <canvas class="grid-item" id="11">6</canvas>
-            <canvas class="grid-item" id="21">7</canvas>
-            <canvas class="grid-item" id="31">8</canvas>
+            <canvas class="grid-item" id="01"></canvas>
+            <canvas class="grid-item" id="11"></canvas>
+            <canvas class="grid-item" id="21"></canvas>
+            <canvas class="grid-item" id="31"></canvas>
             
-            <canvas class="grid-item" id="02">9</canvas>
-            <canvas class="grid-item" id="12">10</canvas>
-            <canvas class="grid-item" id="22">11</canvas>
-            <canvas class="grid-item" id="31">12</canvas>
+            <canvas class="grid-item" id="02"></canvas>
+            <canvas class="grid-item" id="12"></canvas>
+            <canvas class="grid-item" id="22"></canvas>
+            <canvas class="grid-item" id="31"></canvas>
             
-            <canvas class="grid-item" id="03">13</canvas>
-            <canvas class="grid-item" id="13">14</canvas>
-            <canvas class="grid-item" id="23">15</canvas>
-            <canvas class="grid-item" id="33">16</canvas>
+            <canvas class="grid-item" id="03"></canvas>
+            <canvas class="grid-item" id="13"></canvas>
+            <canvas class="grid-item" id="23"></canvas>
+            <canvas class="grid-item" id="33"></canvas>
           </div>
-          <button class="confirm-button2" id="gridConfirmBtn"><i class="fa fa-check" aria-hidden="true"></i> Release</button>
         </div>
       </dialog>
 
       <dialog id="envDialog">
-        <h5>Drag and drop each env to each tile</h5>
         <!-- <div class="dialog-body-flex"> -->
-          <div id="imageContainer">
+        <div id="imageContainer">
             
           <div class="tooltip"> Meadow
             <span class="tooltiptext">hot: 1 cold: 1</span>
@@ -164,29 +228,29 @@
             <span class="tooltiptext">hot: 5 cold: 1</span>
             <img class="draggableItem" id="desert" draggable="true" src="assets/desert_texture.jpg"></img>
           </div>
-        </div>
+      </div>
   
           <div id="envGrids">
             <div class="grid-container-env">
-              <div class="grid-item-env" id="00">1</div>
-              <div class="grid-item-env" id="10">2</div>
-              <div class="grid-item-env" id="20">3</div>
-              <div class="grid-item-env" id="30">4</div>
+              <div class="grid-item-env" id="00"></div>
+              <div class="grid-item-env" id="10"></div>
+              <div class="grid-item-env" id="20"></div>
+              <div class="grid-item-env" id="30"></div>
               
-              <div class="grid-item-env" id="01">5</div>
-              <div class="grid-item-env" id="11">6</div>
-              <div class="grid-item-env" id="21">7</div>
-              <div class="grid-item-env" id="31">8</div>
+              <div class="grid-item-env" id="01"></div>
+              <div class="grid-item-env" id="11"></div>
+              <div class="grid-item-env" id="21"></div>
+              <div class="grid-item-env" id="31"></div>
               
-              <div class="grid-item-env" id="02">9</div>
-              <div class="grid-item-env" id="12">10</div>
-              <div class="grid-item-env" id="22">11</div>
-              <div class="grid-item-env" id="32">12</div>
+              <div class="grid-item-env" id="02"></div>
+              <div class="grid-item-env" id="12"></div>
+              <div class="grid-item-env" id="22"></div>
+              <div class="grid-item-env" id="32"></div>
               
-              <div class="grid-item-env" id="03">13</div>
-              <div class="grid-item-env" id="13">14</div>
-              <div class="grid-item-env" id="23">15</div>
-              <div class="grid-item-env" id="33">16</div>
+              <div class="grid-item-env" id="03"></div>
+              <div class="grid-item-env" id="13"></div>
+              <div class="grid-item-env" id="23"></div>
+              <div class="grid-item-env" id="33"></div>
             </div>
           </div>
         <!-- </div> -->
@@ -201,32 +265,41 @@
           <button class='cancel-button' id="disasterCancel"><i class="fa fa-times" aria-hidden="true"></i> cancel</button>
         </div>
         <div id="buttonContainer">
-          <button class='disaster-btn' id="lightningBtn">Lightning</button>
-          <button class='disaster-btn' id="meteorBtn">Meteor</button>
-          <button class='disaster-btn' id="iceAgeBtn">Ice Age</button>
-          <button class='disaster-btn' id="globalWarmingBtn">Global Warming</button>
+          <button class='disaster-btn' id="lightningBtn">Lightning
+            <span class="btntiptext">타일 하나에 벼락을 내려 멸망시킵니다</span>
+          </button>
+          <button class='disaster-btn' id="meteorBtn">Meteor
+            <span class="btntiptext">랜덤으로 8개 타일을 멸망시킵니다</span>
+          </button>
+          <button class='disaster-btn' id="iceAgeBtn">Ice Age
+            <span class="btntiptext">빙하기가 와 3년간 온도가 낮아집니다</span>
+          </button>
+          <button class='disaster-btn' id="globalWarmingBtn">Global Warming
+            <span class="btntiptext">되돌릴 수 없는 재앙 지구온난화가 옵니다</span>
+          </button>
         </div>
+
         <div id="gridmapLightning">
           <div class="grid-container-small">
-            <div class="grid-item-small" id="00">1</div>
-            <div class="grid-item-small" id="10">2</div>
-            <div class="grid-item-small" id="20">3</div>
-            <div class="grid-item-small" id="30">4</div>
+            <div class="grid-item-small" id="00"></div>
+            <div class="grid-item-small" id="10"></div>
+            <div class="grid-item-small" id="20"></div>
+            <div class="grid-item-small" id="30"></div>
             
-            <div class="grid-item-small" id="01">5</div>
-            <div class="grid-item-small" id="11">6</div>
-            <div class="grid-item-small" id="21">7</div>
-            <div class="grid-item-small" id="31">8</div>
+            <div class="grid-item-small" id="01"></div>
+            <div class="grid-item-small" id="11"></div>
+            <div class="grid-item-small" id="21"></div>
+            <div class="grid-item-small" id="31"></div>
             
-            <div class="grid-item-small" id="02">9</div>
-            <div class="grid-item-small" id="12">10</div>
-            <div class="grid-item-small" id="22">11</div>
-            <div class="grid-item-small" id="32">12</div>
+            <div class="grid-item-small" id="02"></div>
+            <div class="grid-item-small" id="12"></div>
+            <div class="grid-item-small" id="22"></div>
+            <div class="grid-item-small" id="32"></div>
             
-            <div class="grid-item-small" id="03">13</div>
-            <div class="grid-item-small" id="13">14</div>
-            <div class="grid-item-small" id="23">15</div>
-            <div class="grid-item-small" id="33">16</div>
+            <div class="grid-item-small" id="03"></div>
+            <div class="grid-item-small" id="13"></div>
+            <div class="grid-item-small" id="23"></div>
+            <div class="grid-item-small" id="33"></div>
           </div>
         </div>
         </dialog>
@@ -250,33 +323,36 @@
         <li><a id="creatureCharacter">지역별 성격</a></li>
       </ul>
       <div class="chartContainer">
+        <div class="upper-right-block" id="statcontrolBtn">
+          <button class='cancel-button' id="graph-goback"><i class="fa fa-arrow-left" aria-hidden="true"></i>  goback</button>
+          <button class='cancel-button' id="gragh-cancel"><i class="fa fa-times" aria-hidden="true"></i>  close</button>
+        </div>
         <canvas id="cur-chart"></canvas>
         <canvas id="line-chart"></canvas>
         <canvas id="char-chart"></canvas>
         <div id="selectgridMap">
           <div class="grid-c">
-            <canvas class="grid-" id="00">0</canvas>
-            <canvas class="grid-" id="10">1</canvas>
-            <canvas class="grid-" id="20">2</canvas>
-            <canvas class="grid-" id="30">3</canvas>
+            <canvas class="grid-" id="00"></canvas>
+            <canvas class="grid-" id="10"></canvas>
+            <canvas class="grid-" id="20"></canvas>
+            <canvas class="grid-" id="30"></canvas>
             
-            <canvas class="grid-" id="01">4</canvas>
-            <canvas class="grid-" id="11">5</canvas>
-            <canvas class="grid-" id="21">6</canvas>
-            <canvas class="grid-" id="31">7</canvas>
+            <canvas class="grid-" id="01"></canvas>
+            <canvas class="grid-" id="11"></canvas>
+            <canvas class="grid-" id="21"></canvas>
+            <canvas class="grid-" id="31"></canvas>
             
-            <canvas class="grid-" id="02">8</canvas>
-            <canvas class="grid-" id="12">9</canvas>
-            <canvas class="grid-" id="22">10</canvas>
-            <canvas class="grid-" id="32">11</canvas>
+            <canvas class="grid-" id="02"></canvas>
+            <canvas class="grid-" id="12"></canvas>
+            <canvas class="grid-" id="22"></canvas>
+            <canvas class="grid-" id="32"></canvas>
             
-            <canvas class="grid-" id="03">12</canvas>
-            <canvas class="grid-" id="13">13</canvas>
-            <canvas class="grid-" id="23">14</canvas>
-            <canvas class="grid-" id="33">15</canvas>
+            <canvas class="grid-" id="03"></canvas>
+            <canvas class="grid-" id="13"></canvas>
+            <canvas class="grid-" id="23"></canvas>
+            <canvas class="grid-" id="33"></canvas>
           </div>
         </div>
-        <button class='cancel-button' id="gragh-cancel"><i class="fa fa-times" aria-hidden="true"></i></button>
       </div> 
     </div>
   </body>

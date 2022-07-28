@@ -1,4 +1,9 @@
 
+#envBtn{
+    background-image: url('../assets/env_image.png');
+    background-size:cover;
+    background-position: center;
+}
 #envDialog{
     position: absolute;
     margin-top: 9vh;
@@ -18,16 +23,20 @@
     display: grid;
     column-gap:3px;
     row-gap:3px;
-    grid-template-columns: 5vh 5vh 5vh 5vh;
-    grid-template-rows: 5vh 5vh 5vh 5vh;
+    grid-template-columns: 7vh 7vh 7vh 7vh;
+    grid-template-rows: 7vh 7vh 7vh 7vh;
     justify-content: right;
     align-content: right;
+    border-style: solid;
+    border-radius: 12px;
+    border-color: rgb(190, 190, 164);
+    padding: 5px;
 }
 .grid-item-env{
     display: inline-grid;
     background-color: aquamarine;
-    width: 5vh;
-    height:5vh;
+    width: 7vh;
+    height:7vh;
     background-size:cover;
     background-position: center;
 }
@@ -85,7 +94,7 @@
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
-    bottom: 50%;
+    bottom: 60%;
     left: 10%;
     /* Position the tooltip text - see examples below! */
     position: absolute;

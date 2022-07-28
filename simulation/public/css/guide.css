@@ -1,0 +1,46 @@
+.guidebox{
+    position: absolute;
+    display: none;
+    margin: 100px;
+    top: 50px;
+    left: 50px;
+    height: 550px;
+    width: 1300px;
+    background-color:rgba(155,155,155,0.9);
+    color:white;
+    text-align:center;
+}
+#playimage{
+    background-image: url('../assets/createbtn.jpg');
+    background-size:cover;
+    background-position: center;
+    display: block;
+    margin-left: 100px;
+    margin-bottom: 100px;
+    height: 300px;
+    width: 300px;
+}
+#mar{
+    margin-left: 500px;
+}
+#introduce_page{
+    display: block;
+}
+#creature_page{
+    display: none;
+}
+#creature_create_page{
+    display: none;
+}
+#environment{
+    display: none;
+}
+#disaster{
+    display: none;
+}
+#graph{
+    display: none;
+}
+#etc{
+    display: none;
+}

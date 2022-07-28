@@ -30,6 +30,8 @@ var camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 500, 3000)
 camera.lookAt(0,0,0)
 
+const cameraView = [0,610,570]
+
 // ==================== ORBITCONTROL =========================
 var controls = new OrbitControls(camera, renderer.domElement)
 controls.addEventListener( 'change', render )
@@ -107,6 +109,24 @@ var gragh1_click = 0
 var gragh2_click = 0
 var gragh3_click = 0
 var search_grid  = 0
+
+// ================== USEING FUNCTION ========================
+function camerainit(p1,p2,p3){
+    camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        10000)
+    camera.position.set(p1,p2,p3)
+    camera.lookAt(0,0,0)
+
+    controls = new OrbitControls(camera, renderer.domElement)
+    controls.addEventListener( 'change', render )
+    controls.minPolarAngle = -Math.PI/2
+    controls.maxPolarAngle =  Math.PI / 2 - 0.05;
+    controls.minDistance=0
+    controls.maxDistance= 9000
+}
 
 // ================== MAIN LOOP 1 ========================
 
@@ -230,20 +250,10 @@ let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
-creatureBtn.addEventListener('click', function onOpen(){
-    if (typeof creatureDialog.showModal === 'function') {
-        creatureDialog.showModal()
-    }else {
-        alert("the dialog api is not supported by this browser")
-    }
-    cancelAnimationFrame(animateId)
-})
-
 let newCreatureP
 let newPreyList = []
 let newPredetorList = []
 let newCid
-let typeColor = [0x000000, 0x0000FF,0xFF0000] // for visualizing click
 let errmsg = document.querySelector('.errorMsg')
 
 let input = document.getElementsByClassName('creatureInput')
@@ -274,6 +284,9 @@ creatureBtn.addEventListener('click', function onOpen(){
     }else {
         alert("the dialog api is not supported by this browser")
     }
+    cancelAnimationFrame(animateId)
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
+    animate()
     cancelAnimationFrame(animateId)
 })
 
@@ -319,6 +332,7 @@ confirmBtn.addEventListener('click', function(){
     }
     errmsg.style.display = 'none'
     confirmBtn.style.display = 'none'
+    gridConfirmBtn.style.display = "inline"
     newCreatureP = {
         scene: scene,
         type : ctype,
@@ -410,6 +424,7 @@ function getOffset(el){
 
 function initCreatureD(){
     confirmBtn.style.display = 'inline'
+    gridConfirmBtn.style.display = "none"
     newPredetorList = []
     newPreyList = []
     let input = document.getElementsByClassName('creatureInput')
@@ -479,6 +494,9 @@ envBtn.addEventListener('click', function onOpen(){
     }else {
         alert("the dialog api is not supported by this browser")
     }
+    cancelAnimationFrame(animateId)
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
+    animate()
     cancelAnimationFrame(animateId)
 })
 envCancel.addEventListener('click', function(){
@@ -551,6 +569,10 @@ disasterCancel.addEventListener('click', function(){
 // lightning
 lightningBtn.addEventListener('click', function (){
     gridmapLightning.style.display = "block"
+    
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
+    animate()
+    cancelAnimationFrame(animateId)
 })
 gridmapSmallList.forEach((tileElem) => {
     tileElem.addEventListener('click', function(e){
@@ -853,31 +875,7 @@ framecount.addEventListener('input', function(){
     animate()
 }, false)
 
-// ================ Play KEY =====================
 
-
-
-// 스페이스 바를 누르면 카메라 초기 상태로 돌려놓음
-document.addEventListener("keydown",keyFuction,false);
-function keyFuction(event){
-    if(event.keyCode == 32){
-        camera = new THREE.PerspectiveCamera(
-            45,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            10000)
-        camera.position.set(0, 500, 3000)
-        camera.lookAt(0,0,0)
-
-        controls = new OrbitControls(camera, renderer.domElement)
-        controls.addEventListener( 'change', render )
-        controls.minPolarAngle = -Math.PI/2
-        controls.maxPolarAngle =  Math.PI / 2 - 0.05;
-        controls.minDistance=0
-        controls.maxDistance= 9000
-
-    }
-}
 
 // ----------------- for gragh----------------------
 var curCreatureGragh    = document.getElementById('currentCreature')
@@ -895,6 +893,7 @@ console.log(s_gridmaps)
 let s_gridmapList = Array.prototype.slice.call(s_gridmaps)
 
 let graghCancelBtn = document.getElementById('gragh-cancel')
+let graphGobackBtn = document.getElementById('graph-goback')
 
 curCreatureGragh.addEventListener('click',function(){
     chartContainer.style.display = "block"
@@ -925,9 +924,14 @@ changeCreatureGragh.addEventListener('click',function(){
     gragh1_click = 0
     gragh3_click = 0
 })
-curCharaterGragh.addEventListener('click',function(){
-    camera.position.set(0, 370, 340)
-    camera.lookAt(0,0,0)
+curCharaterGragh.addEventListener('click', curCharacterGraphClick)
+graphGobackBtn.addEventListener('click', curCharacterGraphClick)
+
+function curCharacterGraphClick(){
+    graphGobackBtn.style.display="none"
+    // camera.position.set(0, 370, 340)
+    // camera.lookAt(0,0,0)
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
     gragh3.style.display="none"
     chartContainer.style.display = "block"
     s_gridmapC.style.display = "block"
@@ -942,11 +946,12 @@ curCharaterGragh.addEventListener('click',function(){
     gragh2.style.display = "none"
     gragh1_click = 0
     gragh2_click = 0  
-})
+}
 
 // 그 grid를 클릭하면 그 grid의 차트 출력
 s_gridmapList.forEach(grid => {
     grid.addEventListener('click', function(event){
+        graphGobackBtn.style.display="inline"
         const xi = parseInt(event.target.id[0])
         const yi = parseInt(event.target.id[1])
         gragh3.style.display = "block"
@@ -968,5 +973,68 @@ graghCancelBtn.addEventListener('click',function(){
     gragh3_click = 0
 })
 // -------------------------------------------------
+// ================== GUIDE =======================
+var guideopen = 0 
+var curguidepage = 0
 
+var guideBtn  = document.getElementById('guideBtn')
+var guidebox  = document.querySelector('.guidebox')
+var guideCancelBtn = document.getElementById('guide-cancel')
+
+// 각 page 들
+var introduce_page          = document.getElementById('introduce_page')
+var creature_page           = document.getElementById('creature_page')
+var creature_create_page    = document.getElementById('creature_create_page')
+var environment             = document.getElementById('environment')
+var disaster                = document.getElementById('disaster')
+var graph                   = document.getElementById('graph')
+var etc                     = document.getElementById('etc')
+
+var guidepageArr = [introduce_page, creature_page, creature_create_page, environment, disaster, graph, etc]
+
+guideBtn.addEventListener('click',function(){
+    guidebox.style.display = "block"
+    introduce_page.style.display = "block"
+    guideopen = 1
+})
+guideCancelBtn.addEventListener('click',function(){
+    guidepageArr[curguidepage].style.display = "none"
+    curguidepage = 0
+    guideopen = 0
+    guidebox.style.display = "none"
+})
+
+
+
+// ================ Play KEY =====================
+
+document.addEventListener("keydown",keyFuction,false);
+function keyFuction(event){
+
+    // 스페이스 바를 누르면 카메라 초기 상태로 돌려놓음
+    if(event.keyCode == 32){
+        camerainit(0, 500, 3000)
+    }
+    // 오른쪽 방향키 누르면 가이드 화면 이동
+    if(event.keyCode == 39 && guideopen == 1){
+        console.log("오")
+        if(curguidepage < guidepageArr.length-1){
+            console.log("변경")
+            guidepageArr[curguidepage].style.display = "none"
+            curguidepage +=1
+            guidepageArr[curguidepage].style.display = "block"
+        }
+       
+    }   
+    // 왼쪽 방향키 누르면 가이드 화면 이동
+    if(event.keyCode == 37 && guideopen == 1){
+        console.log("왼")
+        if(curguidepage > 0){
+            console.log("변경")
+            guidepageArr[curguidepage].style.display = "none"
+            curguidepage -=1
+            guidepageArr[curguidepage].style.display = "block"
+        }
+    }
+}
 export default myWorld
