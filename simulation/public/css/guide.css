@@ -11,17 +11,124 @@
     text-align:center;
 }
 #playimage{
-    background-image: url('../assets/createbtn.jpg');
+    background-image: url('../assets/introduce.jpg');
     background-size:cover;
     background-position: center;
     display: block;
     margin-left: 100px;
-    margin-bottom: 100px;
+    margin-bottom: 80px;
     height: 300px;
     width: 300px;
 }
-#mar{
-    margin-left: 500px;
+#food{
+    background-image: url('../assets/grass.jpg');
+    background-size:cover;
+    background-position: center;
+    display: block;
+    margin-bottom: 20px;
+    height: 300px;
+    width: 300px;
+}
+#preyimage{
+    background-image: url('../assets/prey.jpg');
+    background-size:cover;
+    background-position: center;
+    display: block;
+    height: 300px;
+    width: 300px;
+}
+#predetorimage{
+    background-image: url('../assets/predetor.jpg');
+    background-size:cover;
+    background-position: center;
+    display: block;
+    height: 300px;
+    width: 300px;
+}
+#selectCreature{
+    background-image: url('../assets/selectCreature.jpg');
+    background-position: center;
+    display: block;
+    height: 300px;
+    width: 500px;
+}
+#selectCreature2{
+    background-image: url('../assets/selectCreature2.jpg');
+    background-position: center;
+    display: block;
+    height: 300px;
+    width: 300px;
+    margin-left: 50px;
+}
+#g_envs{
+    background-image: url('../assets/g_envs.jpg');
+    background-position: center;
+    display: block;
+    height: 100px;
+    width: 300px;
+    margin-left: 90px;
+    margin-top: 150px;
+}
+#g_env{
+    background-image: url('../assets/g_env.jpg');
+    background-position: center;
+    display: block;
+    height: 300px;
+    width: 300px;
+    margin-left: 100px;
+}
+#g_disaster{
+    background-image: url('../assets/g_disaster.jpg');
+    background-position: center;
+    display: block;
+    height: 100px;
+    width: 350px;
+    margin-left: 480px;
+    margin-bottom: 50px;
+}
+#g_graph1{
+    background-image: url('../assets/g_graph1.jpg');
+    background-position: center;
+    display: block;
+    height: 300px;
+    width: 300px;
+
+}
+#g_graph2{
+    background-image: url('../assets/g_graph2.jpg');
+    background-position: center;
+    display: block;
+    height: 300px;
+    width: 300px;
+}
+#g_graph3-1{
+    background-image: url('../assets/g_graph3-1.jpg');
+    background-position: center;
+    display: block;
+}
+#g_graph3-2{
+    background-image: url('../assets/g_graph3-2.jpg');
+    background-position: center;
+    display: block;
+}
+#g_speed{
+    background-image: url('../assets/g_speed.jpg');
+    background-position: center;
+    display: block;
+}
+#g_spacebar{
+    background-image: url('../assets/g_spacebar.jpg');
+    background-position: center;
+    display: block;
+}
+
+
+
+
+#mar1{
+    margin-left: 400px;
+    text-align: left;
+    width: 730px;
 }
 #introduce_page{
     display: block;
@@ -43,4 +150,8 @@
 }
 #etc{
     display: none;
+}
+h1{
+    color: black;
+    margin-bottom: 50px;
 }
