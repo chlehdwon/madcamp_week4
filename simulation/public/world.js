@@ -178,10 +178,10 @@ export default class World{
                     }
                 }
                 if(this.foodMap[next_z][next_x] > 0){
-                    this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
                     this.foodMap[next_z][next_x]-=1
                     let full = creature.hpScale*creature.efficiency*2
                     let plus = creature.hp>=full ? 0 : full/4
+                    this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
                     creature.hp += plus
                 }
                 
