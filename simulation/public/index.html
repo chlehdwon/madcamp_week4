@@ -44,60 +44,96 @@
     <div class="guidebox" >
 
       <div id = "introduce_page">
-        <h1>- introduce -</h5>
+        <h1>- introduce -</h1>
         <div id = "playimage">
-          <div id="mar">
-            <h1>1</h1>
+          <div id="mar1">
+            <h2>- 이 게임은 갈라파고스 섬처럼 독립된 환경에서 생명체들이 각 환경에 어떻게 적응하며 변화하는지를 보기 위한 시뮬레이션입니다.</h2>
+            <h2>- player는 자신이 원하는대로 생명체를 탄생시키거나 환경을 바꾸거나 재앙을 발생시켜 어떻게 생명체들이 바뀌어가는지 시뮬레이션을 해볼 수 있습니다.</h2>
+            <h2>- 각 생명체들은 매년 마다 체력이 충분하면 새끼를 낳게 되는데 이때 일정확률로 성질 5개 중에 2개가 바뀌는 돌연변이가 나타납니다.</h2>
+            <h2>- 각 생명체들은 현재 자신이 위치한 환경에 따라 적응력이 없으면 추가적인 체력소모를 합니다</h2>
           </div>
         </div>
       </div>
       <div id = "creature_page">
-        <h1>- creature -</h5>
-        <div id = "playimage">
-          <div id="mar">
-            <h3>2</h3>
-          </div>
-        </div>
+        <h1>- creature -</h1>
+          <ul>
+            <div><div id = "food"></div><h2>- 식물 -</h2></div>
+            <div><div id = "preyimage"></div><h2>- 피식자 -</h2></div>
+            <div><div id = "predetorimage"></div><h2>- 포식자 -</h2></div>
+          </ul>
       </div>
       <div id = "creature_create_page">
-        <h1>- creature_create -</h5>
-        <div id = "playimage">
-          <div id="mar">
-            <h3>3</h3>
+        <h1>- creature_create -</h1>
+        <ul>
+          <div>
+            <div id = "selectCreature"></div>
+            <h2>바를 움직여 능력치 선택 후 confirm</h2>
           </div>
-        </div>
+          <div>
+            <div id = "selectCreature2"></div>
+            <h2>마우스로 원하는 위치에 클릭 후 release</h2>
+          </div>
+        </ul>
       </div>
       <div id = "environment">
-        <h1>- environment -</h5>
-        <div id = "playimage">
-          <div id="mar">
-            <h1>1</h1>
+        <h1>- environment -</h1>
+        <ul>
+          <div>
+            <div id = "g_envs"></div>
+            <h2>초원, 정글, 툰드라, 사막 타일이 있습니다</h2>
+            <h2>각 타일에 마우스를 대면 타일의 특성이 보입니다</h2>
           </div>
-        </div>
+          <div>
+            <div id = "g_env"></div>
+            <h2>각 타일을 drag&drop 하여 원하는 위치에 놓습니다</h2>
+          </div>
+        </ul>
       </div>
+
       <div id = "disaster">
-        <h1>- disaster -</h5>
-        <div id = "playimage">
-          <div id="mar">
-            <h3>2</h3>
-          </div>
+        <h1>- disaster -</h1>
+        <div>
+            <div id = "g_disaster"></div>
+            <div>
+              <h2>번개, 운석, 빙하기, 지구온난화를 만들 수 있습니다.</h2>
+              <h2>버튼을 눌러 자연재해들을 원할 때 만들 수 있습니다</h2>
+              <h2>어떤 일이 일어날지 한 번 해보세요 :)</h2>
+            </div>
         </div>
       </div>
+
       <div id = "graph">
-        <h1>- graph -</h5>
-        <div id = "playimage">
-          <div id="mar">
-            <h3>3</h3>
+        <h1>- graph -</h1>
+        <ul>
+          <div>
+            <div id = "g_graph1"></div>
+            <h2><현재 전체 개체수 비율></h2>
           </div>
-        </div>
+          <div>
+            <div id = "g_graph2"></div>
+            <h2><개체수 변화 연대기></h2>
+          </div>
+          <div>
+            <ul>
+              <div id = "g_graph3-1"></div>
+              <div id = "g_graph3-2"></div>
+            </ul>
+            <h2><보고싶은 grid를 선택하면 그 grid의 개체수 평균 특성></h2>
+          </div>
+        </ul>
       </div>
       <div id = "etc">
-        <h1>- etc -</h5>
-        <div id = "playimage">
-          <div id="mar">
-            <h3>3</h3>
+        <h1>- etc -</h1>
+        <ul>
+          <div>
+            <div id = "g_speed"></div>
+            <h2><일정시간이 지난 시점으로 이동하거나 속도 조절 가능></h2>
           </div>
-        </div>
+          <div>
+            <div id = "g_spacebar"></div>
+            <h2><spacebar를 누르면 초기 카메라 위치로 갑니다></h2>
+          </div>
+        </ul>
       </div>
 
 
