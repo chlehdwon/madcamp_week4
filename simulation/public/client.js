@@ -20,7 +20,6 @@ document.body.appendChild(renderer.domElement)
 
 // =============== SCENE ======================
 const scene = new THREE.Scene()
-
 // =============== CAMERA =====================
 var camera = new THREE.PerspectiveCamera(
   45,
@@ -50,7 +49,7 @@ scene.add(light.target)
 
 
 // =================== World ========================
-const myWorld = new World(scene,30,30)
+const myWorld = new World(scene,100,10)
 console.log("=====world creation done=====")
 
 // =================== PLANE =========================

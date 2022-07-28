@@ -2,7 +2,7 @@ class env{
     constructor(){
         this.hot = 1
         this.cold = 1
-        this.foodSpawn = 5
+        this.foodSpawn = 7
         this.isDamaged = 0
     }
 }
