@@ -257,7 +257,20 @@ export default class World{
                 this.scene.remove(creature.object)
             }
         })
-        // console.log(this.turn)
+        this.envs.forEach((item, idx)=>{
+            if (item.isDamaged > 0){
+                // 불모지
+                item.foodSpawn = 0
+                if(item.isDamaged == 1){
+                    item.cold = this.baseEnvs[idx].cold
+                    item.hot = this.baseEnvs[idx].hot
+                    item.foodSpawn = this.baseEnvs[idx].foodSpawn
+                }
+                item.isDamaged -= 1
+            }else{
+                item = item.originalEnv
+            }
+        })
         this.turn += 1
     }
 
@@ -336,20 +349,20 @@ export default class World{
         this.predator.push(...babyCreature)
 
         // Disaster: env change
-        this.envs.forEach((item, idx)=>{
-            if (item.isDamaged > 0){
-                // 불모지
-                item.foodSpawn = 0
-                if(item.isDamaged == 1){
-                    item.cold = this.baseEnvs[idx].cold
-                    item.hot = this.baseEnvs[idx].hot
-                    item.foodSpawn = this.baseEnvs[idx].foodSpawn
-                }
-                item.isDamaged -= 1
-            }else{
-                item = item.originalEnv
-            }
-        })
+        // this.envs.forEach((item, idx)=>{
+        //     if (item.isDamaged > 0){
+        //         // 불모지
+        //         item.foodSpawn = 0
+        //         if(item.isDamaged == 1){
+        //             item.cold = this.baseEnvs[idx].cold
+        //             item.hot = this.baseEnvs[idx].hot
+        //             item.foodSpawn = this.baseEnvs[idx].foodSpawn
+        //         }
+        //         item.isDamaged -= 1
+        //     }else{
+        //         item = item.originalEnv
+        //     }
+        // })
         if(this.isWarming > 0){
             this.envs.forEach((item)=>{
                 // 지구온난화
@@ -396,7 +409,7 @@ export default class World{
     mutationAlgo(each_creature){
         let newCreatureInfo = Object.assign({},each_creature)
         let mutationPercent = 90
-        let attributeArray = [each_creature.speed, each_creature.sight/2 - 1 , each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
+        let attributeArray = [each_creature.speed, each_creature.sight/2, each_creature.coldresist, each_creature.hotresist, each_creature.efficiency]
 
         // 변이가 일어난다면 한 특정한 속성 하나는 올리고 한개는 내림
 
@@ -406,10 +419,10 @@ export default class World{
             let downAttribute  = Math.floor(Math.random() * 5)
 
             // 각 index의 값들이 범위를 벗어나면 다시 찾음
-            while(attributeArray[upperAttribute]>=4){
+            while(attributeArray[upperAttribute]>=5){
                 upperAttribute = Math.floor(Math.random() * 5)
             }
-            while(attributeArray[downAttribute]<=0){
+            while(attributeArray[downAttribute]<=1){
                 downAttribute = Math.floor(Math.random() * 5)
             }
             
@@ -417,7 +430,7 @@ export default class World{
             attributeArray[upperAttribute] += 1
             attributeArray[downAttribute]  -= 1
         }
-        attributeArray[1] = attributeArray[1]*2 + 2 
+        attributeArray[1] = attributeArray[1]*2
 
         newCreatureInfo.speed      = attributeArray[0]
         newCreatureInfo.sight      = attributeArray[1]
