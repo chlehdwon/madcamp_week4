@@ -58,7 +58,7 @@ export default class World{
                 worldSize: this.size,
                 type: 1,
                 speed: 3, 
-                sight: 8,
+                sight: 6,
                 coldresist: 3,
                 hotresist: 3,
                 efficiency: 1,
@@ -74,7 +74,7 @@ export default class World{
                 worldSize: this.size,
                 type: 2,
                 speed: 4,
-                sight: 4, 
+                sight: 6, 
                 coldresist: 2,
                 hotresist: 2,
                 efficiency: 1.5,
@@ -168,22 +168,29 @@ export default class World{
                 // 이동한 후 생명체의 위치 저장
                 this.creatures[creature.position.z][creature.position.x].push(creature)
 
-
+                for (var p of this.creatures[creature.position.z][creature.position.x]){
+                    if(p.type==2 && creature.hp<=creature.hpScale*2){
+                        this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==creature.object);
+                        this.prey= this.prey.filter((element)=>element.object!==creature.object);
+                        this.scene.remove(creature.object)
+                        // creature.food+=1
+                        p.hp = p.efficiency * p.hpScale
+                    }
+                }
                 if(this.foodMap[next_z][next_x] > 0){
-                    this.foodMap[next_z][next_x]-=1
                     this.scene.remove(this.foodDict[[next_z, next_x]].mesh)
+                    this.foodMap[next_z][next_x]-=1
                     let full = creature.hpScale*creature.efficiency*2
                     let plus = creature.hp>=full ? 0 : full/4
                     creature.hp += plus
                 }
+                
                 if(creature.isChasing){
                     direction = this.searchFood(creature)
                     creature.direction = direction
                 }
             }
-            creature.hp -= (creature.speed + (hotDamage + coldDamage)*3)
-            if(hotDamage>0) // console.log("so hot")
-            if(coldDamage>0) // console.log("so cold")
+            creature.hp -= (creature.speed + (hotDamage + coldDamage)*5)
 
             if(creature.hp<=0){
                 this.prey = this.prey.filter((element)=>element.object!==creature.object);
@@ -237,9 +244,10 @@ export default class World{
                 // 이동한 곳에 prey가 있고 포식자의 food가 2보다 작으면 prey 먹음
                 for (var p of this.creatures[creature.position.z][creature.position.x]){
                     if(p.type==1 && creature.hp<=creature.hpScale*2){
-                        this.scene.remove(p.object)
+                        
                         this.creatures[creature.position.z][creature.position.x]=this.creatures[creature.position.z][creature.position.x].filter((element)=>element.object!==p.object);
                         this.prey= this.prey.filter((element)=>element.object!==p.object);
+                        this.scene.remove(p.object)
                         // creature.food+=1
                         creature.hp = creature.efficiency * creature.hpScale
                     }
@@ -249,7 +257,7 @@ export default class World{
                     creature.direction = direction
                 }
             }
-            creature.hp -= (creature.speed + (hotDamage + coldDamage)*3)
+            creature.hp -= (creature.speed + (hotDamage + coldDamage)*5)
 
             if(creature.hp<=0){
                 this.predator = this.predator.filter((element)=>element.object!==creature.object);
@@ -340,7 +348,7 @@ export default class World{
                 babyCreature.push(newCreature)
                 this.creatures[position.z][position.x].push(newCreature)
                 
-                creature.hp -= creature.hpScale * 2
+                creature.hp -= creature.hpScale * 1
             }
             // else{
             //     creature.food -= 1
@@ -588,4 +596,6 @@ export default class World{
     distance(n1,n2){return Math.sqrt((n1[0] - n2[0]) ** 2 + (n1[1] - n2[1]) ** 2)}
     minScope(pos,scope){return pos-scope>0 ? pos-scope : 0}
     maxScope(pos,scope){return pos+scope < this.size ? pos+scope : this.size - 1}
+
 }
+

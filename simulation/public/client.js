@@ -8,7 +8,6 @@ import Creature from './creature.js'
 import {makeAccGraph,stack_data,makeCurGraph,makeCharGragh} from './chart.js'
 import {Jungle, Desert, Glacier, Grass} from './env.js'
 
-
 // =============== RENDERER ===================
 const canvas = document.querySelector('#c')
 const renderer = new THREE.WebGLRenderer({
@@ -48,7 +47,6 @@ light.castShadow = true
 light.receiveShadow = true
 scene.add(light)
 scene.add(light.target)
-
 
 
 // =================== World ========================
@@ -212,10 +210,7 @@ function animate() {
             else if(graghType ==3){
                 makeCharGragh(search_grid)
             }
-
-            
         }
-
     }
     render() 
     frame += target_frame
@@ -630,7 +625,7 @@ function lightning(tile){
                 }
             }
         }
-        myWorld.lightning = myWorld.turn+3
+        myWorld.lightning = myWorld.turn+1
         myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 365    // damaged for 1month
         
         planeList[parseInt(tile[0])+parseInt(tile[1])*4].plane.material.map = lightningTexture
@@ -643,11 +638,13 @@ function lightning(tile){
 
 function vibrateCamera(){
     camera.lookAt(new THREE.Vector3(0,-10,0))
-    setTimeout(restoreCamera, 20)
+    light.intensity = 10
+    setTimeout(restore, 20)
 }
 
-function restoreCamera(){
+function restore(){
     camera.lookAt(new THREE.Vector3(0,0,0))
+    light.intensity = 2
 }
 
 
@@ -688,11 +685,11 @@ function meteor(){
                     }
                 }
             }
-            myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 365    // damaged for 1month
+            myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 365*3    // damaged for 1month
             planeList[parseInt(elem[0])+parseInt(elem[1])*4].plane.material.map = meteorTexture
-            recover = 365
+            recover = 365*3
         })
-        myWorld.meteor = myWorld.turn+5
+        myWorld.meteor = myWorld.turn+15
         animate()
     }
 }
@@ -801,7 +798,70 @@ let framecount = document.getElementById("framecount")
 let pauseBtn = document.getElementById("pause")
 let playBtn = document.getElementById("aniplay")
 let frameNum = document.getElementById('frameNum')
+let skip1 = document.getElementById("skip1")
+let skip5 = document.getElementById("skip5")
 
+skip1.addEventListener('click', function(){
+    cancelAnimationFrame(animateId)
+    myWorld.day(isfarsighted)
+    for(let i=0; i<365; i++){
+        age.innerHTML = getYMD()
+        date.setDate(date.getDate()+1)
+        myWorld.day(isfarsighted)
+        if(recover == 1){
+            planeList.forEach((_, idx)=>{
+                console.log(planeList[idx].type)
+                planeList[idx].plane.material.map = textures[planeList[idx].type]
+            })
+        }
+        recover -= 1
+        if(myWorld.turn%365==0){
+            myWorld.age += 1
+            myWorld.yearOver(isfarsighted)
+
+            if(graghType==1){
+                makeCurGraph()
+            }
+            else if(graghType ==2){
+                makeAccGraph()
+            }
+            else if(graghType ==3){
+                makeCharGragh(search_grid)
+            }
+        }
+    }
+    animate()
+})
+skip5.addEventListener('click', function(){
+    cancelAnimationFrame(animateId)
+    for(let i=0; i<365*5; i++){
+        age.innerHTML = getYMD()
+        date.setDate(date.getDate()+1)
+        myWorld.day(isfarsighted)
+        if(recover == 1){
+            planeList.forEach((_, idx)=>{
+                console.log(planeList[idx].type)
+                planeList[idx].plane.material.map = textures[planeList[idx].type]
+            })
+        }
+        recover -= 1
+        if(myWorld.turn%365==0){
+            myWorld.age += 1
+            myWorld.yearOver(isfarsighted)
+
+            if(graghType==1){
+                makeCurGraph()
+            }
+            else if(graghType ==2){
+                makeAccGraph()
+            }
+            else if(graghType ==3){
+                makeCharGragh(search_grid)
+            }
+        }
+    }
+    animate()
+})
 pauseBtn.addEventListener('click', function(){
     cancelAnimationFrame(animateId)
 })
