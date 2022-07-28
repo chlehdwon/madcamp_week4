@@ -13,7 +13,7 @@
   * [5. 언젠가](#5-언젠가)
 ***
 
-# <img src="https://user-images.githubusercontent.com/68576681/181484979-05f94863-46be-41c4-9ea0-baa42621c429.jpg" width="360" height="360">
+# <img src="https://user-images.githubusercontent.com/68576681/181484979-05f94863-46be-41c4-9ea0-baa42621c429.jpg" width="480" height="360">
 
 # Project Summary
 * 나만의 작은 생태계를 구성하는 시뮬레이션 시스템입니다.
@@ -75,7 +75,7 @@
 
 ## 3. 자연재해
 
-<img src="https://user-images.githubusercontent.com/68576681/179735272-82a9414c-368d-4543-a24d-d46009141cb8.PNG" width="480" height="360">  
+<img src="https://user-images.githubusercontent.com/68576681/181488723-e0989f9e-aa17-4413-aee1-ea6971a4455b.jpg" width="480" height="360">  
 
 ### Major Features
 * 번개, 유성, 빙하기, 온난화와 같은 자연재해를 일으킬 수 있습니다.
