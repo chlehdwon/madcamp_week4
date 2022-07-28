@@ -5,6 +5,32 @@
     margin-left: 90px;
     border-radius: 12px;
 }
+#disasterBtn{
+    background-image: url('../assets/disaster_image.jpg');
+    background-size:cover;
+    background-position: center;
+}
+
+#lightningBtn{
+    background-image: url('../assets/disaster_lightning.png');
+    background-size:cover;
+    background-position: center;
+}
+#meteorBtn{
+    background-image: url('../assets/disaster_meteor.png');
+    background-size:cover;
+    background-position: center;
+}
+#iceAgeBtn{
+    background-image: url('../assets/disaster_iceage.jpg');
+    background-size:cover;
+    background-position: center;
+}
+#globalWarmingBtn{
+    background-image: url('../assets/disaster_globalwarming.jpg');
+    background-size:cover;
+    background-position: center;
+}
 
 #gridmapLightning{
     display:none;
@@ -40,12 +66,14 @@
     text-align:center;
     vertical-align:bottom;
     text-decoration: none;
-    font-size: 1.3vh;
+    font-size: 0.7vw;
     margin-bottom: 3vh;
     border-radius: 12px;
-    width:7vh;
+    width:4vw;
     height:7vh;
     border: none; 
+    /* font-weight: bold; */
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 .disaster-btn:hover{
     opacity: 0.5;
@@ -60,4 +88,33 @@
     cursor: pointer; 
     border-radius: 6px;
     margin-bottom: 10px;
+}
+
+.disaster-btn .btntiptext{
+    visibility: hidden;
+    width: 85%;
+    background-color: black;
+    color: #fff;
+    font-size: 7px;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    top: 75%;
+    left: 5%;
+    /* Position the btntip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    padding: 5px
+}
+.disaster-btn:hover .btntiptext{
+    visibility: visible
+}
+
+
+#guideBtn{
+    background-image: url('../assets/guide_image.jpg');
+    background-size:cover;
+    background-position: center;
+    color: black;
+    font-weight: bold;
 }

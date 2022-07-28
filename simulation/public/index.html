@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/creaturestyle.css">
     <link rel="stylesheet" href="css/envstyle.css">
     <link rel="stylesheet" href="css/disasterstyle.css">
+    <link rel="stylesheet" href="css/guide.css">
   </head>
  
   <body style="margin:0;padding:0;overflow:hidden">
@@ -35,10 +36,11 @@
       <div id="dday">
       </div>
       <div id="calender">
-        0
       </div>
     </div>
     
+    <div class="guidebox" >
+    </div>
     
     <div class="settingbox">
 
@@ -46,7 +48,7 @@
         <button class="button" id="creatureBtn">creature</button>
         <button class="button" id="envBtn">env</button>
         <button class="button" id="disasterBtn">disasters</button>
-        <button class="button">Guide</button>
+        <button class="button" id="guideBtn">Guide</button>
       </div>
 
       <dialog id="creatureDialog">
@@ -141,9 +143,8 @@
       </dialog>
 
       <dialog id="envDialog">
-        <h5>Drag and drop each env to each tile</h5>
         <!-- <div class="dialog-body-flex"> -->
-          <div id="imageContainer">
+        <div id="imageContainer">
             
           <div class="tooltip"> Meadow
             <span class="tooltiptext">hot: 1 cold: 1</span>
@@ -164,7 +165,7 @@
             <span class="tooltiptext">hot: 5 cold: 1</span>
             <img class="draggableItem" id="desert" draggable="true" src="assets/desert_texture.jpg"></img>
           </div>
-        </div>
+      </div>
   
           <div id="envGrids">
             <div class="grid-container-env">
@@ -201,11 +202,20 @@
           <button class='cancel-button' id="disasterCancel"><i class="fa fa-times" aria-hidden="true"></i> cancel</button>
         </div>
         <div id="buttonContainer">
-          <button class='disaster-btn' id="lightningBtn">Lightning</button>
-          <button class='disaster-btn' id="meteorBtn">Meteor</button>
-          <button class='disaster-btn' id="iceAgeBtn">Ice Age</button>
-          <button class='disaster-btn' id="globalWarmingBtn">Global Warming</button>
+          <button class='disaster-btn' id="lightningBtn">Lightning
+            <span class="btntiptext">타일 하나에 벼락을 내려 멸망시킵니다</span>
+          </button>
+          <button class='disaster-btn' id="meteorBtn">Meteor
+            <span class="btntiptext">랜덤으로 8개 타일을 멸망시킵니다</span>
+          </button>
+          <button class='disaster-btn' id="iceAgeBtn">Ice Age
+            <span class="btntiptext">빙하기가 와 3년간 온도가 낮아집니다</span>
+          </button>
+          <button class='disaster-btn' id="globalWarmingBtn">Global Warming
+            <span class="btntiptext">되돌릴 수 없는 재앙 지구온난화가 옵니다</span>
+          </button>
         </div>
+
         <div id="gridmapLightning">
           <div class="grid-container-small">
             <div class="grid-item-small" id="00"></div>

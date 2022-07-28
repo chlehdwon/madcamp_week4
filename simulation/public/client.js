@@ -31,6 +31,8 @@ var camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 500, 3000)
 camera.lookAt(0,0,0)
 
+const cameraView = [0,610,570]
+
 // ==================== ORBITCONTROL =========================
 var controls = new OrbitControls(camera, renderer.domElement)
 controls.addEventListener( 'change', render )
@@ -110,6 +112,24 @@ var gragh2_click = 0
 var gragh3_click = 0
 var search_grid  = 0
 
+// ================== USEING FUNCTION ========================
+function camerainit(p1,p2,p3){
+    camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        10000)
+    camera.position.set(p1,p2,p3)
+    camera.lookAt(0,0,0)
+
+    controls = new OrbitControls(camera, renderer.domElement)
+    controls.addEventListener( 'change', render )
+    controls.minPolarAngle = -Math.PI/2
+    controls.maxPolarAngle =  Math.PI / 2 - 0.05;
+    controls.minDistance=0
+    controls.maxDistance= 9000
+}
+
 // ================== MAIN LOOP 1 ========================
 
 //create adam and eve
@@ -135,6 +155,7 @@ date.setMonth(0)
 date.setDate(1)
 
 function animate() {
+
     animateId= requestAnimationFrame(animate)
     light.position.copy( camera.position );
     if(frame > basic_frame){
@@ -235,15 +256,6 @@ let gridmaps = document.getElementsByClassName('grid-item')
 let gridmapList = Array.prototype.slice.call(gridmaps)
 let gridConfirmBtn = document.getElementById('gridConfirmBtn')
 
-creatureBtn.addEventListener('click', function onOpen(){
-    if (typeof creatureDialog.showModal === 'function') {
-        creatureDialog.showModal()
-    }else {
-        alert("the dialog api is not supported by this browser")
-    }
-    cancelAnimationFrame(animateId)
-})
-
 let newCreatureP
 let newPreyList = []
 let newPredetorList = []
@@ -278,6 +290,9 @@ creatureBtn.addEventListener('click', function onOpen(){
     }else {
         alert("the dialog api is not supported by this browser")
     }
+    cancelAnimationFrame(animateId)
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
+    animate()
     cancelAnimationFrame(animateId)
 })
 
@@ -486,6 +501,9 @@ envBtn.addEventListener('click', function onOpen(){
         alert("the dialog api is not supported by this browser")
     }
     cancelAnimationFrame(animateId)
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
+    animate()
+    cancelAnimationFrame(animateId)
 })
 envCancel.addEventListener('click', function(){
     envDialog.close('no env chosen')
@@ -557,6 +575,10 @@ disasterCancel.addEventListener('click', function(){
 // lightning
 lightningBtn.addEventListener('click', function (){
     gridmapLightning.style.display = "block"
+    
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
+    animate()
+    cancelAnimationFrame(animateId)
 })
 gridmapSmallList.forEach((tileElem) => {
     tileElem.addEventListener('click', function(e){
@@ -802,21 +824,7 @@ framecount.addEventListener('input', function(){
 document.addEventListener("keydown",keyFuction,false);
 function keyFuction(event){
     if(event.keyCode == 32){
-        camera = new THREE.PerspectiveCamera(
-            45,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            10000)
-        camera.position.set(0, 500, 3000)
-        camera.lookAt(0,0,0)
-
-        controls = new OrbitControls(camera, renderer.domElement)
-        controls.addEventListener( 'change', render )
-        controls.minPolarAngle = -Math.PI/2
-        controls.maxPolarAngle =  Math.PI / 2 - 0.05;
-        controls.minDistance=0
-        controls.maxDistance= 9000
-
+        camerainit(0, 500, 3000)
     }
 }
 
@@ -872,8 +880,9 @@ graphGobackBtn.addEventListener('click', curCharacterGraphClick)
 
 function curCharacterGraphClick(){
     graphGobackBtn.style.display="none"
-    camera.position.set(0, 370, 340)
-    camera.lookAt(0,0,0)
+    // camera.position.set(0, 370, 340)
+    // camera.lookAt(0,0,0)
+    camerainit(cameraView[0],cameraView[1],cameraView[2])
     gragh3.style.display="none"
     chartContainer.style.display = "block"
     s_gridmapC.style.display = "block"
@@ -915,5 +924,10 @@ graghCancelBtn.addEventListener('click',function(){
     gragh3_click = 0
 })
 // -------------------------------------------------
+var guideBtn  = document.getElementById('guideBtn')
+var guideMain = document.getElementById('guidebox')
 
+guideBtn.addEventListener('click',function(){
+    guideMain.style.display = "block"
+})
 export default myWorld

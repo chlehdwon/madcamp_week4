@@ -40,6 +40,7 @@ li a{
   text-overflow:ellipsis;
   white-space:nowrap;
   width: 100%;
+  font-size:1vw;
 }
 
 li a:hover{
@@ -61,7 +62,6 @@ li a:hover{
   justify-content: center;
   align-content: center;
   padding-top: 10px;
-  border-style: solid;
 }
 .grid-c{
   display: grid;
