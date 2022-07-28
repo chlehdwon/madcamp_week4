@@ -171,6 +171,13 @@ function animate() {
 
         // creatures move
         myWorld.day(isfarsighted)
+        if(recover == 1){
+            planeList.forEach((_, idx)=>{
+                console.log(planeList[idx].type)
+                planeList[idx].plane.material.map = textures[planeList[idx].type]
+            })
+        }
+        recover -= 1
         if(myWorld.turn%365==0){
             myWorld.age += 1
             myWorld.yearOver(isfarsighted)
@@ -185,14 +192,7 @@ function animate() {
                 makeCharGragh(search_grid)
             }
 
-            if(recover == 1){
-                console.log(recover)
-                planeList.forEach((_, idx)=>{
-                    console.log(planeList[idx].type)
-                    planeList[idx].plane.material.map = textures[planeList[idx].type]
-                })
-                recover = 0
-            }
+            
         }
 
     }
@@ -470,14 +470,14 @@ function drop(e) {
     const imgurl = e.dataTransfer.getData('text');
 
     // add it to the drop target
-    console.log(e.target.id)
+    // console.log(e.target.id)
     e.target.style.backgroundImage = `url(${imgurl})`
     newEnvList[parseInt(targetid[0]) + parseInt(targetid[1])*4] = imgid
 }
 envBtn.addEventListener('click', function onOpen(){
     if (typeof envDialog.showModal === 'function') {
         envGrids.forEach((grid, idx)=>{
-            console.log(textureUrl[planeList[idx].type])
+            // console.log(textureUrl[planeList[idx].type])
             grid.style.backgroundImage = `url(${textureUrl[planeList[idx].type]})`
         })
         envDialog.showModal()
@@ -608,10 +608,10 @@ function lightning(tile){
             }
         }
         myWorld.lightning = myWorld.turn+3
-        myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 1    // damaged for 1month
+        myWorld.envs[parseInt(tile[0]) + parseInt(tile[1])*4].isDamaged = 365    // damaged for 1month
         
         planeList[parseInt(tile[0])+parseInt(tile[1])*4].plane.material.map = lightningTexture
-        recover=1
+        recover=365
         animate()
     }
 }
@@ -665,9 +665,9 @@ function meteor(){
                     }
                 }
             }
-            myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 1    // damaged for 1month
+            myWorld.envs[parseInt(elem[0]) + parseInt(elem[1])*4].isDamaged = 365    // damaged for 1month
             planeList[parseInt(elem[0])+parseInt(elem[1])*4].plane.material.map = meteorTexture
-            recover = 1
+            recover = 365
         })
         myWorld.meteor = myWorld.turn+5
         animate()
