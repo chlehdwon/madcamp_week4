@@ -1,0 +1,9 @@
+.guidebox{
+    position: absolute;
+    display: none;
+    top: 50px;
+    left: 50px;
+    height: 1000px;
+    width: 1000px;
+    color:white;
+}
