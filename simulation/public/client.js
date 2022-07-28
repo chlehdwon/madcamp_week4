@@ -153,7 +153,6 @@ date.setMonth(0)
 date.setDate(1)
 
 function animate() {
-
     animateId= requestAnimationFrame(animate)
     light.position.copy( camera.position );
     if(frame > basic_frame){
@@ -876,17 +875,7 @@ framecount.addEventListener('input', function(){
     animate()
 }, false)
 
-// ================ Play KEY =====================
 
-
-
-// 스페이스 바를 누르면 카메라 초기 상태로 돌려놓음
-document.addEventListener("keydown",keyFuction,false);
-function keyFuction(event){
-    if(event.keyCode == 32){
-        camerainit(0, 500, 3000)
-    }
-}
 
 // ----------------- for gragh----------------------
 var curCreatureGragh    = document.getElementById('currentCreature')
@@ -984,10 +973,68 @@ graghCancelBtn.addEventListener('click',function(){
     gragh3_click = 0
 })
 // -------------------------------------------------
+// ================== GUIDE =======================
+var guideopen = 0 
+var curguidepage = 0
+
 var guideBtn  = document.getElementById('guideBtn')
-var guideMain = document.getElementById('guidebox')
+var guidebox  = document.querySelector('.guidebox')
+var guideCancelBtn = document.getElementById('guide-cancel')
+
+// 각 page 들
+var introduce_page          = document.getElementById('introduce_page')
+var creature_page           = document.getElementById('creature_page')
+var creature_create_page    = document.getElementById('creature_create_page')
+var environment             = document.getElementById('environment')
+var disaster                = document.getElementById('disaster')
+var graph                   = document.getElementById('graph')
+var etc                     = document.getElementById('etc')
+
+var guidepageArr = [introduce_page, creature_page, creature_create_page, environment, disaster, graph, etc]
 
 guideBtn.addEventListener('click',function(){
-    guideMain.style.display = "block"
+    guidebox.style.display = "block"
+    introduce_page.style.display = "block"
+    guideopen = 1
 })
+guideCancelBtn.addEventListener('click',function(){
+    guidepageArr[curguidepage].style.display = "none"
+    curguidepage = 0
+    guideopen = 0
+    guidebox.style.display = "none"
+})
+
+
+
+// ================ Play KEY =====================
+
+document.addEventListener("keydown",keyFuction,false);
+function keyFuction(event){
+
+    // 스페이스 바를 누르면 카메라 초기 상태로 돌려놓음
+    if(event.keyCode == 32){
+        camerainit(0, 500, 3000)
+    }
+    // 오른쪽 방향키 누르면 가이드 화면 이동
+    if(event.keyCode == 39 && guideopen == 1){
+        console.log("오")
+        if(curguidepage < guidepageArr.length-1){
+            console.log("변경")
+            guidepageArr[curguidepage].style.display = "none"
+            curguidepage +=1
+            guidepageArr[curguidepage].style.display = "block"
+        }
+       
+    }   
+    // 왼쪽 방향키 누르면 가이드 화면 이동
+    if(event.keyCode == 37 && guideopen == 1){
+        console.log("왼")
+        if(curguidepage > 0){
+            console.log("변경")
+            guidepageArr[curguidepage].style.display = "none"
+            curguidepage -=1
+            guidepageArr[curguidepage].style.display = "block"
+        }
+    }
+}
 export default myWorld
