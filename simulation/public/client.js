@@ -248,7 +248,6 @@ let newCreatureP
 let newPreyList = []
 let newPredetorList = []
 let newCid
-let typeColor = [0x000000, 0x0000FF,0xFF0000] // for visualizing click
 let errmsg = document.querySelector('.errorMsg')
 
 let input = document.getElementsByClassName('creatureInput')
@@ -324,6 +323,7 @@ confirmBtn.addEventListener('click', function(){
     }
     errmsg.style.display = 'none'
     confirmBtn.style.display = 'none'
+    gridConfirmBtn.style.display = "inline"
     newCreatureP = {
         scene: scene,
         type : ctype,
@@ -415,6 +415,7 @@ function getOffset(el){
 
 function initCreatureD(){
     confirmBtn.style.display = 'inline'
+    gridConfirmBtn.style.display = "none"
     newPredetorList = []
     newPreyList = []
     let input = document.getElementsByClassName('creatureInput')
@@ -835,6 +836,7 @@ console.log(s_gridmaps)
 let s_gridmapList = Array.prototype.slice.call(s_gridmaps)
 
 let graghCancelBtn = document.getElementById('gragh-cancel')
+let graphGobackBtn = document.getElementById('graph-goback')
 
 curCreatureGragh.addEventListener('click',function(){
     chartContainer.style.display = "block"
@@ -865,7 +867,11 @@ changeCreatureGragh.addEventListener('click',function(){
     gragh1_click = 0
     gragh3_click = 0
 })
-curCharaterGragh.addEventListener('click',function(){
+curCharaterGragh.addEventListener('click', curCharacterGraphClick)
+graphGobackBtn.addEventListener('click', curCharacterGraphClick)
+
+function curCharacterGraphClick(){
+    graphGobackBtn.style.display="none"
     camera.position.set(0, 370, 340)
     camera.lookAt(0,0,0)
     gragh3.style.display="none"
@@ -882,11 +888,12 @@ curCharaterGragh.addEventListener('click',function(){
     gragh2.style.display = "none"
     gragh1_click = 0
     gragh2_click = 0  
-})
+}
 
 // 그 grid를 클릭하면 그 grid의 차트 출력
 s_gridmapList.forEach(grid => {
     grid.addEventListener('click', function(event){
+        graphGobackBtn.style.display="inline"
         const xi = parseInt(event.target.id[0])
         const yi = parseInt(event.target.id[1])
         gragh3.style.display = "block"

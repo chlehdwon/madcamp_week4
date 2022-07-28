@@ -18,16 +18,16 @@
     display: grid;
     column-gap:3px;
     row-gap:3px;
-    grid-template-columns: 5vh 5vh 5vh 5vh;
-    grid-template-rows: 5vh 5vh 5vh 5vh;
+    grid-template-columns: 7vh 7vh 7vh 7vh;
+    grid-template-rows: 7vh 7vh 7vh 7vh;
     justify-content: right;
     align-content: right;
 }
 .grid-item-env{
     display: inline-grid;
     background-color: aquamarine;
-    width: 5vh;
-    height:5vh;
+    width: 7vh;
+    height:7vh;
     background-size:cover;
     background-position: center;
 }

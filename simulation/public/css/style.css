@@ -8,7 +8,7 @@
     font-size:2.5vh;
     padding:1vh;
     font-weight: bold;
-    text-shadow: 5px 5px black;
+    text-shadow: 5px 5px grey;
     width: 100%;
 }
 body{
@@ -97,7 +97,7 @@ body{
 .rightsidedBox{
     position:absolute;
     padding-top:2vh;
-    padding-right: 2vw;
+    padding-right: 100px;
     right: 0;
 }
 .upper-right-block{

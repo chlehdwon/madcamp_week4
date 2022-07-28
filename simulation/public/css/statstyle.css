@@ -7,58 +7,88 @@
 .statisticBox{
     position:absolute;
     padding-top:2vh;
-    padding-right: 2vw;
     right: 0;
     width:25vw;
     text-align:center;
+    padding-right: 20px;
 }
 ul {
-    display:flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow:hidden;
-    border-radius: 12px;
-  }
-  li{float:left;}
-  li a{
-    display: flex;
-    background-color:#94B49F;
-    color:#ffffff;
-    padding:1vh;
-    text-decoration: none;
-    justify-content: center;
-    font-weight: bold;
-    width: 16vh;
-  }
-  li a:hover{
-    background-color: #558ABB;
-    color:black;
-  }
-  .chartContainer{
-    width: 53vh;
-    color:black;
-    background-color:rgb(252,248,232);
-    display:none;
-    border-radius: 12px;
-  }
+  display: inline-flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow:hidden;
+  border-radius: 12px;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+li{
+  display: flex;
+  width:100%;
+  overflow: hidden;
+}
+li a{
+  display: flex;
+  background-color:#94B49F;
+  color:#ffffff;
+  padding:1vh;
+  text-decoration: none;
+  justify-content: center;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  width: 100%;
+}
+
+li a:hover{
+  background-color: #5b7062;
+  color:black;
+}
+
+.chartContainer{
+  /* width: 53vh; */
+  color:black;
+  background-color:rgb(252,248,232);
+  display:none;
+  border-radius: 12px;
+  padding: 12px;
+}
+
 #selectgridMap{
-    display:none;
-    padding-left: 3.5vh;
+  display:flex;
+  justify-content: center;
+  align-content: center;
+  padding-top: 10px;
+  border-style: solid;
 }
 .grid-c{
-    display: grid;
-    padding: 1vh;
-    column-gap:10px;
-    row-gap:10px;
-    grid-template-columns: 10vh 10vh 10vh 10vh;
-    grid-template-rows: 10vh 10vh 10vh 10vh;
+  display: grid;
+  column-gap:3px;
+  row-gap:3px;
+  grid-template-columns: 5vw 5vw 5vw 5vw;
+  grid-template-rows: 10vh 10vh 10vh 10vh;
+  justify-content: center;
+  align-content: center;
 }
 .grid-{
-    display: inline-grid;
-    background-color: aquamarine;
-    width: 10vh;
-    height:10vh;
-    background-size:cover;
-    background-position: center;
+  display: inline-grid;
+  background-color: aquamarine;
+  width: 5vw;
+  height:10vh;
+  background-size:cover;
+  background-position: center;
+}
+#gragh-cancel{
+  font-size: 2vh; 
+  cursor: pointer; 
+  padding: 3px 7px;
+}
+
+#graph-goback{
+  display:none;
+  font-size: 2vh; 
+  cursor: pointer; 
+  padding: 3px 7px; 
 }
