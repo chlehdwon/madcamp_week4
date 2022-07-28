@@ -191,10 +191,7 @@ function animate() {
             else if(graghType ==3){
                 makeCharGragh(search_grid)
             }
-
-            
         }
-
     }
     render() 
     frame += target_frame
@@ -778,7 +775,50 @@ let framecount = document.getElementById("framecount")
 let pauseBtn = document.getElementById("pause")
 let playBtn = document.getElementById("aniplay")
 let frameNum = document.getElementById('frameNum')
+let skip1 = document.getElementById("skip1")
+let skip5 = document.getElementById("skip5")
 
+skip1.addEventListener('click', function(){
+    cancelAnimationFrame(animateId)
+    myWorld.day(isfarsighted)
+    for(let i=0; i<365; i++){
+        age.innerHTML = getYMD()
+        date.setDate(date.getDate()+1)
+        myWorld.day(isfarsighted)
+        if(recover == 1){
+            planeList.forEach((_, idx)=>{
+                console.log(planeList[idx].type)
+                planeList[idx].plane.material.map = textures[planeList[idx].type]
+            })
+        }
+        recover -= 1
+        if(myWorld.turn%365==0){
+            myWorld.age += 1
+            myWorld.yearOver(isfarsighted)
+        }
+    }
+    animate()
+})
+skip5.addEventListener('click', function(){
+    cancelAnimationFrame(animateId)
+    for(let i=0; i<365*5; i++){
+        age.innerHTML = getYMD()
+        date.setDate(date.getDate()+1)
+        myWorld.day(isfarsighted)
+        if(recover == 1){
+            planeList.forEach((_, idx)=>{
+                console.log(planeList[idx].type)
+                planeList[idx].plane.material.map = textures[planeList[idx].type]
+            })
+        }
+        recover -= 1
+        if(myWorld.turn%365==0){
+            myWorld.age += 1
+            myWorld.yearOver(isfarsighted)
+        }
+    }
+    animate()
+})
 pauseBtn.addEventListener('click', function(){
     cancelAnimationFrame(animateId)
 })
